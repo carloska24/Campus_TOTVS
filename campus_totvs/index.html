@@ -3383,7 +3383,7 @@
       </div>
 
       <!-- SUB-ABAS DO CONJUNTO 1: FUNDAMENTOS -->
-      <div class="section-subtabs track-subtabs-group" id="track-fundamentos-subtabs">
+      <div class="section-subtabs track-subtabs-group" id="track-fundamentos-subtabs" data-track="track-fundamentos">
         <button class="subtab-btn active" onclick="switchMasterclassTab('subpanelCap01')">
           📘 Cap 01: Memória & Variáveis (01_Variaveis.prw)
         </button>
@@ -3405,7 +3405,7 @@
       </div>
 
       <!-- SUB-ABAS DO CONJUNTO 2: BANCO DE DADOS & CUSTOMIZAÇÕES -->
-      <div class="section-subtabs track-subtabs-group" id="track-database-subtabs" style="display: none;">
+      <div class="section-subtabs track-subtabs-group" id="track-database-subtabs" data-track="track-database" style="display: none;">
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap06')">
           🗄️ Cap 06: Banco de Dados & TCQuery (06_BancoDeDados.prw)
         </button>
@@ -3418,7 +3418,7 @@
       </div>
 
       <!-- SUB-ABAS DO CONJUNTO 3: ARQUITETURA AVANÇADA -->
-      <div class="section-subtabs track-subtabs-group" id="track-modern-subtabs" style="display: none;">
+      <div class="section-subtabs track-subtabs-group" id="track-modern-subtabs" data-track="track-modern" style="display: none;">
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCapMVC')" style="background: rgba(0, 120, 255, 0.12); color: #60a5fa; border-color: rgba(0, 120, 255, 0.35);">
           🏛️ Arquitetura MVC Oficial (COMP011_MVC.prw)
         </button>
@@ -3428,7 +3428,7 @@
       </div>
 
       <!-- SUB-ABAS DO CONJUNTO 4: DICIONÁRIO DE FUNÇÕES -->
-      <div class="section-subtabs track-subtabs-group" id="track-dict-subtabs" style="display: none;">
+      <div class="section-subtabs track-subtabs-group" id="track-dict-subtabs" data-track="track-dict" style="display: none;">
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCapTabela')">
           📋 Dicionário de Sintaxe & Funções do Desenvolvedor
         </button>
@@ -8408,50 +8408,69 @@
 
       // 1. Atualiza botões do seletor de trilhas principais
       mView.querySelectorAll('.masterclass-track-selector .track-btn').forEach(btn => {
+        const tAttr = btn.getAttribute('data-track') || '';
         const onclickAttr = btn.getAttribute('onclick') || '';
-        btn.classList.toggle('active', onclickAttr.includes(trackId));
+        btn.classList.toggle('active', tAttr === trackId || onclickAttr.includes(trackId));
       });
 
       // 2. Exibe o grupo de sub-abas da trilha selecionada e oculta as demais
+      let targetGroup = null;
       mView.querySelectorAll('.track-subtabs-group').forEach(grp => {
-        if (grp.getAttribute('data-track') === trackId) {
+        const isMatch = (grp.getAttribute('data-track') === trackId) || 
+                        (grp.id === trackId + '-subtabs') ||
+                        (grp.id && grp.id.includes(trackId.replace('track-', '')));
+        if (isMatch) {
           grp.style.display = 'flex';
-          // Ativa automaticamente o primeiro subcapítulo desta trilha
-          const firstSubBtn = grp.querySelector('.subtab-btn');
-          if (firstSubBtn) {
-            firstSubBtn.click();
-          }
+          targetGroup = grp;
         } else {
           grp.style.display = 'none';
         }
       });
+
+      // 3. Ativa o primeiro subcapítulo da trilha alvo
+      if (targetGroup) {
+        let activeSubBtn = targetGroup.querySelector('.subtab-btn.active');
+        if (!activeSubBtn) {
+          activeSubBtn = targetGroup.querySelector('.subtab-btn');
+        }
+        if (activeSubBtn) {
+          const onclickAttr = activeSubBtn.getAttribute('onclick') || '';
+          const match = onclickAttr.match(/switchMasterclassTab\(['"]([^'"]+)['"]\)/);
+          if (match && match[1]) {
+            switchMasterclassTab(match[1]);
+          } else {
+            activeSubBtn.click();
+          }
+        }
+      }
     };
 
     window.switchMasterclassTab = function(panelId) {
       const mView = document.getElementById('viewMasterclass');
       if (!mView) return;
 
-      // 1. Atualiza botões de subtab ativos
+      // 1. Atualiza botões de subtab ativos em todas as subtabs da Masterclass
       mView.querySelectorAll('.section-subtabs .subtab-btn').forEach(btn => {
         const onclickAttr = btn.getAttribute('onclick') || '';
         btn.classList.toggle('active', onclickAttr.includes(panelId));
       });
 
-      // 2. Ativa o painel de conteúdo
+      // 2. Ativa o painel de conteúdo correspondente
       mView.querySelectorAll('.subpanel').forEach(p => {
         p.classList.toggle('active', p.id === panelId);
       });
 
-      // 3. Sincroniza a trilha pai (se for acionado diretamente por um botão externo)
+      // 3. Garante que o grupo de sub-abas pai e o botão da trilha estejam visíveis e sincronizados
       const activeBtn = mView.querySelector(`.section-subtabs .subtab-btn.active`);
       if (activeBtn) {
         const parentGrp = activeBtn.closest('.track-subtabs-group');
         if (parentGrp) {
-          const trackId = parentGrp.getAttribute('data-track');
+          const trackId = parentGrp.getAttribute('data-track') || parentGrp.id.replace('-subtabs', '');
           parentGrp.style.display = 'flex';
           mView.querySelectorAll('.masterclass-track-selector .track-btn').forEach(btn => {
+            const tAttr = btn.getAttribute('data-track') || '';
             const onclickAttr = btn.getAttribute('onclick') || '';
-            btn.classList.toggle('active', onclickAttr.includes(trackId));
+            btn.classList.toggle('active', tAttr === trackId || onclickAttr.includes(trackId));
           });
           mView.querySelectorAll('.track-subtabs-group').forEach(grp => {
             if (grp !== parentGrp) grp.style.display = 'none';

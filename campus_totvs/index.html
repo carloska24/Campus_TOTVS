@@ -1974,6 +1974,152 @@
       gap: 10px;
       background: var(--card-inner-bg);
     }
+
+    /* =========================================================================
+       NOVAS FEATURES INTERATIVAS: CONFIGURADOR SX, MASTERCLASSES & CARREIRA
+       ========================================================================= */
+    .dict-explorer-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px 26px;
+      box-shadow: var(--shadow-main);
+    }
+    .dict-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .table-chip {
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(0, 210, 211, 0.15);
+      border: 1px solid rgba(0, 210, 211, 0.4);
+      color: var(--totvs-cyan);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .module-chip {
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(0, 120, 255, 0.15);
+      border: 1px solid rgba(0, 120, 255, 0.4);
+      color: var(--totvs-blue);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .dict-grid-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+    .dict-grid-table th {
+      background: var(--card-inner-bg);
+      color: var(--text-main);
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 800;
+      border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .dict-grid-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-body);
+    }
+    [data-theme="light"] .dict-grid-table td {
+      border-bottom-color: rgba(0, 0, 0, 0.05);
+    }
+    .dict-grid-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .type-pill {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .type-C { background: rgba(0, 120, 255, 0.2); color: #60a5fa; }
+    .type-N { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .type-D { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+    .type-M { background: rgba(147, 51, 234, 0.2); color: #c084fc; }
+
+    .dict-quick-pills-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+    .dict-quick-pill {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dict-quick-pill:hover, .dict-quick-pill.active {
+      background: rgba(0, 210, 211, 0.15);
+      border-color: var(--totvs-cyan);
+      color: var(--totvs-cyan);
+    }
+
+    /* Skills Checklist */
+    .skill-check-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .skill-check-card:hover {
+      border-color: var(--border-active);
+      transform: translateY(-2px);
+    }
+    .skill-check-card.checked {
+      background: rgba(0, 210, 211, 0.05);
+      border-color: rgba(0, 210, 211, 0.4);
+    }
+
+    /* Toast Notification */
+    .campus-toast-notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: linear-gradient(135deg, #0c111e, #141c2e);
+      border: 1.5px solid var(--totvs-cyan);
+      box-shadow: 0 8px 30px rgba(0, 210, 211, 0.35);
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 10000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .campus-toast-notification.visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
   </style>
 </head>
 
@@ -2355,6 +2501,21 @@
               </p>
             </div>
           </div>
+
+          <!-- Laboratório Prático de Ponto de Entrada -->
+          <div style="margin-top: 18px; background: linear-gradient(135deg, rgba(0, 210, 211, 0.08), rgba(0, 120, 255, 0.05)); border: 1.5px solid rgba(0, 210, 211, 0.35); border-radius: 12px; padding: 18px 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+              <div>
+                <h4 style="color: var(--totvs-cyan); font-size: 14px; font-weight: 800; margin: 0;">🧪 Laboratório Prático de Ponto de Entrada: M410LIOK.prw</h4>
+                <p style="font-size: 12px; color: var(--text-body); margin: 4px 0 0 0; line-height: 1.5;">
+                  Código oficial do TDN para validação de quantidade e preço mínimo do item. Carregue no editor para executar no Protheus Virtual!
+                </p>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('pe_mata410')" style="background: linear-gradient(135deg, #00d2d3, #0078ff); font-weight: 700; white-space: nowrap;">
+                🚀 Carregar no Editor & Executar (F5)
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2668,6 +2829,9 @@
         <button class="subtab-btn" onclick="switchDictTab('subpanelDictSIX')">
           🔍 SIX (Índices & Performance)
         </button>
+        <button class="subtab-btn" onclick="switchDictTab('subpanelDictExplorer')" style="background: rgba(0, 210, 211, 0.12); color: var(--totvs-cyan); border-color: rgba(0, 210, 211, 0.35);">
+          🔎 Configurador Virtual (Explorador SX)
+        </button>
       </div>
 
       <!-- SX1 -->
@@ -2833,6 +2997,45 @@
         </div>
       </div>
 
+      <!-- 6. SUBPANEL EXPLORADOR VIRTUAL SX -->
+      <div class="subpanel" id="subpanelDictExplorer">
+        <div class="dict-card">
+          <div class="chapter-header">
+            <div>
+              <div class="chapter-badge-group">
+                <span class="chapter-chip" style="background: rgba(0, 210, 211, 0.2); color: var(--totvs-cyan);">Metadados Interativos</span>
+                <span class="chapter-file">SIGACFG • SX3 • SIX • SX1</span>
+              </div>
+              <h3 style="color: var(--text-main);">Configurador Virtual: Explorador de Tabelas e Campos do Protheus</h3>
+            </div>
+          </div>
+
+          <div class="chapter-content-text">
+            Consulte a estrutura física e lógica real das principais tabelas do ERP Protheus. Selecione uma tabela rápida abaixo ou digite no campo de pesquisa para ver instantaneamente seus campos no dicionário <strong>SX3</strong>, índices <strong>SIX</strong> e gerar consultas <strong>TCQuery</strong> otimizadas.
+          </div>
+
+          <!-- Barra de Pesquisa e Filtros Rápidos -->
+          <div style="margin-top: 16px; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 260px; position: relative;">
+              <input type="text" id="dictSearchInput" placeholder="🔍 Digite o alias ou nome da tabela (ex: SA1, SB1, SC5, SE1)..." style="width: 100%; background: var(--bg-secondary); border: 1.5px solid var(--border-color); color: var(--text-main); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; transition: border-color 0.2s;">
+            </div>
+          </div>
+
+          <div class="dict-quick-pills-bar">
+            <span style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Atalhos Rápidos:</span>
+            <button type="button" class="dict-quick-pill active" data-table="SA1" onclick="renderDictionaryTable('SA1')">SA1 (Clientes)</button>
+            <button type="button" class="dict-quick-pill" data-table="SB1" onclick="renderDictionaryTable('SB1')">SB1 (Produtos)</button>
+            <button type="button" class="dict-quick-pill" data-table="SC5" onclick="renderDictionaryTable('SC5')">SC5 (Pedidos Venda)</button>
+            <button type="button" class="dict-quick-pill" data-table="SC6" onclick="renderDictionaryTable('SC6')">SC6 (Itens Pedido)</button>
+            <button type="button" class="dict-quick-pill" data-table="SE1" onclick="renderDictionaryTable('SE1')">SE1 (Contas a Receber)</button>
+            <button type="button" class="dict-quick-pill" data-table="SE2" onclick="renderDictionaryTable('SE2')">SE2 (Contas a Pagar)</button>
+          </div>
+
+          <!-- Container Dinâmico da Tabela Selecionada -->
+          <div id="dictResultsContainer" style="margin-top: 14px;"></div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -2888,6 +3091,12 @@
         </button>
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap06')">
           🗄️ Cap 06: Banco de Dados (TCQuery)
+        </button>
+        <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCapMVC')" style="background: rgba(0, 120, 255, 0.12); color: #60a5fa; border-color: rgba(0, 120, 255, 0.35);">
+          🏛️ MVC Oficial TOTVS
+        </button>
+        <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCapTLPP')" style="background: rgba(147, 51, 234, 0.12); color: #c084fc; border-color: rgba(147, 51, 234, 0.35);">
+          🚀 APIs REST em TLPP
         </button>
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCapTabela')">
           📋 Dicionário de Funções
@@ -3133,6 +3342,77 @@
 
 <span class="code-var">QRY_CLI</span>->(<span class="code-fn">DbCloseArea</span>()) <span class="code-comment">// Libera a memória do servidor</span>
           </div>
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('masterclass_sql')" style="background: linear-gradient(135deg, #00d2d3, #0078ff); font-weight: 700;">
+              🚀 Carregar TCQuery Otimizada no Editor & Executar (F5)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MASTERCLASS MVC OFICIAL -->
+      <div class="subpanel" id="subpanelCapMVC">
+        <div class="chapter-card">
+          <div class="chapter-header">
+            <div>
+              <div class="chapter-badge-group">
+                <span class="chapter-chip" style="background: rgba(0, 120, 255, 0.2); color: #60a5fa;">Padrão Obrigatório TOTVS</span>
+                <span class="chapter-file">COMP011_MVC.prw</span>
+              </div>
+              <h3 style="color: var(--text-main);">Masterclass: Arquitetura MVC (ModelDef, ViewDef e MenuDef)</h3>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('masterclass_mvc')" style="background: linear-gradient(135deg, #00d2d3, #0078ff); font-weight: 700;">
+              🚀 Carregar Fonte MVC no Editor
+            </button>
+          </div>
+
+          <div class="chapter-content-text">
+            O <strong>MVC (Model-View-Controller)</strong> é a arquitetura moderna oficial da TOTVS para o desenvolvimento de cadastros e telas no Protheus. Ele desacopla a regra de negócio (<code>ModelDef</code>), a camada de apresentação gráfica (<code>ViewDef</code>) e o menu de operações (<code>MenuDef</code>), garantindo que as regras funcionem tanto em SmartClient quanto em APIs REST sem retrabalho!
+          </div>
+
+          <div class="concept-grid">
+            <div class="concept-item">
+              <h4>🎯 ModelDef() - Regras de Negócio:</h4>
+              <p>Instancia o <code>MPFormModel</code>, adiciona campos com <code>FWFormStruct(1)</code> e define blocos de pré-validação, pós-validação e commit no banco de dados.</p>
+            </div>
+            <div class="concept-item">
+              <h4>🖥️ ViewDef() - Camada Visual:</h4>
+              <p>Instancia o <code>FWFormView</code>, define o layout de caixas horizontais e verticais e mapeia as estruturas com <code>FWFormStruct(2)</code>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MASTERCLASS APIS REST TLPP -->
+      <div class="subpanel" id="subpanelCapTLPP">
+        <div class="chapter-card">
+          <div class="chapter-header">
+            <div>
+              <div class="chapter-badge-group">
+                <span class="chapter-chip" style="background: rgba(147, 51, 234, 0.2); color: #c084fc;">Tecnologia TLPP 2026</span>
+                <span class="chapter-file">ClienteAPI.tlpp</span>
+              </div>
+              <h3 style="color: var(--text-main);">Masterclass: Microsserviços e APIs REST em TLPP com Decorators</h3>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('masterclass_rest')" style="background: linear-gradient(135deg, #9333ea, #0078ff); font-weight: 700;">
+              🚀 Carregar API REST TLPP no Editor
+            </button>
+          </div>
+
+          <div class="chapter-content-text">
+            O <strong>TLPP (TOTVS Language Plus Plus)</strong> revoluciona o ecossistema Protheus trazendo Orientação a Objetos nativa com namespaces, classes com construtores tipados e criação de APIs REST corporativas sem necessidade de arquivos de configuração complexos, usando anotações <code>@Get</code> e <code>@Post</code>.
+          </div>
+
+          <div class="concept-grid">
+            <div class="concept-item">
+              <h4>🏷️ Anotações @Get e @Post:</h4>
+              <p>Mapeiam a URL pública do serviço diretamente no método da classe: <code>@Get(endpoint="/api/v1/clientes")</code>.</p>
+            </div>
+            <div class="concept-item">
+              <h4>📦 Objeto JsonObject:</h4>
+              <p>Manipulação de objetos e arrays JSON com alta performance e métodos nativos de serialização <code>ToJson()</code> e <code>FromJson()</code>.</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3224,6 +3504,9 @@
         </button>
         <button class="subtab-btn" onclick="switchCareerTab('subpanelCarScenarios')">
           💼 Casos Reais de Consultoria
+        </button>
+        <button class="subtab-btn" onclick="switchCareerTab('subpanelCarCalculator')" style="background: rgba(0, 210, 211, 0.12); color: var(--totvs-cyan); border-color: rgba(0, 210, 211, 0.35);">
+          📊 Calculadora de Senioridade
         </button>
       </div>
 
@@ -3337,6 +3620,30 @@
         </div>
       </div>
 
+      <!-- CALCULADORA DE SENIORIDADE E PROGRESSO DE CARREIRA -->
+      <div class="subpanel" id="subpanelCarCalculator">
+        <div class="career-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+            <div>
+              <h3 style="color: var(--text-main); margin: 0; font-size: 18px; font-weight: 800;">📊 Calculadora de Senioridade & Matriz de Habilidades</h3>
+              <p style="margin: 3px 0 0 0; font-size: 12.5px; color: var(--text-muted);">Marque as competências que você já domina para calcular em tempo real sua prontidão de mercado:</p>
+            </div>
+            <div style="text-align: right;">
+              <div id="careerRankTitle" style="font-size: 13px; font-weight: 800; color: var(--totvs-cyan);">🌱 Desenvolvedor Trainee / Júnior</div>
+              <div id="careerScoreValue" style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">0% de Prontidão (0/15 Habilidades)</div>
+            </div>
+          </div>
+
+          <!-- Barra de Progresso Gamificada -->
+          <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.06); border-radius: 20px; overflow: hidden; margin-bottom: 16px; border: 1px solid var(--border-color);">
+            <div id="careerProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #00d2d3, #0078ff, #10b981); border-radius: 20px; transition: width 0.3s ease;"></div>
+          </div>
+
+          <!-- Grade Dinâmica de Habilidades (Carregada via campus_features.js) -->
+          <div id="careerSkillsContainer"></div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -3403,6 +3710,8 @@
 
   <!-- Carregador Oficial do Monaco Editor (VS Code Engine) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
+  <!-- Recursos Interativos: Dicionário SX, Masterclasses e Calculadora de Carreira -->
+  <script src="js/campus_features.js"></script>
   
   <script>
     // =========================================================================
@@ -7468,6 +7777,12 @@
         selectLesson(targetLesson);
       }
     };
+
+    // Inicialização das Features Avançadas (Configurador Virtual & Calculadora de Carreira)
+    setTimeout(() => {
+      if (typeof initDictionaryExplorer === 'function') initDictionaryExplorer();
+      if (typeof initCareerCalculator === 'function') initCareerCalculator();
+    }, 100);
   </script>
 </body>
 </html>

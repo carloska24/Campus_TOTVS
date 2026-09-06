@@ -462,6 +462,26 @@ const TOTVS_DICTIONARY_DB = {
       { field: "X6_CONTEUD", type: "C", size: 80, dec: 0, desc: "Conteúdo / Valor do Parâmetro", valid: "", relac: "", picture: "" },
       { field: "X6_PROPRI", type: "C", size: 1, dec: 0, desc: "Proprietário (S=Padrão/U=Custom)", valid: "", relac: "'S'", picture: "@!" }
     ]
+  },
+  "SF4": {
+    name: "Tipos de Entrada e Saída (TES)",
+    description: "Coração fiscal do Protheus: tributação ICMS, IPI, PIS, COFINS, estoque e financeiro (SIGAFIS).",
+    module: "SIGAFIS",
+    indices: [
+      { order: 1, key: "F4_FILIAL + F4_CODIGO", desc: "Código do TES (Chave Primária)" },
+      { order: 2, key: "F4_FILIAL + F4_CF", desc: "CFOP Padrão da Operação" }
+    ],
+    fields: [
+      { field: "F4_CODIGO", type: "C", size: 3, dec: 0, desc: "Código do TES", valid: "ExistChav('SF4')", relac: "", picture: "@!" },
+      { field: "F4_TIPO", type: "C", size: 1, dec: 0, desc: "Tipo (E=Entrada/S=Saída)", valid: "Pertence('E/S')", relac: "'S'", picture: "@!" },
+      { field: "F4_CF", type: "C", size: 5, dec: 0, desc: "CFOP Oficial", valid: "ExistCpo('13')", relac: "", picture: "@!" },
+      { field: "F4_DUPLIC", type: "C", size: 1, dec: 0, desc: "Gera Financeiro (S/N)", valid: "Pertence('S/N')", relac: "'S'", picture: "@!" },
+      { field: "F4_ESTOQUE", type: "C", size: 1, dec: 0, desc: "Atualiza Estoque (S/N)", valid: "Pertence('S/N')", relac: "'S'", picture: "@!" },
+      { field: "F4_ICM", type: "C", size: 1, dec: 0, desc: "Calcula ICMS (S/N)", valid: "Pertence('S/N')", relac: "'S'", picture: "@!" },
+      { field: "F4_IPI", type: "C", size: 1, dec: 0, desc: "Calcula IPI (R/B/N)", valid: "Pertence('R/B/N/S')", relac: "'N'", picture: "@!" },
+      { field: "F4_PISCOF", type: "C", size: 1, dec: 0, desc: "Crédito PIS/COFINS (1..4)", valid: "", relac: "'1'", picture: "@!" },
+      { field: "F4_TEXTO", type: "C", size: 20, dec: 0, desc: "Descrição do TES", valid: "", relac: "", picture: "" }
+    ]
   }
 };
 
@@ -677,6 +697,171 @@ Method ListarClientes() as Logical Class ClienteRest
     oRest:SetStatusCode(200)
     oRest:SetKeyHeaderResponse("Content-Type", "application/json; charset=utf-8")
 Return .T.`
+  },
+
+  // Masterclass 02B: Loops e Estruturas de Repetição
+  "masterclass_loops": {
+    filename: "02B_Loops.prw",
+    title: "Masterclass 02B: Estruturas de Repetição & Prevenção de Loops Infinitos",
+    code: `#Include "Totvs.ch"
+
+/*/{Protheus.doc} U_LoopsDemo
+Demonstração dos laços de repetição While e For...Next com controle de fluxo (Loop e Exit).
+@author Arquiteto Campus TOTVS
+/*/
+User Function U_LoopsDemo()
+    Local nI         := 0
+    Local nTotal     := 0
+    Local cRelatorio := "=== AULA 02B: ESTRUTURAS DE REPETIÇÃO ===" + CRLF + CRLF
+
+    // 1. Laço While pré-condicional com incremento obrigatório
+    cRelatorio += "--- 1. Varredura com While ---" + CRLF
+    While nI < 5
+        nI++
+        nTotal += (nI * 10)
+        cRelatorio += "Iteração " + cValToChar(nI) + " | Subtotal: R$ " + cValToChar(nTotal) + CRLF
+    EndDo
+
+    // 2. Laço For...Next com Exit (break antecipado)
+    cRelatorio += CRLF + "--- 2. Varredura com For e Exit condicional ---" + CRLF
+    For nI := 1 To 10
+        If nI == 4
+            cRelatorio += "-> Alvo encontrado em nI = 4! Disparando Exit..." + CRLF
+            Exit
+        EndIf
+        cRelatorio += "Passo For: " + cValToChar(nI) + CRLF
+    Next nI
+
+    ApMsgInfo(cRelatorio, "Campus TOTVS - Loops e Performance")
+Return Nil`
+  },
+
+  // Masterclass 08: Parâmetros SX6 e Função GetMv
+  "masterclass_params": {
+    filename: "08_Parametros.prw",
+    title: "Masterclass 08: Leitura Dinâmica de Parâmetros SX6 com GetMv()",
+    code: `#Include "Totvs.ch"
+
+/*/{Protheus.doc} U_ParamsDemo
+Leitura segura de parâmetros do dicionário SX6 sem codificação de regras fixas (hardcode).
+@author Arquiteto Campus TOTVS
+/*/
+User Function U_ParamsDemo()
+    Local cMsg       := "=== PARÂMETROS DO SISTEMA (SX6) ===" + CRLF + CRLF
+    Local nLimPed    := 0
+    Local cMoedaPad  := ""
+    Local lGeraDup   := .T.
+
+    // 1. Leitura com valor padrão caso o parâmetro ainda não exista no SX6
+    nLimPed   := GetMv("MV_LIMPED", .F., 50000.00)
+    cMoedaPad := GetMv("MV_MOEDA1", .F., "REAL")
+    lGeraDup  := GetMv("MV_GERADUP", .F., .T.)
+
+    cMsg += "1. Limite Máximo por Pedido (MV_LIMPED) : R$ " + Transform(nLimPed, "@E 999,999.92") + CRLF
+    cMsg += "2. Moeda Padrão do ERP (MV_MOEDA1)      : " + cMoedaPad + CRLF
+    cMsg += "3. Gera Duplicata Automática? (MV_GERADUP): " + Iif(lGeraDup, "SIM", "NÃO") + CRLF + CRLF
+    cMsg += "Dica Sênior: NUNCA coloque regras de limite fixas no fonte! Use sempre GetMv()."
+
+    ApMsgInfo(cMsg, "Governança SX6 Protheus")
+Return Nil`
+  },
+
+  // Módulo SIGACTB: Contabilidade Gerencial
+  "modulos_ctb": {
+    filename: "CTB_Lancamento.prw",
+    title: "SIGACTB: Lançamento Contábil Padronizado com Partidas Dobradas",
+    code: `#Include "Totvs.ch"
+#Include "TopConn.ch"
+
+/*/{Protheus.doc} U_CtbDemo
+Simulação de integridade de lançamentos contábeis na tabela CT2 (SIGACTB).
+Demonstra o princípio inegociável de partidas dobradas (Débito = Crédito).
+@author Arquiteto Campus TOTVS
+/*/
+User Function U_CtbDemo()
+    Local cQuery     := ""
+    Local cAliasQry  := "QRY_CT2"
+    Local nTotalDeb  := 0
+    Local nTotalCrd  := 0
+    Local cRelat     := "=== AUDITORIA CONTÁBIL SIGACTB (PARTIDAS DOBRADAS) ===" + CRLF + CRLF
+
+    If Select(cAliasQry) > 0
+        (cAliasQry)->(DbCloseArea())
+    EndIf
+
+    // Consulta de lançamentos contábeis (CT2) do dia ativo
+    cQuery := " SELECT CT2_DATA, CT2_LOTE, CT2_DOC, CT2_DEBITO, CT2_CREDIT, CT2_VALOR "
+    cQuery += " FROM " + RetSqlName("CT2") + " CT2 "
+    cQuery += " WHERE CT2.CT2_FILIAL = '" + xFilial("CT2") + "' "
+    cQuery += "   AND CT2.D_E_L_E_T_ = ' ' "
+    cQuery += " ORDER BY CT2.CT2_DOC, CT2.CT2_LINHA "
+
+    cQuery := ChangeQuery(cQuery)
+    TCQuery cQuery New Alias (cAliasQry)
+
+    While !(cAliasQry)->(Eof())
+        If !Empty((cAliasQry)->CT2_DEBITO)
+            nTotalDeb += (cAliasQry)->CT2_VALOR
+        EndIf
+        If !Empty((cAliasQry)->CT2_CREDIT)
+            nTotalCrd += (cAliasQry)->CT2_VALOR
+        EndIf
+        (cAliasQry)->(DbSkip())
+    EndDo
+    (cAliasQry)->(DbCloseArea())
+
+    cRelat += "Total Débitos  : R$ " + Transform(nTotalDeb, "@E 999,999,999.92") + CRLF
+    cRelat += "Total Créditos : R$ " + Transform(nTotalCrd, "@E 999,999,999.92") + CRLF
+    cRelat += "Diferença      : R$ " + Transform(nTotalDeb - nTotalCrd, "@E 999,999,999.92") + CRLF + CRLF
+    cRelat += Iif(nTotalDeb == nTotalCrd, "✅ LOTE BALANCEADO COM SUCESSO!", "❌ ALERTA: LOTE DESBALANCEADO!")
+
+    ApMsgInfo(cRelat, "SIGACTB - Auditoria Contábil")
+Return Nil`
+  },
+
+  // Módulo SIGAFIS: Livros Fiscais e Regras de TES
+  "modulos_fis": {
+    filename: "FIS_ApuracaoTES.prw",
+    title: "SIGAFIS: Leitura e Auditoria de Regras Fiscais da TES (SF4)",
+    code: `#Include "Totvs.ch"
+#Include "TopConn.ch"
+
+/*/{Protheus.doc} U_FisDemo
+Auditoria de Regras Tributárias configuradas no Tipo de Entrada/Saída (SF4).
+Verifica incidência de ICMS, IPI e movimentação de estoque/duplicata.
+@author Arquiteto Campus TOTVS
+/*/
+User Function U_FisDemo()
+    Local cQuery    := ""
+    Local cAliasTes := "QRY_TES"
+    Local cRelat    := "=== AUDITORIA DE REGRAS FISCAIS (TES - SF4) ===" + CRLF + CRLF
+    Local nCont     := 0
+
+    If Select(cAliasTes) > 0
+        (cAliasTes)->(DbCloseArea())
+    EndIf
+
+    cQuery := " SELECT F4_CODIGO, F4_TIPO, F4_TEXTO, F4_ESTOQUE, F4_DUPLIC, F4_ICM, F4_IPI "
+    cQuery += " FROM " + RetSqlName("SF4") + " SF4 "
+    cQuery += " WHERE SF4.F4_FILIAL = '" + xFilial("SF4") + "' "
+    cQuery += "   AND SF4.D_E_L_E_T_ = ' ' "
+    cQuery += " ORDER BY SF4.F4_CODIGO "
+
+    cQuery := ChangeQuery(cQuery)
+    TCQuery cQuery New Alias (cAliasTes)
+
+    While !(cAliasTes)->(Eof())
+        nCont++
+        cRelat += "TES " + (cAliasTes)->F4_CODIGO + " [" + (cAliasTes)->F4_TIPO + "] - " + PadR((cAliasTes)->F4_TEXTO, 20)
+        cRelat += " | Estq: " + (cAliasTes)->F4_ESTOQUE + " | Dup: " + (cAliasTes)->F4_DUPLIC
+        cRelat += " | ICMS: " + (cAliasTes)->F4_ICM + " | IPI: " + (cAliasTes)->F4_IPI + CRLF
+        (cAliasTes)->(DbSkip())
+    EndDo
+    (cAliasTes)->(DbCloseArea())
+
+    cRelat += CRLF + "Total de Tipos de Entrada/Saída Analisados: " + cValToChar(nCont)
+    ApMsgInfo(cRelat, "SIGAFIS - Engenharia Tributária")
+Return Nil`
   }
 };
 

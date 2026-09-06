@@ -2137,6 +2137,47 @@
       color: #ff5252;
     }
 
+    /* Masterclass Track Selector */
+    .masterclass-track-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      background: var(--card-inner-bg);
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+    .track-btn {
+      font-size: 12.5px;
+      font-weight: 700;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+    }
+    .track-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .track-btn.active {
+      background: rgba(0, 210, 211, 0.12);
+      border-color: var(--totvs-cyan);
+      color: var(--totvs-cyan);
+    }
+    .track-subtabs-group {
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Skills Checklist */
     .skill-check-card {
       background: var(--bg-card);
@@ -2213,7 +2254,7 @@
       </button>
       <button class="nav-tab-btn" id="btnNavMasterclass">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        Masterclass (01 a 05)
+        Masterclass (01 a 08)
       </button>
       <button class="nav-tab-btn" id="btnNavCarreira">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -2230,6 +2271,10 @@
       <button class="btn btn-secondary btn-sm" id="btnUploadFile" title="Carregar arquivo .prw do seu computador">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Carregar .PRW
+      </button>
+      <button class="btn btn-secondary btn-sm" id="btnResetLessonCode" title="Restaurar o código inicial da aula descartando edições feitas">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Resetar Aula
       </button>
       <button class="btn btn-primary" id="btnRunCode" title="Execução Livre no Simulador SmartClient (Atalho F5)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -2445,7 +2490,7 @@
           </div>
           <div class="stat-pill">
             <div class="stat-label">Módulos Abordados</div>
-            <div class="stat-val">FAT • COM • EST • FIN</div>
+            <div class="stat-val">FAT • COM • EST • FIN • CTB • FIS</div>
           </div>
           <div class="stat-pill">
             <div class="stat-label">Nível de Rigor</div>
@@ -2467,6 +2512,12 @@
         </button>
         <button class="subtab-btn" onclick="switchModuleTab('subpanelFin')">
           💰 SIGAFIN (Financeiro & Tesouraria)
+        </button>
+        <button class="subtab-btn" onclick="switchModuleTab('subpanelCtb')">
+          📑 SIGACTB (Contabilidade Gerencial)
+        </button>
+        <button class="subtab-btn" onclick="switchModuleTab('subpanelFis')">
+          ⚖️ SIGAFIS (Livros Fiscais & SPED)
         </button>
       </div>
 
@@ -2837,6 +2888,180 @@
         </div>
       </div>
 
+      <!-- PAINEL 5: SIGACTB -->
+      <div class="subpanel" id="subpanelCtb">
+        <div class="module-card">
+          <div class="chapter-header">
+            <div>
+              <div class="chapter-badge-group">
+                <span class="chapter-chip">Módulo Contábil & Governança</span>
+                <span class="chapter-file">CTBA020 • CTBA102 • CTBA105</span>
+              </div>
+              <h3>SIGACTB: Contabilidade Gerencial, Partidas Dobradas e Lançamentos</h3>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('modulos_ctb')" style="background: linear-gradient(135deg, #00d2d3, #0078ff); font-weight: 700;">
+              🚀 Carregar Snippet CTB no Editor
+            </button>
+          </div>
+
+          <div class="chapter-content-text">
+            O <strong>SIGACTB</strong> consolida todas as operações financeiras, de faturamento, compras e folha do Protheus através das regras de <strong>Partidas Dobradas</strong> (Débito e Crédito). As integrações automáticas utilizam os <em>Lançamentos Padrões (CT5)</em> para contabilizar documentos no exato momento da emissão ou baixa.
+          </div>
+
+          <h4 style="color: var(--text-main); font-size: 14.5px; font-weight: 700;">🔄 Fluxo do Processo Contábil no ERP:</h4>
+          <div class="module-flow-box">
+            <div class="flow-step">
+              <div class="flow-step-title">1. Plano de Contas</div>
+              <div class="flow-step-code">CTBA020 (CT1)</div>
+              <div class="flow-step-desc">Estrutura de Ativo/Passivo/DRE</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step">
+              <div class="flow-step-title">2. Lançamento Padrão</div>
+              <div class="flow-step-code">CTBA080 (CT5)</div>
+              <div class="flow-step-desc">Regras de Débito/Crédito do ERP</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step">
+              <div class="flow-step-title">3. Lote Contábil</div>
+              <div class="flow-step-code">CTBA102 (CT2)</div>
+              <div class="flow-step-desc">Partidas simples e dobradas</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step">
+              <div class="flow-step-title">4. Demonstrações</div>
+              <div class="flow-step-code">CTBR040 (Balanço/DRE)</div>
+              <div class="flow-step-desc">Fechamento do exercício</div>
+            </div>
+          </div>
+
+          <h4 style="color: var(--text-main); font-size: 14.5px; font-weight: 700; margin-top: 10px;">📋 Tabelas Mestres do SIGACTB:</h4>
+          <table class="masterclass-table">
+            <thead>
+              <tr>
+                <th>Tabela</th>
+                <th>Nome da Entidade</th>
+                <th>Chave Primária / Relacionamento</th>
+                <th>Papel no Negócio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>CT1</code></td>
+                <td>Plano de Contas Contábil</td>
+                <td><code>CT1_CONTA</code></td>
+                <td>Estrutura sintética e analítica das contas contábeis da empresa.</td>
+              </tr>
+              <tr>
+                <td><code>CT2</code></td>
+                <td>Lançamentos Contábeis</td>
+                <td><code>CT2_DATA</code> + <code>CT2_LOTE</code> + <code>CT2_SBLOTE</code> + <code>CT2_DOC</code> + <code>CT2_LINHA</code></td>
+                <td>Diário oficial com valores de débito (<code>CT2_DEBITO</code>) e crédito (<code>CT2_CREDIT</code>).</td>
+              </tr>
+              <tr>
+                <td><code>CT5</code></td>
+                <td>Lançamentos Padrões (LP)</td>
+                <td><code>CT5_LANPAD</code> + <code>CT5_SEQUEN</code></td>
+                <td>Regras dinâmicas em ADVPL que contabilizam notas fiscais, baixas e folha automaticamente.</td>
+              </tr>
+              <tr>
+                <td><code>CTT</code></td>
+                <td>Centros de Custo</td>
+                <td><code>CTT_CUSTO</code></td>
+                <td>Segregação departamental dos lançamentos contábeis para análise gerencial.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PAINEL 6: SIGAFIS -->
+      <div class="subpanel" id="subpanelFis">
+        <div class="module-card">
+          <div class="chapter-header">
+            <div>
+              <div class="chapter-badge-group">
+                <span class="chapter-chip">Módulo Fiscal & Tributário</span>
+                <span class="chapter-file">MATA080 • MATA953 • MATA954</span>
+              </div>
+              <h3>SIGAFIS: Livros Fiscais, Regras de TES e Apurações SPED</h3>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('modulos_fis')" style="background: linear-gradient(135deg, #00d2d3, #0078ff); font-weight: 700;">
+              🚀 Carregar Snippet FIS no Editor
+            </button>
+          </div>
+
+          <div class="chapter-content-text">
+            O <strong>SIGAFIS</strong> orquestra a complexidade tributária brasileira (ICMS, ICMS-ST, IPI, PIS, COFINS, ISS e retenções). O motor do módulo é o <strong>TES (Tipos de Entrada e Saída - SF4)</strong>, que determina se uma operação gera crédito, débito, gera duplicata no financeiro ou atualiza saldo de estoque.
+          </div>
+
+          <h4 style="color: var(--text-main); font-size: 14.5px; font-weight: 700;">🔄 Fluxo do Motor Fiscal no Protheus:</h4>
+          <div class="module-flow-box">
+            <div class="flow-step">
+              <div class="flow-step-title">1. Configuração do TES</div>
+              <div class="flow-step-code">MATA080 (SF4)</div>
+              <div class="flow-step-desc">Alíquotas, tributação e CFOP</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step">
+              <div class="flow-step-title">2. Emissão Documento</div>
+              <div class="flow-step-code">MATA103/MATA460</div>
+              <div class="flow-step-desc">Cálculo instantâneo de impostos</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step">
+              <div class="flow-step-title">3. Livro Fiscal (Item)</div>
+              <div class="flow-step-code">SFT / SF3</div>
+              <div class="flow-step-desc">Escrituração fiscal oficial</div>
+            </div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-step">
+              <div class="flow-step-title">4. Apuração & SPED</div>
+              <div class="flow-step-code">SPEDFISCAL / EFD</div>
+              <div class="flow-step-desc">Geração de guias e obrigações</div>
+            </div>
+          </div>
+
+          <h4 style="color: var(--text-main); font-size: 14.5px; font-weight: 700; margin-top: 10px;">📋 Tabelas Mestres do SIGAFIS:</h4>
+          <table class="masterclass-table">
+            <thead>
+              <tr>
+                <th>Tabela</th>
+                <th>Nome da Entidade</th>
+                <th>Chave Primária / Relacionamento</th>
+                <th>Papel no Negócio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>SF4</code></td>
+                <td>Tipos de Entrada e Saída (TES)</td>
+                <td><code>F4_CODIGO</code></td>
+                <td>Coração tributário: define CFOP, se calcula ICMS/IPI/PIS/COFINS e gera financeiro.</td>
+              </tr>
+              <tr>
+                <td><code>SFT</code></td>
+                <td>Livro Fiscal por Item</td>
+                <td><code>FT_FILIAL</code> + <code>FT_TIPOMOV</code> + <code>FT_SERIE</code> + <code>FT_NFISCAL</code> + <code>FT_CLIEFOR</code> + <code>FT_LOJA</code> + <code>FT_ITEM</code></td>
+                <td>Detalhamento item a item de base de cálculo, alíquotas e tributos destacados.</td>
+              </tr>
+              <tr>
+                <td><code>SF3</code></td>
+                <td>Livros Fiscais (Resumo)</td>
+                <td><code>F3_FILIAL</code> + <code>F3_ENTRASA</code> + <code>F3_EMISSAO</code> + <code>F3_SERIE</code> + <code>F3_NFISCAL</code></td>
+                <td>Resumo fiscal por documento para emissão dos livros modelo 1, 2 e 51.</td>
+              </tr>
+              <tr>
+                <td><code>SF7</code></td>
+                <td>Exceções Fiscais</td>
+                <td><code>F7_GRPCLI</code> + <code>F7_GRPROD</code></td>
+                <td>Regras de substituição tributária (ICMS-ST) e alíquotas diferenciadas por estado.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -3112,59 +3337,100 @@
 
       <div class="modular-hero">
         <div class="hero-badge">📚 FORMAÇÃO OFICIAL DE ENGENHARIA TOTVS</div>
-        <h2>Masterclass: Fundamentos & Arquitetura ADVPL (Aulas 01 a 05)</h2>
+        <h2>Masterclass: Engenharia & Arquitetura ADVPL / TLPP (Aulas 01 a 08 + MVC + REST)</h2>
         <p>
-          Estrutura completa das 5 aulas fundamentais organizadas em capítulos dedicados. Clique nas abas abaixo para navegar diretamente entre os temas sem rolagem vertical excessiva.
+          Formação completa e estruturada da Engenharia de Software TOTVS Protheus. Navegue pelos 3 Módulos Oficiais organizados por nível de maturidade ou consulte o Arsenal de Funções do desenvolvedor.
         </p>
 
         <div class="hero-stats-grid">
           <div class="stat-pill">
-            <div class="stat-label">Trilha Concluída</div>
-            <div class="stat-val">5 Aulas Práticas</div>
+            <div class="stat-label">Trilha Completa</div>
+            <div class="stat-val">9 Aulas Práticas</div>
           </div>
           <div class="stat-pill">
-            <div class="stat-label">Compatibilidade WebApp</div>
-            <div class="stat-val">100% Estável</div>
+            <div class="stat-label">Formações Avançadas</div>
+            <div class="stat-val">MVC & APIs REST</div>
           </div>
           <div class="stat-pill">
             <div class="stat-label">Arquitetura de Memória</div>
-            <div class="stat-val">RAM & UI Nativa</div>
+            <div class="stat-val">RAM, DBAccess & PEs</div>
           </div>
           <div class="stat-pill">
-            <div class="stat-label">Nível de Rigor</div>
-            <div class="stat-val">Especialista TOTVS</div>
+            <div class="stat-label">Governança Oficial</div>
+            <div class="stat-val">100% CodeAnalysis</div>
           </div>
         </div>
       </div>
 
-      <!-- Sub-navegação em Abas dos Capítulos -->
-      <div class="section-subtabs">
+      <!-- SELETOR DE CONJUNTOS DA FORMAÇÃO MASTERCLASS -->
+      <div class="masterclass-track-selector">
+        <button type="button" class="track-btn active" data-track="track-fundamentos" onclick="switchMasterclassTrack('track-fundamentos')">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; margin-right: 6px;"></span>
+          <strong>Módulo 1: Fundamentos da Linguagem</strong> (Aulas 01 a 05)
+        </button>
+        <button type="button" class="track-btn" data-track="track-database" onclick="switchMasterclassTrack('track-database')">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #a855f7; margin-right: 6px;"></span>
+          <strong>Módulo 2: Banco de Dados & Customizações</strong> (Aulas 06 a 08)
+        </button>
+        <button type="button" class="track-btn" data-track="track-modern" onclick="switchMasterclassTrack('track-modern')">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; margin-right: 6px;"></span>
+          <strong>Módulo 3: Arquitetura Avançada TOTVS</strong> (MVC & TLPP)
+        </button>
+        <button type="button" class="track-btn" data-track="track-dict" onclick="switchMasterclassTrack('track-dict')">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00d2d3; margin-right: 6px;"></span>
+          <strong>Arsenal de Funções</strong> (Dicionário de Sintaxe)
+        </button>
+      </div>
+
+      <!-- SUB-ABAS DO CONJUNTO 1: FUNDAMENTOS -->
+      <div class="section-subtabs track-subtabs-group" id="track-fundamentos-subtabs">
         <button class="subtab-btn active" onclick="switchMasterclassTab('subpanelCap01')">
-          📘 Cap 01: Memória & Variáveis
+          📘 Cap 01: Memória & Variáveis (01_Variaveis.prw)
         </button>
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap02')">
-          📘 Cap 02: Lógica & Static Functions
+          📘 Cap 02: Lógica & Static Functions (02_Logica.prw)
+        </button>
+        <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap02B')">
+          📘 Cap 02B: Loops & Repetição (02B_Loops.prw)
         </button>
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap03')">
-          📘 Cap 03: Matrizes & Strings
+          📘 Cap 03: Matrizes & Strings (03_MatrizesEStrings.prw)
         </button>
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap04')">
-          📘 Cap 04: Codeblocks & aSort/aScan
+          📘 Cap 04: Codeblocks & aSort/aScan (04_Codeblocks.prw)
         </button>
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap05')">
-          📘 Cap 05: Interfaces Gráficas (MSDialog)
+          📘 Cap 05: Interface Gráfica MSDialog (05_InterfaceGrafica.prw)
         </button>
+      </div>
+
+      <!-- SUB-ABAS DO CONJUNTO 2: BANCO DE DADOS & CUSTOMIZAÇÕES -->
+      <div class="section-subtabs track-subtabs-group" id="track-database-subtabs" style="display: none;">
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap06')">
-          🗄️ Cap 06: Banco de Dados (TCQuery)
+          🗄️ Cap 06: Banco de Dados & TCQuery (06_BancoDeDados.prw)
         </button>
+        <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap07')">
+          🔌 Cap 07: Pontos de Entrada & PEs (07_PontosDeEntrada.prw)
+        </button>
+        <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCap08')">
+          ⚙️ Cap 08: Parâmetros SX6 & GetMv (08_Parametros.prw)
+        </button>
+      </div>
+
+      <!-- SUB-ABAS DO CONJUNTO 3: ARQUITETURA AVANÇADA -->
+      <div class="section-subtabs track-subtabs-group" id="track-modern-subtabs" style="display: none;">
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCapMVC')" style="background: rgba(0, 120, 255, 0.12); color: #60a5fa; border-color: rgba(0, 120, 255, 0.35);">
-          🏛️ MVC Oficial TOTVS
+          🏛️ Arquitetura MVC Oficial (COMP011_MVC.prw)
         </button>
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCapTLPP')" style="background: rgba(147, 51, 234, 0.12); color: #c084fc; border-color: rgba(147, 51, 234, 0.35);">
-          🚀 APIs REST em TLPP
+          🚀 APIs REST Corporativas em TLPP (API_CLIENTES.tlpp)
         </button>
+      </div>
+
+      <!-- SUB-ABAS DO CONJUNTO 4: DICIONÁRIO DE FUNÇÕES -->
+      <div class="section-subtabs track-subtabs-group" id="track-dict-subtabs" style="display: none;">
         <button class="subtab-btn" onclick="switchMasterclassTab('subpanelCapTabela')">
-          📋 Dicionário de Funções
+          📋 Dicionário de Sintaxe & Funções do Desenvolvedor
         </button>
       </div>
 
@@ -3249,6 +3515,60 @@
                 Funções auxiliares internas devem <strong>SEMPRE</strong> ser declaradas como <code>Static Function</code>. Isso impede que dois arquivos tenham funções com o mesmo nome colidindo no RPO.
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAPÍTULO 02B: LOOPS E REPETIÇÃO -->
+      <div class="subpanel" id="subpanelCap02B">
+        <div class="chapter-card">
+          <div class="chapter-header">
+            <div>
+              <div class="chapter-badge-group">
+                <span class="chapter-chip">Módulo 1: Fundamentos</span>
+                <span class="chapter-file">02B_Loops.prw</span>
+              </div>
+              <h3>Capítulo 02B: Estruturas de Repetição (Loops) & Prevenção de Travamento</h3>
+            </div>
+            <button class="btn-open-lesson" onclick="goToLessonInEditor('aula02b')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Abrir Fonte no Editor
+            </button>
+          </div>
+
+          <div class="chapter-content-text">
+            O domínio dos laços de repetição é vital para processar matrizes, relatórios e tabelas no Protheus. Entenda a diferença crítica entre o laço pré-condicional <code>While...EndDo</code> e o laço determinístico <code>For...Next</code>, além do uso de <strong>Exit</strong> (break) e <strong>Loop</strong> (continue).
+          </div>
+
+          <div class="concept-grid">
+            <div class="concept-item">
+              <h4>🔄 1. While...EndDo (Laço Pré-Condicional)</h4>
+              <p>
+                Executa enquanto a expressão for verdadeira. No Protheus, todo laço While <strong>deve conter obrigatoriamente</strong> o avanço da variável de controle (ex: <code>nI++</code> ou <code>DbSkip()</code>), caso contrário gerará loop infinito e travará o AppServer!
+              </p>
+            </div>
+            <div class="concept-item">
+              <h4>🛑 2. For...Next com Exit e Loop</h4>
+              <p>
+                O comando <code>Exit</code> interrompe imediatamente o laço (útil para buscas quando o item já foi encontrado). Já o comando <code>Loop</code> pula o restante da iteração atual e avança direto para o próximo passo.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout callout-alert">
+            <div class="callout-icon">🚨</div>
+            <div class="callout-body">
+              <h5>Regra Crítica de Performance: Evite cálculos pesados dentro do laço!</h5>
+              <p>
+                Funções como <code>Len(aVetor)</code> não devem ser chamadas a cada passo do laço. Guarde o total antes em uma variável: <code>nTam := Len(aVetor)</code> para economizar milhares de ciclos de CPU em grandes matrizes.
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('masterclass_loops')" style="background: linear-gradient(135deg, #00d2d3, #0078ff); font-weight: 700;">
+              🚀 Carregar Loops no Editor & Executar (F5)
+            </button>
           </div>
         </div>
       </div>
@@ -3415,6 +3735,151 @@
         </div>
       </div>
 
+      <!-- CAPÍTULO 07 -->
+      <div class="subpanel" id="subpanelCap07">
+        <div class="chapter-card">
+          <div class="chapter-header">
+            <div>
+              <div class="chapter-badge-group">
+                <span class="chapter-chip" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">Nível 2: Customizações Oficiais</span>
+                <span class="chapter-file">07_PontosDeEntrada.prw</span>
+              </div>
+              <h3>Capítulo 07: Pontos de Entrada & Hooks do ERP (GetArea, RestArea & MT410OK)</h3>
+            </div>
+            <button class="btn-open-lesson" onclick="goToLessonInEditor('aula07')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Abrir Fonte no Editor
+            </button>
+          </div>
+
+          <div class="chapter-content-text">
+            Os <strong>Pontos de Entrada (PEs)</strong> são ganchos oficiais (hooks) disponibilizados pela TOTVS dentro das rotinas padrões do ERP. Eles permitem injetar regras de negócio customizadas <em>sem alterar uma única linha do código fonte padrão da TOTVS</em>, garantindo que atualizações de release não sobrescrevam suas regras.
+          </div>
+
+          <div class="concept-grid">
+            <div class="concept-item">
+              <h4>🛡️ 1. GetArea() e RestArea() — Lei Suprema</h4>
+              <p>
+                Em 100% dos Pontos de Entrada é obrigatório salvar a área ativa com <code>Local aArea := GetArea()</code> na primeira linha e restaurar com <code>RestArea(aArea)</code> antes do <code>Return</code>. Esquecer isso desposiciona tabelas e corrompe dados em produção.
+              </p>
+            </div>
+            <div class="concept-item">
+              <h4>🎯 2. O Contrato de Retorno do PE</h4>
+              <p>
+                PEs de validação esperam retorno lógico: <code>.T.</code> permite que a gravação continue, enquanto <code>.F.</code> bloqueia a operação e cancela a transação no ERP.
+              </p>
+            </div>
+            <div class="concept-item">
+              <h4>🛑 3. Mensagens com Help() em vez de ApMsgInfo</h4>
+              <p>
+                Em PEs de validação de tela, nunca use <code>ApMsgInfo()</code> simples se houver transação aberta. Utilize <code>Help()</code> para registrar a mensagem no dicionário de Help do Protheus sem gerar deadlocks.
+              </p>
+            </div>
+            <div class="concept-item">
+              <h4>🔍 4. ExistBlock() e ExecBlock()</h4>
+              <p>
+                O Protheus verifica a existência de um PE com <code>ExistBlock("NOME_PE")</code> e o executa dinamicamente com <code>ExecBlock("NOME_PE", .F., .F., aParametros)</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout callout-pro">
+            <div class="callout-icon">💡</div>
+            <div class="callout-body">
+              <h5>Exemplo Real: Bloqueio de Pedidos no Ponto de Entrada MT410OK</h5>
+              <p>
+                No faturamento (MATA410), ao confirmar o pedido de venda, o Protheus invoca <code>MT410OK()</code>. Se o valor do pedido ultrapassar R$ 50.000 ou o cliente estiver inadimplente, retornamos <code>.F.</code> com uma explicação para o operador.
+              </p>
+            </div>
+          </div>
+
+          <div class="masterclass-code-box">
+<span class="code-comment">// Padrão de Ponto de Entrada Seguro (Conformidade CodeAnalysis / SonarQube):</span>
+<span class="code-kw">User Function</span> <span class="code-fn">MT410OK</span>()
+    <span class="code-kw">Local</span> aArea    := <span class="code-fn">GetArea</span>()
+    <span class="code-kw">Local</span> lRetorno := <span class="code-kw">.T.</span>
+    
+    <span class="code-kw">If</span> <span class="code-var">SC5</span>-><span class="code-var">C5_VLRTOT</span> > 50000
+        lRetorno := <span class="code-kw">.F.</span>
+        <span class="code-fn">Help</span>(<span class="code-str">""</span>, 1, <span class="code-str">"MT410OK"</span>,, <span class="code-str">"Pedidos acima de R$ 50.000 requerem aprovacao gerencial."</span>, 1, 0)
+    <span class="code-kw">EndIf</span>
+    
+    <span class="code-fn">RestArea</span>(aArea)
+<span class="code-kw">Return</span> lRetorno
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('pe_mata410')" style="background: linear-gradient(135deg, #10b981, #059669); font-weight: 700;">
+              🚀 Carregar Ponto de Entrada MT410OK no Editor & Testar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAPÍTULO 08 -->
+      <div class="subpanel" id="subpanelCap08">
+        <div class="chapter-card">
+          <div class="chapter-header">
+            <div>
+              <div class="chapter-badge-group">
+                <span class="chapter-chip" style="background: rgba(234, 179, 8, 0.15); color: #facc15;">Nível 2: Dicionário & Configurações</span>
+                <span class="chapter-file">08_Parametros.prw</span>
+              </div>
+              <h3>Capítulo 08: Parâmetros Globais do ERP (Tabela SX6, GetMV & PutMV)</h3>
+            </div>
+            <button class="btn-open-lesson" onclick="goToLessonInEditor('aula08')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Abrir Fonte no Editor
+            </button>
+          </div>
+
+          <div class="chapter-content-text">
+            No Protheus, desenvolvedores profissionais <strong>nunca deixam regras fixas no código (hard-coded)</strong>. Valores de tolerância, e-mails de alerta, alçadas de desconto e integrações devem ser configurados em parâmetros na <strong>Tabela SX6</strong> e lidos dinamicamente com <code>GetMV()</code>.
+          </div>
+
+          <div class="concept-grid">
+            <div class="concept-item">
+              <h4>⚙️ 1. GetMV("MV_NOME") — Leitura Transparente</h4>
+              <p>
+                Lê o valor do parâmetro considerando o contexto de empresa e filial ativo. O retorno assume automaticamente o tipo do parâmetro (Caractere, Numérico, Lógico ou Data).
+              </p>
+            </div>
+            <div class="concept-item">
+              <h4>✏️ 2. PutMV("MV_NOME", xValor) — Gravação</h4>
+              <p>
+                Grava ou atualiza o conteúdo do parâmetro na tabela SX6. Deve ser usado com cautela para não alterar parametrizações globais de outros departamentos.
+              </p>
+            </div>
+            <div class="concept-item">
+              <h4>🏢 3. Parâmetros por Filial vs Compartilhados</h4>
+              <p>
+                No Configurador (SIGACFG), parâmetros podem ser configurados com conteúdo exclusivo por filial (<code>X6_FIL == cFilAnt</code>) ou genéricos com filial em branco.
+              </p>
+            </div>
+            <div class="concept-item">
+              <h4>🚀 4. Performance e Cache do SX6</h4>
+              <p>
+                O AppServer mantém em cache de memória os parâmetros mais acessados. Ler com <code>GetMV()</code> é extremamente veloz e não sobrecarrega o banco de dados.
+              </p>
+            </div>
+          </div>
+
+          <div class="masterclass-code-box">
+<span class="code-comment">// Exemplo prático de eliminação de Hard-code usando SX6:</span>
+<span class="code-kw">Local</span> nLimitePedido := <span class="code-fn">GetMV</span>(<span class="code-str">"MV_LIMPED"</span>)  <span class="code-comment">// Lê valor da SX6 (ex: 50000.00)</span>
+<span class="code-kw">Local</span> nDescMaximo   := <span class="code-fn">GetMV</span>(<span class="code-str">"MV_PERDESC"</span>) <span class="code-comment">// Percentual max de desconto (ex: 15.0)</span>
+
+<span class="code-kw">If</span> <span class="code-var">nDescontoDado</span> > nDescMaximo
+    <span class="code-fn">ApMsgStop</span>(<span class="code-str">"Desconto acima do permitido pelo parametro MV_PERDESC!"</span>, <span class="code-str">"Bloqueio"</span>)
+<span class="code-kw">EndIf</span>
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="loadCodeIntoEditor('masterclass_params')" style="background: linear-gradient(135deg, #eab308, #ca8a04); font-weight: 700; color: #1e1e1e;">
+              🚀 Carregar Leitor de Parâmetros SX6 no Editor
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- MASTERCLASS MVC OFICIAL -->
       <div class="subpanel" id="subpanelCapMVC">
         <div class="chapter-card">
@@ -3517,6 +3982,12 @@
               <tr><td><code>TCQuery</code></td><td><code>TCQuery cSql New Alias (cAlias)</code></td><td>Executa instrução SQL no banco e cria cursor em memória.</td><td>Aula 06</td></tr>
               <tr><td><code>DbSkip()</code></td><td><code>(cAlias)->(DbSkip())</code></td><td>Avança o cursor para o próximo registro do banco.</td><td>Aula 06</td></tr>
               <tr><td><code>DbCloseArea()</code></td><td><code>(cAlias)->(DbCloseArea())</code></td><td>Fecha a área de trabalho e libera memória do servidor.</td><td>Aula 06</td></tr>
+              <tr><td><code>Exit / Loop</code></td><td><code>If lCond; Exit; EndIf</code></td><td>Controle de laço: Exit interrompe (break), Loop avança (continue).</td><td>Aula 02B</td></tr>
+              <tr><td><code>GetArea() / RestArea()</code></td><td><code>aArea := GetArea() / RestArea(aArea)</code></td><td>Salva e restaura 100% do estado das tabelas (obrigatório em PEs).</td><td>Aula 07</td></tr>
+              <tr><td><code>ExistBlock() / ExecBlock()</code></td><td><code>If ExistBlock("PE"); ExecBlock("PE"); EndIf</code></td><td>Verifica se Ponto de Entrada existe e executa dinamicamente.</td><td>Aula 07</td></tr>
+              <tr><td><code>GetMV() / PutMV()</code></td><td><code>xVal := GetMV("MV_NOME")</code></td><td>Lê e atualiza parâmetros globais da tabela SX6 do Protheus.</td><td>Aula 08</td></tr>
+              <tr><td><code>RecLock() / MsUnlock()</code></td><td><code>RecLock("SA1", .F.) ... MsUnlock()</code></td><td>Gravação atômica protegida com bloqueio de registro no banco.</td><td>Banco / ERP</td></tr>
+              <tr><td><code>FWFormStruct()</code></td><td><code>oStru := FWFormStruct(1, "SA1")</code></td><td>Carrega metadados do dicionário SX3 para Model (1) ou View (2) em MVC.</td><td>Masterclass MVC</td></tr>
             </tbody>
           </table>
         </div>
@@ -3762,6 +4233,26 @@
 
       <div class="grader-criteria-list" id="graderCriteriaList">
         <!-- Injetado dinamicamente -->
+      </div>
+
+      <!-- Comparativo Didático: Código Inicial Limpo vs Solução Esperada -->
+      <div class="grader-comparison-box" style="margin-top: 14px; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <strong style="font-size: 11.5px; color: var(--totvs-cyan); text-transform: uppercase;">📄 Código Base Inicial (Sem Nenhuma Edição):</strong>
+            <span id="graderCodeStatusBadge" class="sidebar-tag-modified" style="font-size: 10px; display: inline-flex;">✨ Limpo</span>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn btn-secondary btn-sm" id="graderBtnResetOriginal" style="font-size: 11px; padding: 3px 8px;" title="Descarta qualquer edição do aluno e restaura o código inicial limpo">🔄 Restaurar Código Inicial no Editor</button>
+          </div>
+        </div>
+        <pre id="graderInitialCodeText" style="margin: 0 0 10px 0; font-family: 'Consolas', monospace; font-size: 11px; color: #94a3b8; background: rgba(255, 255, 255, 0.03); padding: 8px 10px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap; max-height: 90px; border: 1px solid rgba(255, 255, 255, 0.06);"></pre>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <strong style="font-size: 11.5px; color: #34d399; text-transform: uppercase;">💡 Gabarito / Solução Oficial Esperada:</strong>
+          <button type="button" class="btn btn-secondary btn-sm" id="graderBtnApplySolution" style="font-size: 11px; padding: 3px 8px; color: #34d399; border-color: rgba(52, 211, 153, 0.4);" title="Aplica a solução no editor para teste">📋 Aplicar Solução no Editor</button>
+        </div>
+        <pre id="graderSolutionText" style="margin: 0; font-family: 'Consolas', monospace; font-size: 11.5px; color: #a5f3fc; background: rgba(0, 210, 211, 0.05); padding: 10px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap; max-height: 110px; border: 1px solid rgba(0, 210, 211, 0.15);"></pre>
       </div>
 
       <div class="grader-footer">
@@ -7669,8 +8160,87 @@
         graderCriteriaList.appendChild(card);
       });
 
+      // 4. Preenche o Gabarito Oficial e o Código Base Original (Sem Edições)
+      const graderInitialCodeText = document.getElementById('graderInitialCodeText');
+      if (graderInitialCodeText) {
+        graderInitialCodeText.innerText = currentLesson.code;
+      }
+      const graderCodeStatusBadge = document.getElementById('graderCodeStatusBadge');
+      const savedUserCode = localStorage.getItem('totvs_user_code_' + currentLesson.id);
+      const isUserCodeModified = (savedUserCode !== null && savedUserCode !== undefined && savedUserCode !== currentLesson.code);
+      if (graderCodeStatusBadge) {
+        if (isUserCodeModified) {
+          graderCodeStatusBadge.innerHTML = '✏️ Código Submetido com Edições Customizadas';
+          graderCodeStatusBadge.style.background = 'rgba(245, 158, 11, 0.2)';
+          graderCodeStatusBadge.style.color = '#fbbf24';
+          graderCodeStatusBadge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+        } else {
+          graderCodeStatusBadge.innerHTML = '✨ Código Inicial Limpo (Sem Edições)';
+          graderCodeStatusBadge.style.background = 'rgba(16, 185, 129, 0.2)';
+          graderCodeStatusBadge.style.color = '#34d399';
+          graderCodeStatusBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        }
+      }
+
+      const graderSolText = document.getElementById('graderSolutionText');
+      if (graderSolText) {
+        if (currentLesson.challenge && currentLesson.challenge.solution) {
+          graderSolText.innerText = currentLesson.challenge.solution;
+        } else {
+          graderSolText.innerText = "// Consulte os objetivos técnicos descritos na missão desta aula.";
+        }
+      }
+
       // Abre o modal de auditoria
       graderModal.classList.add('active');
+    }
+
+    // Funções de Gestão de Código Inicial vs Edições
+    function resetCurrentLesson() {
+      if (!currentLesson) return;
+      localStorage.removeItem('totvs_user_code_' + currentLesson.id);
+      if (monacoEditorInstance) {
+        monacoEditorInstance.setValue(currentLesson.code);
+      }
+      renderLessonsList();
+      renderChallenge(currentLesson);
+
+      // Atualiza badges no modal de auditoria se estiver aberto
+      const badge = document.getElementById('graderCodeStatusBadge');
+      if (badge) {
+        badge.innerHTML = '✨ Código Inicial Limpo (Sem Edições)';
+        badge.style.background = 'rgba(16, 185, 129, 0.2)';
+        badge.style.color = '#34d399';
+        badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+      }
+      const initialCode = document.getElementById('graderInitialCodeText');
+      if (initialCode) {
+        initialCode.innerText = currentLesson.code;
+      }
+
+      if (typeof showToastNotification === 'function') {
+        showToastNotification(`Código de "${currentLesson.badge}" restaurado para o estado inicial sem edições!`, '🔄');
+      }
+    }
+
+    function applyChallengeSolution() {
+      if (!currentLesson || !currentLesson.challenge || !currentLesson.challenge.solution) return;
+      if (monacoEditorInstance) {
+        let newCode = currentLesson.code;
+        if (currentLesson.id === 'aula01') {
+          newCode = currentLesson.code.replace('Local cNome     := "Joao Silva"', 'Local cCargo    := "Desenvolvedor ADVPL Pleno"\n    Local cNome     := "Joao Silva"');
+          newCode = newCode.replace('cResumo += "Nome: " + cNome + CRLF', 'cResumo += "Nome: " + cNome + CRLF\n    cResumo += "Cargo: " + PadL(cCargo, 30) + CRLF');
+        } else {
+          newCode = currentLesson.code + '\n\n// --- SOLUÇÃO OFICIAL DO DESAFIO ---\n' + currentLesson.challenge.solution;
+        }
+        monacoEditorInstance.setValue(newCode);
+        localStorage.setItem('totvs_user_code_' + currentLesson.id, newCode);
+        renderLessonsList();
+        if (typeof showToastNotification === 'function') {
+          showToastNotification(`Solução oficial aplicada no editor para "${currentLesson.badge}"!`, '💡');
+        }
+        if (graderModal) graderModal.classList.remove('active');
+      }
     }
 
     // Vinculação de eventos do corretor de código
@@ -7679,6 +8249,25 @@
     }
     if (btnValidateChallengeInCard) {
       btnValidateChallengeInCard.addEventListener('click', runCodeGrader);
+    }
+    const btnResetLessonCode = document.getElementById('btnResetLessonCode');
+    if (btnResetLessonCode) {
+      btnResetLessonCode.addEventListener('click', () => {
+        if (confirm(`Deseja restaurar o código original de "${currentLesson ? currentLesson.title : ''}" descartando todas as alterações feitas?`)) {
+          resetCurrentLesson();
+        }
+      });
+    }
+    const graderBtnResetOriginal = document.getElementById('graderBtnResetOriginal');
+    if (graderBtnResetOriginal) {
+      graderBtnResetOriginal.addEventListener('click', () => {
+        resetCurrentLesson();
+        if (graderModal) graderModal.classList.remove('active');
+      });
+    }
+    const graderBtnApplySolution = document.getElementById('graderBtnApplySolution');
+    if (graderBtnApplySolution) {
+      graderBtnApplySolution.addEventListener('click', applyChallengeSolution);
     }
     if (graderModalClose) {
       graderModalClose.addEventListener('click', () => graderModal.classList.remove('active'));
@@ -7813,15 +8402,62 @@
       });
     };
 
+    window.switchMasterclassTrack = function(trackId) {
+      const mView = document.getElementById('viewMasterclass');
+      if (!mView) return;
+
+      // 1. Atualiza botões do seletor de trilhas principais
+      mView.querySelectorAll('.masterclass-track-selector .track-btn').forEach(btn => {
+        const onclickAttr = btn.getAttribute('onclick') || '';
+        btn.classList.toggle('active', onclickAttr.includes(trackId));
+      });
+
+      // 2. Exibe o grupo de sub-abas da trilha selecionada e oculta as demais
+      mView.querySelectorAll('.track-subtabs-group').forEach(grp => {
+        if (grp.getAttribute('data-track') === trackId) {
+          grp.style.display = 'flex';
+          // Ativa automaticamente o primeiro subcapítulo desta trilha
+          const firstSubBtn = grp.querySelector('.subtab-btn');
+          if (firstSubBtn) {
+            firstSubBtn.click();
+          }
+        } else {
+          grp.style.display = 'none';
+        }
+      });
+    };
+
     window.switchMasterclassTab = function(panelId) {
       const mView = document.getElementById('viewMasterclass');
       if (!mView) return;
+
+      // 1. Atualiza botões de subtab ativos
       mView.querySelectorAll('.section-subtabs .subtab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('onclick').includes(panelId));
+        const onclickAttr = btn.getAttribute('onclick') || '';
+        btn.classList.toggle('active', onclickAttr.includes(panelId));
       });
+
+      // 2. Ativa o painel de conteúdo
       mView.querySelectorAll('.subpanel').forEach(p => {
         p.classList.toggle('active', p.id === panelId);
       });
+
+      // 3. Sincroniza a trilha pai (se for acionado diretamente por um botão externo)
+      const activeBtn = mView.querySelector(`.section-subtabs .subtab-btn.active`);
+      if (activeBtn) {
+        const parentGrp = activeBtn.closest('.track-subtabs-group');
+        if (parentGrp) {
+          const trackId = parentGrp.getAttribute('data-track');
+          parentGrp.style.display = 'flex';
+          mView.querySelectorAll('.masterclass-track-selector .track-btn').forEach(btn => {
+            const onclickAttr = btn.getAttribute('onclick') || '';
+            btn.classList.toggle('active', onclickAttr.includes(trackId));
+          });
+          mView.querySelectorAll('.track-subtabs-group').forEach(grp => {
+            if (grp !== parentGrp) grp.style.display = 'none';
+          });
+        }
+      }
     };
 
     window.switchCareerTab = function(panelId) {

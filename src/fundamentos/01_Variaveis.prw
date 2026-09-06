@@ -9,7 +9,6 @@
 /*/
 User Function Aula01()
     // Declaracao de Variaveis Locais (Boa Pratica)
-    Local cCargo    := "Desenvolvedor"
     Local cNome     := "Joao Silva"
     Local nSalario  := 4500.75
     Local dAdmissao := Date()
@@ -21,7 +20,6 @@ User Function Aula01()
     // Formatando e montando o texto de apresentacao
     cResumo := "=== DADOS DO COLABORADOR ===" + CRLF + CRLF
     cResumo += "Nome: " + cNome + CRLF
-    cResumo += "Cargo: " + cCargo + CRLF
     cResumo += "Salario: R$ " + Transform(nSalario, "@E 999,999.92") + CRLF
     cResumo += "Data de Admissao: " + dToC(dAdmissao) + CRLF
     cResumo += "Status Ativo: " + Iif(lAtivo, "SIM", "NAO") + CRLF + CRLF

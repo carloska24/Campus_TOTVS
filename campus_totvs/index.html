@@ -572,41 +572,54 @@
       100% { background-position: -300% 0; }
     }
 
-    /* Meta Bar: Quest Tag, Dificuldade, XP Badge */
+    /* Meta Bar: Quest Tag, Dificuldade, Status e XP em harmonia */
     .challenge-meta-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 8px;
+      flex-wrap: wrap;
       margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     }
     [data-theme="light"] .challenge-meta-bar {
       border-bottom-color: rgba(0, 0, 0, 0.08);
     }
 
+    .challenge-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
     .challenge-quest-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
       text-transform: uppercase;
       color: #f59e0b;
+      white-space: nowrap;
+      flex-shrink: 0;
+      width: fit-content;
     }
     [data-theme="light"] .challenge-quest-tag {
       color: #b45309;
     }
 
     .pulse-dot {
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: #f59e0b;
-      box-shadow: 0 0 8px #f59e0b;
+      box-shadow: 0 0 6px #f59e0b;
       animation: pulseDot 1.8s infinite;
+      flex-shrink: 0;
     }
     @keyframes pulseDot {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -614,13 +627,20 @@
     }
 
     .challenge-difficulty {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-main, #f1f5f9);
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 1.5px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted, #94a3b8);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      white-space: nowrap;
+      flex-shrink: 0;
+      width: fit-content;
+      max-width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1.3;
     }
     [data-theme="light"] .challenge-difficulty {
       background: rgba(0, 0, 0, 0.05);
@@ -631,15 +651,20 @@
     .challenge-xp-badge {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
       color: #ffffff;
-      font-weight: 800;
-      font-size: 11px;
-      padding: 3px 9px;
-      border-radius: 20px;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
-      letter-spacing: 0.3px;
+      font-weight: 700;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.35);
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-left: auto;
+      width: fit-content;
+      max-width: fit-content;
     }
 
     /* Header com ícone único estilizado e título */
@@ -1712,20 +1737,242 @@
       margin-left: 3px;
     }
     .challenge-tag-edited {
+      font-size: 9.5px;
+      font-weight: 600;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+      padding: 1.5px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      line-height: 1.3;
+      flex-shrink: 0;
+      width: fit-content;
+      max-width: fit-content;
+    }
+    [data-theme="light"] .challenge-tag-edited {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(217, 119, 6, 0.35);
+      color: #b45309;
+    }
+
+    /* Botão de Validação do Desafio no Header */
+    .btn-grade {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 16px;
+      height: 38px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-grade:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5);
+      transform: translateY(-1px);
+    }
+
+    /* Botão de Validação no Card de Missão */
+    .btn-validate-challenge {
+      width: 100%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 12px 18px;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 13.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+      transition: all 0.25s ease;
+      margin-bottom: 8px;
+    }
+    .btn-validate-challenge:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .task-item.pending {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.08);
+    }
+    .task-item.pending .task-checkbox {
+      border-color: #f59e0b;
+      color: #f59e0b;
+      background: rgba(245, 158, 11, 0.18);
+    }
+
+    /* Modal de Auditoria e Correção (Code Grader) */
+    .grader-window-frame {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-elevated), 0 0 35px rgba(16, 185, 129, 0.2);
+      border-radius: 14px;
+      width: 580px;
+      max-width: 95vw;
+      max-height: 88vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      animation: modalFadeIn 0.25s ease-out;
+    }
+    .grader-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card-inner-bg);
+    }
+    .grader-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .grader-badge-icon {
+      font-size: 24px;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .grader-header h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 0;
+    }
+    .grader-subtitle {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .grader-score-banner {
+      padding: 16px 20px;
+      margin: 16px 20px 8px 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .grader-score-banner.partial {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+    .grader-score-circle {
+      font-size: 20px;
+      font-weight: 900;
+      min-width: 52px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #10b981;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    }
+    .grader-score-banner.partial .grader-score-circle {
+      background: #f59e0b;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+    .grader-score-text h4 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 0 0 4px 0;
+    }
+    .grader-score-text p {
+      font-size: 12px;
+      color: var(--text-body);
+      margin: 0;
+    }
+    .grader-criteria-list {
+      padding: 8px 20px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .grader-criterion-card {
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--card-inner-bg);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .grader-criterion-card.pass {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    .grader-criterion-card.fail {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.05);
+    }
+    .criterion-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .criterion-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .criterion-badge {
       font-size: 10px;
       font-weight: 800;
-      background: linear-gradient(135deg, #f59e0b, #ea580c);
-      color: #ffffff;
-      padding: 2.5px 8px;
+      padding: 2px 7px;
       border-radius: 6px;
-      letter-spacing: 0.4px;
-      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
-      animation: pulseGlow 2.5s infinite;
-      white-space: nowrap;
+      text-transform: uppercase;
     }
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 6px rgba(245, 158, 11, 0.3); opacity: 0.95; }
-      50% { box-shadow: 0 0 14px rgba(245, 158, 11, 0.7); opacity: 1; }
+    .criterion-badge.pass {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+    }
+    .criterion-badge.fail {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+    .criterion-tip {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      padding-left: 22px;
+    }
+    .grader-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: var(--card-inner-bg);
     }
   </style>
 </head>
@@ -1776,9 +2023,13 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Carregar .PRW
       </button>
-      <button class="btn btn-primary" id="btnRunCode">
+      <button class="btn btn-primary" id="btnRunCode" title="Execução Livre no Simulador SmartClient (Atalho F5)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         Executar no Protheus
+      </button>
+      <button class="btn btn-grade" id="btnGradeCode" title="Avaliar e Corrigir os Objetivos da Missão Prática">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        Validar Desafio
       </button>
     </div>
   </header>
@@ -1862,12 +2113,14 @@
         <div class="inspector-card challenge-card" id="challengePanel" style="display: none;">
           <!-- Top Meta Bar: Status da Missão, Dificuldade e XP -->
           <div class="challenge-meta-bar">
-            <div class="challenge-quest-tag">
-              <span class="pulse-dot"></span>
-              <span id="challengeQuestTag">MISSÃO PRÁTICA</span>
+            <div class="challenge-meta-left">
+              <div class="challenge-quest-tag">
+                <span class="pulse-dot"></span>
+                <span id="challengeQuestTag">MISSÃO PRÁTICA</span>
+              </div>
+              <span class="challenge-difficulty" id="challengeDifficulty">Iniciante</span>
+              <span class="challenge-tag-edited" id="challengeEditedTag" style="display: none;">✏️ Editado</span>
             </div>
-            <div class="challenge-tag-edited" id="challengeEditedTag" style="display: none;">✏️ CÓDIGO EDITADO</div>
-            <div class="challenge-difficulty" id="challengeDifficulty">🟢 Iniciante</div>
             <div class="challenge-xp-badge" id="challengeXpBadge" title="Recompensa de XP">
               <span class="xp-icon">⚡</span>
               <span id="challengeXpValue">+50 XP</span>
@@ -1933,8 +2186,12 @@
             </div>
           </div>
 
-          <!-- Botão Principal de Conclusão Gamificado -->
+          <!-- Ações da Missão: Validação e Conclusão -->
           <div class="challenge-actions">
+            <button type="button" class="btn-validate-challenge" id="btnValidateChallengeInCard" title="Avalia o código do editor e verifica os critérios da aula">
+              <span class="btn-trophy">🛡️</span>
+              <span class="btn-label" id="btnValidateLabel">Avaliar & Corrigir Código</span>
+            </button>
             <button type="button" class="btn-complete-challenge" id="btnCompleteChallenge">
               <span class="btn-trophy" id="btnCompleteIcon">⚔️</span>
               <span class="btn-label" id="btnCompleteLabel">Concluir Missão (+50 XP)</span>
@@ -3085,7 +3342,7 @@
 
 
 
-  <!-- Protheus Virtual Modal Simulator -->
+  <!-- Protheus Virtual Modal Simulator (Modo Execução Livre) -->
   <div class="protheus-simulator-modal" id="protheusModal">
     <div class="protheus-window-frame">
       <div class="protheus-titlebar">
@@ -3105,6 +3362,41 @@
 
       <div class="protheus-dialog-footer">
         <button class="protheus-btn-ok" id="modalBtnOk">Ok</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Auditoria e Correção do Desafio (Code Grader) -->
+  <div class="protheus-simulator-modal" id="graderModal">
+    <div class="grader-window-frame">
+      <div class="grader-header">
+        <div class="grader-title-group">
+          <div class="grader-badge-icon">🛡️</div>
+          <div>
+            <h3 id="graderModalTitle">Auditoria do Desafio ADVPL</h3>
+            <span class="grader-subtitle" id="graderModalSubtitle">Avaliação Automática de Código & Regras TOTVS</span>
+          </div>
+        </div>
+        <button class="protheus-btn-close" id="graderModalClose">✕</button>
+      </div>
+
+      <div class="grader-score-banner" id="graderScoreBanner">
+        <div class="grader-score-circle" id="graderScoreCircle">4/4</div>
+        <div class="grader-score-text">
+          <h4 id="graderScoreHeadline">Missão Aprovada com Excelência!</h4>
+          <p id="graderScoreDesc">Seu código cumpriu todos os critérios técnicos da aula.</p>
+        </div>
+      </div>
+
+      <div class="grader-criteria-list" id="graderCriteriaList">
+        <!-- Injetado dinamicamente -->
+      </div>
+
+      <div class="grader-footer">
+        <button class="btn btn-secondary" id="graderBtnClose">Fechar</button>
+        <button class="btn btn-primary" id="graderBtnCompleteMission" style="background: linear-gradient(135deg, #10b981, #059669);">
+          🏆 Concluir Missão (+50 XP)
+        </button>
       </div>
     </div>
   </div>
@@ -5735,6 +6027,21 @@
     const modalBtnOk = document.getElementById('modalBtnOk');
     const modalBtnClose = document.getElementById('modalBtnClose');
 
+    // Elementos do Grader Modal (Auditoria Pedagógica)
+    const graderModal = document.getElementById('graderModal');
+    const graderModalTitle = document.getElementById('graderModalTitle');
+    const graderModalClose = document.getElementById('graderModalClose');
+    const graderBtnClose = document.getElementById('graderBtnClose');
+    const graderScoreBanner = document.getElementById('graderScoreBanner');
+    const graderScoreCircle = document.getElementById('graderScoreCircle');
+    const graderScoreHeadline = document.getElementById('graderScoreHeadline');
+    const graderScoreDesc = document.getElementById('graderScoreDesc');
+    const graderCriteriaList = document.getElementById('graderCriteriaList');
+    const graderBtnCompleteMission = document.getElementById('graderBtnCompleteMission');
+
+    const btnGradeCode = document.getElementById('btnGradeCode');
+    const btnValidateChallengeInCard = document.getElementById('btnValidateChallengeInCard');
+
     require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs' } });
 
     require(['vs/editor/editor.main'], function () {
@@ -5898,7 +6205,7 @@
       if (codeModifiedBadge) codeModifiedBadge.style.display = isModified ? 'inline-flex' : 'none';
       if (btnResetCode) btnResetCode.style.display = isModified ? 'inline-flex' : 'none';
       const chEditedTag = document.getElementById('challengeEditedTag');
-      if (chEditedTag) chEditedTag.style.display = isModified ? 'inline-block' : 'none';
+      if (chEditedTag) chEditedTag.style.display = isModified ? 'inline-flex' : 'none';
       const banner = document.getElementById('challengeEditedBanner');
       if (banner) banner.style.display = isModified ? 'flex' : 'none';
 
@@ -6514,6 +6821,518 @@
     modalBtnOk.addEventListener('click', () => modal.classList.remove('active'));
     modalBtnClose.addEventListener('click', () => modal.classList.remove('active'));
     modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+
+    // =========================================================================
+    // MOTOR DE CORREÇÃO PEDAGÓGICA AUTOMÁTICA (CODE GRADER PEDAGÓGICO)
+    // =========================================================================
+    function gradeLessonChallenge(lesson, code) {
+      const lessonId = (lesson && lesson.id) ? lesson.id : "aula01";
+      const cleanCode = (code || '').replace(/\/\*[\s\S]*?\*\//g, '');
+      const rawLines = cleanCode.split('\n');
+
+      // Executa no simulador virtual para capturar saída e possíveis erros de runtime
+      let runtimeOutput = null;
+      try {
+        runtimeOutput = executeVirtualAdvpl(code, lesson);
+      } catch (e) {
+        runtimeOutput = { type: 'error', message: e.message };
+      }
+      const outMsg = (runtimeOutput && runtimeOutput.message) ? runtimeOutput.message : "";
+      const isRunSuccess = runtimeOutput && runtimeOutput.type !== 'error';
+
+      let criteria = [];
+
+      switch (lessonId) {
+        case "aula01": {
+          // 1. Declarar a variável Local cCargo no topo da função
+          const hasLocalCargo = /^\s*Local\s+cCargo\b/im.test(cleanCode);
+          let isAtTop = false;
+          if (hasLocalCargo) {
+            let foundExecutable = false;
+            for (let line of rawLines) {
+              let l = line.trim();
+              if (!l || l.startsWith('//') || l.startsWith('*') || l.startsWith('#') || /^User\s+Function/i.test(l)) continue;
+              if (/^(Local|Private|Static)\s+/i.test(l)) {
+                if (/\bcCargo\b/i.test(l)) {
+                  isAtTop = !foundExecutable;
+                  break;
+                }
+              } else {
+                foundExecutable = true;
+              }
+            }
+          }
+
+          criteria.push({
+            id: 0,
+            title: "Declarar a variável Local cCargo no topo da função",
+            pass: hasLocalCargo && isAtTop,
+            tip: (hasLocalCargo && isAtTop)
+              ? "Excelente! Variável 'cCargo' declarada com escopo Local no início da função, seguindo as diretrizes oficiais TOTVS."
+              : (!hasLocalCargo 
+                  ? "Declare a variável 'Local cCargo := \"...\"' junto das demais variáveis no início da User Function." 
+                  : "Atenção às regras de ouro da TOTVS: 'Local cCargo' deve ser declarada no topo da função, antes de instruções executáveis!")
+          });
+
+          // 2. Formatar o cargo com PadL(cCargo, 30) para padronizar o alinhamento
+          const hasPadL = /Pad[LR]\s*\(\s*cCargo\s*,\s*30\s*\)/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Formatar o cargo com PadL(cCargo, 30)",
+            pass: hasPadL,
+            tip: hasPadL
+              ? "Perfeito! A função PadL/PadR foi aplicada com largura de 30 posições para alinhar o texto."
+              : "Utilize a função PadL(cCargo, 30) para preencher a string com espaços à esquerda até 30 posições."
+          });
+
+          // 3. Concatenar no cResumo logo após a linha do Nome
+          const hasConcat = /cResumo\s*\+?=\s*.*(?:cCargo|Pad[LR])/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Concatenar no cResumo logo após a linha do Nome",
+            pass: hasConcat,
+            tip: hasConcat
+              ? "Muito bem! O cargo foi adicionado à variável 'cResumo' para exibição."
+              : "Adicione a linha: cResumo += \"Cargo: \" + PadL(cCargo, 30) + CRLF logo após a linha do Nome."
+          });
+
+          // 4. Executar no Protheus Virtual e validar a exibição do cargo
+          const hasOutputCargo = isRunSuccess && /Cargo:/i.test(outMsg) && /(?:Desenvolvedor|Pleno|ADVPL)/i.test(outMsg);
+          criteria.push({
+            id: 3,
+            title: "Executar no Protheus Virtual e validar a exibição do cargo",
+            pass: hasOutputCargo,
+            tip: hasOutputCargo
+              ? "Show! O Protheus Virtual compilou e renderizou o cargo no relatório final com sucesso."
+              : "O relatório executado ainda não exibiu a linha do Cargo ou ocorreu erro na compilação. Revise o editor."
+          });
+          break;
+        }
+
+        case "aula02": {
+          const hasElseIf = /ElseIf\s+.*nMedia\s*(?:>=|>)/i.test(cleanCode) || (/If\s+.*nMedia/i.test(cleanCode) && /Else/i.test(cleanCode));
+          criteria.push({
+            id: 0,
+            title: "Implementar condição condicional para média intermediária",
+            pass: hasElseIf,
+            tip: hasElseIf ? "Correto! Estrutura ElseIf/If condicional detectada." : "Adicione uma cláusula ElseIf nMedia >= 7.0 para classificar notas intermediárias."
+          });
+
+          const hasAaddPrata = /aAdd\s*\(\s*aResultado\s*,.*(?:Prata|Pleno)/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Inserir 'Nivel Prata (Pleno)' com aAdd()",
+            pass: hasAaddPrata,
+            tip: hasAaddPrata ? "Ótimo! aAdd utilizado para popular o vetor aResultado." : "Use aAdd(aResultado, 'Classificacao: Nivel Prata (Pleno)') na condição atendida."
+          });
+
+          const hasEndIf = /End\s*If/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Estrutura condicional finalizada com EndIf",
+            pass: hasEndIf,
+            tip: hasEndIf ? "EndIf posicionado corretamente." : "Lembre-se de fechar os blocos condicionais com EndIf."
+          });
+
+          const hasOutA2 = isRunSuccess && /(?:Prata|Pleno|Aprovado)/i.test(outMsg);
+          criteria.push({
+            id: 3,
+            title: "Executar no Protheus Virtual e validar a classificação",
+            pass: hasOutA2,
+            tip: hasOutA2 ? "Classificação exibida com sucesso no modal do Protheus!" : "Execute no Protheus Virtual e certifique-se de que a classificação apareça na mensagem."
+          });
+          break;
+        }
+
+        case "aula02b": {
+          const hasLoop = /For\s+\w+\s*:=|While\s+/i.test(cleanCode);
+          criteria.push({
+            id: 0,
+            title: "Estruturar repetição com laço For ou While",
+            pass: hasLoop,
+            tip: hasLoop ? "Laço de repetição detectado." : "Utilize For ou While para iterar pelos dados."
+          });
+
+          const hasAccum = /\w+\s*\+=\s*\w+/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Calcular total acumulado com operador +=",
+            pass: hasAccum,
+            tip: hasAccum ? "Operador de atribuição cumulativa += implementado." : "Utilize nTotal += nValor para somar os valores das iterações."
+          });
+
+          const hasLoopClose = /Next|EndDo/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Encerramento correto do loop com Next / EndDo",
+            pass: hasLoopClose,
+            tip: hasLoopClose ? "Loop fechado corretamente." : "Feche o laço For com Next ou While com EndDo."
+          });
+
+          const hasOutA2b = isRunSuccess && /(?:Total|Soma|Média|Saldo)/i.test(outMsg);
+          criteria.push({
+            id: 3,
+            title: "Exibição do total consolidado no Protheus Virtual",
+            pass: hasOutA2b,
+            tip: hasOutA2b ? "Total consolidado exibido com sucesso!" : "Certifique-se de exibir o valor total acumulado no ApMsgInfo."
+          });
+          break;
+        }
+
+        case "aula03": {
+          const hasPRD5 = /PRD005/i.test(cleanCode) || /aItens/i.test(cleanCode);
+          criteria.push({
+            id: 0,
+            title: "Inserir o 5º produto na matriz aItens",
+            pass: hasPRD5,
+            tip: hasPRD5 ? "Item adicional inserido na matriz de produtos." : "Adicione a linha do produto 'PRD005' na matriz aItens."
+          });
+
+          const hasPadR = /PadR\s*\(/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Padronizar alinhamento da descrição com PadR()",
+            pass: hasPadR,
+            tip: hasPadR ? "PadR utilizado para alinhamento profissional de colunas." : "Formate a descrição do item com PadR(cDesc, 26)."
+          });
+
+          const hasTotalMatriz = /nTotal/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Recalcular o total geral do pedido",
+            pass: hasTotalMatriz,
+            tip: hasTotalMatriz ? "Total geral do pedido acumulado." : "Garanta que o loop soma o novo produto ao total geral."
+          });
+
+          const hasOutA3 = isRunSuccess && /PRD005/i.test(outMsg);
+          criteria.push({
+            id: 3,
+            title: "Validação da listagem de itens no Protheus Virtual",
+            pass: hasOutA3,
+            tip: hasOutA3 ? "Tabela de itens renderizada perfeitamente!" : "Execute e confira se o PRD005 aparece na listagem do modal."
+          });
+          break;
+        }
+
+        case "aula04": {
+          const hasCodeblock = /\{\s*\|[^|]*\|\s*.*(?:>|<)/i.test(cleanCode);
+          criteria.push({
+            id: 0,
+            title: "Definir Codeblock com critério de comparação",
+            pass: hasCodeblock,
+            tip: hasCodeblock ? "Codeblock de comparação lambda criado com sucesso." : "Defina bBloco := { |x, y| x[4] > y[4] } para ordenação decrescente por valor."
+          });
+
+          const hasASort = /aSort\s*\(/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Ordenar matriz com a função aSort()",
+            pass: hasASort,
+            tip: hasASort ? "aSort executado com o bloco de código." : "Invoque aSort(aProdutos, , , bBloco) para ordenar os registros."
+          });
+
+          const hasAScan = /aScan\s*\(/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Buscar elemento na matriz com aScan()",
+            pass: hasAScan,
+            tip: hasAScan ? "aScan aplicado para localização dinâmica." : "Utilize aScan(aProdutos, { |x| x[1] == 'PRD001' }) para localizar o índice."
+          });
+
+          const hasOutA4 = isRunSuccess && /(?:aSort|aScan|Ordenad|Encontrado)/i.test(outMsg);
+          criteria.push({
+            id: 3,
+            title: "Validar algoritmo de ordenação e busca no Protheus",
+            pass: hasOutA4,
+            tip: hasOutA4 ? "Algoritmo validado com excelência no Protheus Virtual!" : "Execute no Protheus Virtual para validar o resultado da busca."
+          });
+          break;
+        }
+
+        case "aula05": {
+          const hasDialog = /DEFINE\s+MSDIALOG/i.test(cleanCode);
+          criteria.push({
+            id: 0,
+            title: "Criar janela nativa com DEFINE MSDIALOG",
+            pass: hasDialog,
+            tip: hasDialog ? "Janela nativa MSDIALOG configurada." : "Utilize o comando DEFINE MSDIALOG para a janela modal."
+          });
+
+          const hasMsGet = /@.*MSGET/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Campos de digitação interativa com @ MSGET",
+            pass: hasMsGet,
+            tip: hasMsGet ? "Campos de entrada MSGET vinculados a variáveis." : "Adicione os campos interativos de valor e desconto com @ MSGET."
+          });
+
+          const hasCalcAction = /ACTION|SetText/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Lógica de cálculo vinculada ao botão da tela",
+            pass: hasCalcAction,
+            tip: hasCalcAction ? "Ação de cálculo e atualização dinâmica de tela OK." : "Vincule a ação de recálculo ao botão de calcular."
+          });
+
+          const hasOutA5 = isRunSuccess && /(?:MSDIALOG|Desconto|Líquido|Total)/i.test(outMsg);
+          criteria.push({
+            id: 3,
+            title: "Validação da interface no Protheus Virtual",
+            pass: hasOutA5,
+            tip: hasOutA5 ? "Interface gráfica simulada com sucesso!" : "Execute no Protheus Virtual para testar a janela de diálogo."
+          });
+          break;
+        }
+
+        case "aula06": {
+          const hasRetSql = /RetSqlName\s*\(\s*["'](?:SA1|SC5|SB1)["']\s*\)/i.test(cleanCode);
+          criteria.push({
+            id: 0,
+            title: "Resolução dinâmica de tabela com RetSqlName()",
+            pass: hasRetSql,
+            tip: hasRetSql ? "Boa prática oficial TOTVS: RetSqlName utilizado em vez de tabela fixa." : "Nunca faça SQL fixo! Use RetSqlName('SA1') para buscar o nome da empresa ativa."
+          });
+
+          const hasDelet = /D_E_L_E_T_\s*=\s*['"]\s+['"]/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Cláusula obrigatória de deleção lógica (D_E_L_E_T_ = ' ')",
+            pass: hasDelet,
+            tip: hasDelet ? "Filtro de deleção lógica incluído, protegendo integridade de dados." : "Adicione WHERE D_E_L_E_T_ = ' ' para filtrar registros excluídos no Protheus."
+          });
+
+          const hasTCQuery = /TCQuery\s+/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Abertura de área TopConnect com TCQuery / ChangeQuery",
+            pass: hasTCQuery,
+            tip: hasTCQuery ? "Área de consulta aberta via TCQuery." : "Envie a query com TCQuery ChangeQuery(cQuery) New Alias 'QRY_TMP'."
+          });
+
+          const hasCloseArea = /DbCloseArea\s*\(\s*\)/i.test(cleanCode);
+          criteria.push({
+            id: 3,
+            title: "Fechamento obrigatório de área com DbCloseArea()",
+            pass: hasCloseArea,
+            tip: hasCloseArea ? "Memória liberada com DbCloseArea(), evitando memory leak." : "Regra inegociável: Sempre feche a área após o laço com (cAlias)->(DbCloseArea())."
+          });
+          break;
+        }
+
+        case "aula07": {
+          const hasGetArea = /GetArea\s*\(\s*\)/i.test(cleanCode);
+          criteria.push({
+            id: 0,
+            title: "Salvar contexto geral do ambiente com GetArea()",
+            pass: hasGetArea,
+            tip: hasGetArea ? "Contexto geral salvo no início da rotina." : "Use Local aArea := GetArea() para salvar o ponteiro inicial."
+          });
+
+          const hasTableArea = /->\s*\(\s*GetArea\s*\(\s*\)\s*\)/i.test(cleanCode) || /GetArea/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Salvar posicionamento da tabela mestre",
+            pass: hasTableArea,
+            tip: hasTableArea ? "Posicionamento do registro salvo com sucesso." : "Salve a área da tabela com Local aAreaTab := (cAlias)->(GetArea())."
+          });
+
+          const hasLogicPE = /If|Else/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Lógica de validação customizada no Ponto de Entrada",
+            pass: hasLogicPE,
+            tip: hasLogicPE ? "Regra de negócio customizada implementada no ponto de entrada." : "Adicione a validação de bloqueio ou liberação comercial."
+          });
+
+          const hasRestArea = /RestArea\s*\(/i.test(cleanCode);
+          criteria.push({
+            id: 3,
+            title: "Restauração segura de contexto com RestArea()",
+            pass: hasRestArea,
+            tip: hasRestArea ? "Áreas restauradas com sucesso na saída da rotina." : "Restaure obrigatoriamente as áreas com RestArea(aAreaTab) e RestArea(aArea)."
+          });
+          break;
+        }
+
+        case "aula08": {
+          const hasGetMV = /GetMV\s*\(\s*["']MV_/i.test(cleanCode);
+          criteria.push({
+            id: 0,
+            title: "Leitura dinâmica de parâmetro SX6 com GetMV()",
+            pass: hasGetMV,
+            tip: hasGetMV ? "GetMV() utilizado para parametrizar regras de negócio." : "Substitua valores fixos chamando GetMV('MV_LIMPED', .F., 50000)."
+          });
+
+          const hasCompare = /GetMV/i.test(cleanCode) && /(?:nVal|nTotal|nLimite|>|<|>=|<=)/i.test(cleanCode);
+          criteria.push({
+            id: 1,
+            title: "Aplicação do parâmetro na regra de negócio",
+            pass: hasCompare,
+            tip: hasCompare ? "Parâmetro integrado à tomada de decisão." : "Compare o valor do pedido com o limite lido do GetMV."
+          });
+
+          const hasTransform = /Transform\s*\(/i.test(cleanCode);
+          criteria.push({
+            id: 2,
+            title: "Formatação visual com Transform(@E)",
+            pass: hasTransform,
+            tip: hasTransform ? "Valores formatados para o usuário." : "Formate os valores lidos com Transform(nValor, '@E 999,999.92')."
+          });
+
+          const hasOutA8 = isRunSuccess && /(?:GetMV|Parâmetro|LIMPED|PERDESC)/i.test(outMsg);
+          criteria.push({
+            id: 3,
+            title: "Relatório de parametrização no Protheus Virtual",
+            pass: hasOutA8,
+            tip: hasOutA8 ? "Relatório de parâmetros gerado com sucesso!" : "Execute no Protheus Virtual para validar a exibição dos parâmetros."
+          });
+          break;
+        }
+
+        default: {
+          criteria.push({ id: 0, title: "Sintaxe ADVPL válida", pass: isRunSuccess, tip: "Compilação sem erros." });
+          criteria.push({ id: 1, title: "Declaração de variáveis", pass: /Local\s+/i.test(cleanCode), tip: "Uso de variáveis locais." });
+          criteria.push({ id: 2, title: "Lógica de processamento", pass: cleanCode.length > 50, tip: "Implementação de instruções." });
+          criteria.push({ id: 3, title: "Execução no Protheus Virtual", pass: isRunSuccess, tip: "Execução com sucesso." });
+          break;
+        }
+      }
+
+      const score = criteria.filter(c => c.pass).length;
+      const total = criteria.length;
+      const passed = (score === total);
+
+      return {
+        lessonId: lessonId,
+        lessonTitle: (lesson && lesson.title) ? lesson.title : "Aula ADVPL",
+        score: score,
+        total: total,
+        passed: passed,
+        criteria: criteria
+      };
+    }
+
+    function runCodeGrader() {
+      if (!currentLesson) return;
+      const code = (monacoEditorInstance ? monacoEditorInstance.getValue() : currentLesson.code);
+      const gradeResult = gradeLessonChallenge(currentLesson, code);
+
+      // 1. Atualiza persistência dos checkboxes no localStorage
+      const savedTasks = {};
+      gradeResult.criteria.forEach((crit, idx) => {
+        savedTasks[idx] = crit.pass;
+      });
+      localStorage.setItem('totvs_quest_tasks_' + currentLesson.id, JSON.stringify(savedTasks));
+
+      // 2. Atualiza a lista visual de tarefas no painel do desafio
+      if (challengeTasksList) {
+        challengeTasksList.innerHTML = '';
+        gradeResult.criteria.forEach((crit, idx) => {
+          const taskLi = document.createElement('li');
+          taskLi.className = 'task-item' + (crit.pass ? ' done' : ' pending');
+          taskLi.innerHTML = `
+            <span class="task-checkbox">${crit.pass ? '✓' : '⚠️'}</span>
+            <div style="flex: 1;">
+              <div style="font-weight: 600; color: ${crit.pass ? 'var(--text-main)' : '#fbbf24'};">${crit.title}</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">${crit.tip}</div>
+            </div>
+          `;
+          challengeTasksList.appendChild(taskLi);
+        });
+        if (challengeProgressCount) {
+          challengeProgressCount.innerText = gradeResult.score + '/' + gradeResult.total;
+        }
+      }
+
+      // 3. Preenche os dados do Modal de Auditoria
+      graderModalTitle.innerText = `Auditoria do Código: ${currentLesson.badge}`;
+      graderScoreCircle.innerText = `${gradeResult.score}/${gradeResult.total}`;
+
+      if (gradeResult.passed) {
+        graderScoreBanner.className = 'grader-score-banner';
+        graderScoreHeadline.innerText = 'Missão 100% Cumprida com Excelência! 🏆';
+        graderScoreDesc.innerText = 'Parabéns! Seu código atendeu a todos os 4 critérios técnicos e às diretrizes oficiais TOTVS.';
+        graderBtnCompleteMission.style.display = 'inline-flex';
+        graderBtnCompleteMission.innerText = `🏆 Concluir Missão (+${(currentLesson.challenge && currentLesson.challenge.xp) ? currentLesson.challenge.xp : 50} XP)`;
+
+        // Feedback audiovisual de vitória
+        playAudioFx('victory');
+        launchConfetti();
+
+        // Concede a conclusão automaticamente se ainda não concluído
+        if (!completedChallenges[currentLesson.id]) {
+          completedChallenges[currentLesson.id] = true;
+          localStorage.setItem('totvs_campus_completed_challenges', JSON.stringify(completedChallenges));
+          userXp += ((currentLesson.challenge && currentLesson.challenge.xp) ? currentLesson.challenge.xp : 50);
+          localStorage.setItem('totvs_campus_user_xp', userXp.toString());
+        }
+
+        renderChallenge(currentLesson);
+        renderLessonsList();
+      } else {
+        graderScoreBanner.className = 'grader-score-banner partial';
+        graderScoreHeadline.innerText = `Atenção: ${gradeResult.score} de ${gradeResult.total} critérios atendidos`;
+        graderScoreDesc.innerText = 'Veja abaixo os itens que ainda precisam de ajuste no seu código para liberar a aprovação total.';
+        graderBtnCompleteMission.style.display = 'none';
+        playAudioFx('tick');
+      }
+
+      // Injeta lista detalhada de critérios no modal
+      graderCriteriaList.innerHTML = '';
+      gradeResult.criteria.forEach((crit, idx) => {
+        const card = document.createElement('div');
+        card.className = 'grader-criterion-card ' + (crit.pass ? 'pass' : 'fail');
+        card.innerHTML = `
+          <div class="criterion-head">
+            <div class="criterion-title">
+              <span>${crit.pass ? '✅' : '🟡'}</span>
+              <span>Passo ${idx + 1}: ${crit.title}</span>
+            </div>
+            <span class="criterion-badge ${crit.pass ? 'pass' : 'fail'}">${crit.pass ? 'Aprovado' : 'Pendente'}</span>
+          </div>
+          <div class="criterion-tip">${crit.tip}</div>
+        `;
+        graderCriteriaList.appendChild(card);
+      });
+
+      // Abre o modal de auditoria
+      graderModal.classList.add('active');
+    }
+
+    // Vinculação de eventos do corretor de código
+    if (btnGradeCode) {
+      btnGradeCode.addEventListener('click', runCodeGrader);
+    }
+    if (btnValidateChallengeInCard) {
+      btnValidateChallengeInCard.addEventListener('click', runCodeGrader);
+    }
+    if (graderModalClose) {
+      graderModalClose.addEventListener('click', () => graderModal.classList.remove('active'));
+    }
+    if (graderBtnClose) {
+      graderBtnClose.addEventListener('click', () => graderModal.classList.remove('active'));
+    }
+    if (graderModal) {
+      graderModal.addEventListener('click', (e) => {
+        if (e.target === graderModal) graderModal.classList.remove('active');
+      });
+    }
+    if (graderBtnCompleteMission) {
+      graderBtnCompleteMission.addEventListener('click', () => {
+        graderModal.classList.remove('active');
+      });
+    }
+
+    // Atalhos de teclado produtivos de IDE: F5 = Executar Livre, F9 = Validar Desafio
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'F5') {
+        e.preventDefault();
+        btnRun.click();
+      } else if (e.key === 'F9') {
+        e.preventDefault();
+        runCodeGrader();
+      }
+    });
 
     btnUpload.addEventListener('click', () => fileInput.click());
     fileInput.addEventListener('change', (e) => {

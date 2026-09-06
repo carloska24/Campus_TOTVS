@@ -1,0 +1,194 @@
+/* ==========================================================================
+   Campus TOTVS - Syntax Theme: TOTVS ADVPL / VS Code Dark+ (Oficial Definitivo)
+   Replicação Pixel-Perfect do Antigravity IDE / VS Code TDS
+   ========================================================================== */
+
+.code-editor-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  background: #181818;
+  font-family: 'Consolas', 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: 13.5px;
+  line-height: 1.55;
+  letter-spacing: 0px;
+}
+
+.editor-gutter {
+  width: 54px;
+  background: #181818;
+  border-right: 1px solid #282828;
+  user-select: none;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #6e7681;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.line-number {
+  height: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 14px;
+  width: 100%;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.line-number:hover {
+  color: #c9d1d9;
+}
+
+.editor-viewport {
+  flex: 1;
+  overflow: auto;
+  padding: 12px 0;
+  position: relative;
+  background: #181818;
+  white-space: pre !important;
+}
+
+.code-line {
+  height: 21px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  white-space: pre !important;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+  font-family: inherit;
+  color: #d4d4d4;
+}
+
+.code-line span {
+  white-space: pre !important;
+}
+
+.code-line:hover {
+  background: #23272e;
+}
+
+.code-line.active-line {
+  background: #264f78;
+  border-left: 3px solid #007acc;
+}
+
+.code-line.has-inspection::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00d2d3;
+  box-shadow: 0 0 8px #00d2d3;
+}
+
+/* ==========================================================================
+   PALETA OFICIAL DE TOKENS ADVPL / VS CODE DARK+
+   ========================================================================== */
+
+/* Diretivas de Pré-Processador (#Include, #Define) */
+.tok-directive {
+  color: #c586c0; /* Magenta */
+  font-weight: normal;
+}
+
+/* Palavras-chave de controle (If, Else, ElseIf, EndIf, Do Case, For, Next, Return) */
+.tok-keyword {
+  color: #c586c0; /* Rosa/Magenta oficial do VS Code */
+  font-weight: normal;
+}
+
+/* Declaração de Funções (User Function, Static Function) */
+.tok-func-decl {
+  color: #c586c0; /* Magenta */
+}
+
+/* Nome da Função Declarada (Aula01, Aula02, CalcSenioridade) */
+.tok-func-name {
+  color: #dcdcaa; /* Amarelo Claro */
+  font-weight: normal;
+}
+
+/* Escopos de Memória (Local, Private, Public, Static) */
+.tok-scope {
+  color: #569cd6; /* Azul oficial */
+}
+
+/* Tipos Primitivos (Character, Numeric, Date, Logical, Array) */
+.tok-type {
+  color: #4ec9b0; /* Verde Azulado / Ciano Claro */
+}
+
+/* Funções Nativas e Chamadas (Transform, ApMsgInfo, aAdd, Len, dToC) */
+.tok-function {
+  color: #dcdcaa; /* Amarelo Claro */
+}
+
+/* Strings / Textos ("Totvs.ch", "Joao Silva", "Aprovado") */
+.tok-string {
+  color: #ce9178; /* Laranja / Salmão */
+}
+
+/* Números Literais (8.5, 4500.75, 1, 0) */
+.tok-number {
+  color: #b5cea8; /* Verde Menta Claro */
+}
+
+/* Operadores (:=, +=, ==, >=, <=, +, -) */
+.tok-operator {
+  color: #d4d4d4; /* Branco Cinza */
+}
+
+/* Comentários Simples (// ...) */
+.tok-comment {
+  color: #6a9955; /* Verde Comentário */
+  font-style: italic;
+}
+
+/* Bloco ProtheusDoc completo */
+.tok-doc {
+  color: #6a9955; /* Verde ProtheusDoc */
+}
+
+/* Tags internas do ProtheusDoc (@type, @author, @since, @version, @param, @return) */
+.tok-doc-tag {
+  color: #569cd6; /* Azul Claro */
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Constantes Nativas (.T., .F., CRLF, Nil) */
+.tok-macro {
+  color: #569cd6; /* Azul */
+}
+
+/* Identificadores e Nomes de Variáveis (nNota, cStatus, cNome, aRelatorio) */
+.tok-variable {
+  color: #9cdcfe; /* Azul Claro */
+}
+
+/* ==========================================================================
+   BRACKET PAIR COLORIZATION (VS Code Standard)
+   ========================================================================== */
+.tok-bracket.bracket-lvl-1 {
+  color: #ffd700; /* Amarelo Ouro */
+  font-weight: bold;
+}
+
+.tok-bracket.bracket-lvl-2 {
+  color: #da70d6; /* Orquídea / Magenta */
+  font-weight: bold;
+}
+
+.tok-bracket.bracket-lvl-3 {
+  color: #179fff; /* Azul Turquesa */
+  font-weight: bold;
+}

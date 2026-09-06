@@ -1,0 +1,171 @@
+/* Protheus Virtual WebApp & SmartClient Simulator */
+.protheus-simulator-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.protheus-simulator-modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.protheus-window-frame {
+  width: 580px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #222222;
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.protheus-simulator-modal.active .protheus-window-frame {
+  transform: scale(1) translateY(0);
+}
+
+/* Window Titlebar */
+.protheus-titlebar {
+  background: linear-gradient(to right, #001f3f, #003366);
+  height: 34px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  user-select: none;
+}
+
+.protheus-title-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.protheus-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  background: #00d2d3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: #001f3f;
+}
+
+.protheus-window-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.protheus-btn-close {
+  width: 14px;
+  height: 14px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.protheus-btn-close:hover {
+  opacity: 1;
+}
+
+/* Dialog Body */
+.protheus-dialog-body {
+  padding: 24px;
+  display: flex;
+  gap: 20px;
+  background: #f8f9fc;
+}
+
+.protheus-dialog-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.protheus-dialog-icon.info {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.protheus-dialog-icon.alert {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.protheus-dialog-icon.error {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.protheus-dialog-message {
+  flex: 1;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #333333;
+  white-space: pre-wrap;
+  font-family: var(--font-code);
+  background: #ffffff;
+  padding: 14px;
+  border: 1px solid #e0e4ec;
+  border-radius: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* Dialog Footer */
+.protheus-dialog-footer {
+  padding: 12px 24px;
+  background: #edf0f7;
+  border-top: 1px solid #dce1eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.protheus-btn-ok {
+  background: #0056b3;
+  color: #ffffff;
+  border: 1px solid #004494;
+  padding: 7px 22px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background 0.15s ease;
+}
+
+.protheus-btn-ok:hover {
+  background: #004494;
+}

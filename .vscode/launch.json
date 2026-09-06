@@ -1,0 +1,47 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "totvs_language_web_debug",
+			"request": "launch",
+			"name": "Protheus WebApp (Navegador)",
+			"program": "${command:AskForProgramName}",
+			"smartClientUrl": "http://localhost:4371",
+			"enableMultiThread": true,
+			"enableProfile": false,
+			"isMultiSession": false,
+			"cwb": "${workspaceFolder}"
+		}
+	],
+	"lastPrograms": [
+		{
+			"label": "U_AULA02"
+		},
+		{
+			"label": "U_AULA01"
+		},
+		{
+			"label": "U_AULA03"
+		},
+		{
+			"label": "U_AULA04"
+		},
+		{
+			"label": "SIGAADV"
+		},
+		{
+			"label": "U_AULA05"
+		},
+		{
+			"label": "U_AULA06"
+		},
+		{
+			"label": "U_AULA07"
+		},
+		{
+			"label": "U_AULA08"
+		}
+	],
+	"lastProgramExecuted": "<cancel>",
+	"lastProgramArguments": []
+}

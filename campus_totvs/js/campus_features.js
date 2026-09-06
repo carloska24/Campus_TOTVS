@@ -34,6 +34,43 @@ const TOTVS_DICTIONARY_DB = {
       { field: "A1_EMAIL", type: "C", size: 60, dec: 0, desc: "E-mail de Contato", valid: "", relac: "", picture: "" }
     ]
   },
+  "SA2": {
+    name: "Fornecedores",
+    description: "Cadastro de fornecedores, credores e parceiros de compra (SIGACOM/FIN).",
+    module: "SIGACOM",
+    indices: [
+      { order: 1, key: "A2_FILIAL + A2_COD + A2_LOJA", desc: "Código + Loja (Chave Primária)" },
+      { order: 2, key: "A2_FILIAL + A2_NOME", desc: "Razão Social do Fornecedor" },
+      { order: 3, key: "A2_FILIAL + A2_CGC", desc: "CNPJ ou CPF do Fornecedor" }
+    ],
+    fields: [
+      { field: "A2_COD", type: "C", size: 6, dec: 0, desc: "Código do Fornecedor", valid: "ExistChav('SA2')", relac: "GetSX8Num('SA2','A2_COD')", picture: "@!" },
+      { field: "A2_LOJA", type: "C", size: 2, dec: 0, desc: "Loja do Fornecedor", valid: "", relac: "'01'", picture: "@!" },
+      { field: "A2_NOME", type: "C", size: 40, dec: 0, desc: "Razão Social", valid: "Texto()", relac: "", picture: "@!" },
+      { field: "A2_NREDUZ", type: "C", size: 20, dec: 0, desc: "Nome Fantasia", valid: "", relac: "", picture: "@!" },
+      { field: "A2_TIPO", type: "C", size: 1, dec: 0, desc: "Tipo (F=Fis / J=Jur)", valid: "Pertence('F/J/X/R')", relac: "'J'", picture: "@!" },
+      { field: "A2_CGC", type: "C", size: 14, dec: 0, desc: "CNPJ ou CPF", valid: "CGC(M->A2_CGC)", relac: "", picture: "@R 99.999.999/9999-99" },
+      { field: "A2_EST", type: "C", size: 2, dec: 0, desc: "Estado (UF)", valid: "ExistCpo('SX5','12'+M->A2_EST)", relac: "'SP'", picture: "@!" },
+      { field: "A2_MUN", type: "C", size: 30, dec: 0, desc: "Município", valid: "", relac: "", picture: "@!" },
+      { field: "A2_BANCO", type: "C", size: 3, dec: 0, desc: "Banco Padrão", valid: "ExistCpo('SA6')", relac: "", picture: "@!" }
+    ]
+  },
+  "SA3": {
+    name: "Vendedores & Representantes",
+    description: "Cadastro de vendedores internos e representantes externos (SIGAFAT).",
+    module: "SIGAFAT",
+    indices: [
+      { order: 1, key: "A3_FILIAL + A3_COD", desc: "Código do Vendedor (Chave Primária)" },
+      { order: 2, key: "A3_FILIAL + A3_NOME", desc: "Nome do Vendedor" }
+    ],
+    fields: [
+      { field: "A3_COD", type: "C", size: 6, dec: 0, desc: "Código do Vendedor", valid: "ExistChav('SA3')", relac: "GetSX8Num('SA3','A3_COD')", picture: "@!" },
+      { field: "A3_NOME", type: "C", size: 40, dec: 0, desc: "Nome Completo", valid: "Texto()", relac: "", picture: "@!" },
+      { field: "A3_NREDUZ", type: "C", size: 20, dec: 0, desc: "Nome Reduzido", valid: "", relac: "", picture: "@!" },
+      { field: "A3_COMIS", type: "N", size: 5, dec: 2, desc: "% Comissão Padrão", valid: "Positivo()", relac: "0", picture: "@E 99.99" },
+      { field: "A3_EMAIL", type: "C", size: 60, dec: 0, desc: "E-mail de Contato", valid: "", relac: "", picture: "" }
+    ]
+  },
   "SB1": {
     name: "Produtos & Serviços",
     description: "Cadastro mestre de itens, matérias-primas e serviços (SIGAEST/COM/FAT).",
@@ -51,6 +88,61 @@ const TOTVS_DICTIONARY_DB = {
       { field: "B1_LOCPAD", type: "C", size: 2, dec: 0, desc: "Almoxarifado Padrão", valid: "ExistCpo('NNR')", relac: "'01'", picture: "@!" },
       { field: "B1_POSIPI", type: "C", size: 10, dec: 0, desc: "NCM / Classif. Fiscal", valid: "ExistCpo('SYD')", relac: "", picture: "@R 9999.99.99" },
       { field: "B1_PESO", type: "N", size: 9, dec: 4, desc: "Peso Líquido", valid: "Positivo()", relac: "0", picture: "@E 9,999.9999" }
+    ]
+  },
+  "SB2": {
+    name: "Saldos Físico e Financeiro",
+    description: "Controle de saldos em estoque, custo médio e empenhos por armazém (SIGAEST).",
+    module: "SIGAEST",
+    indices: [
+      { order: 1, key: "B2_FILIAL + B2_COD + B2_LOCAL", desc: "Produto + Local (Chave Primária)" },
+      { order: 2, key: "B2_FILIAL + B2_LOCAL + B2_COD", desc: "Local + Produto" }
+    ],
+    fields: [
+      { field: "B2_COD", type: "C", size: 15, dec: 0, desc: "Código do Produto", valid: "ExistCpo('SB1')", relac: "", picture: "@!" },
+      { field: "B2_LOCAL", type: "C", size: 2, dec: 0, desc: "Almoxarifado / Armazém", valid: "ExistCpo('NNR')", relac: "'01'", picture: "@!" },
+      { field: "B2_QATU", type: "N", size: 12, dec: 2, desc: "Quantidade Atual em Estoque", valid: "", relac: "0", picture: "@E 999,999.99" },
+      { field: "B2_RESERVA", type: "N", size: 12, dec: 2, desc: "Quantidade Reservada/Empenhada", valid: "", relac: "0", picture: "@E 999,999.99" },
+      { field: "B2_QPEDVEN", type: "N", size: 12, dec: 2, desc: "Quantidade em Pedidos de Venda", valid: "", relac: "0", picture: "@E 999,999.99" },
+      { field: "B2_CM1", type: "N", size: 14, dec: 4, desc: "Custo Médio Unitário (Moeda 1)", valid: "Positivo()", relac: "0", picture: "@E 999,999.9999" },
+      { field: "B2_VATU1", type: "N", size: 16, dec: 2, desc: "Valor Total Atual em Estoque", valid: "", relac: "0", picture: "@E 999,999,999.92" }
+    ]
+  },
+  "SD3": {
+    name: "Movimentações Internas de Estoque",
+    description: "Requisições, devoluções, transferências e apontamentos de produção (SIGAEST).",
+    module: "SIGAEST",
+    indices: [
+      { order: 1, key: "D3_FILIAL + D3_DOC + D3_EMISSAO", desc: "Documento + Emissão" },
+      { order: 2, key: "D3_FILIAL + D3_COD + D3_LOCAL", desc: "Produto + Almoxarifado" }
+    ],
+    fields: [
+      { field: "D3_DOC", type: "C", size: 9, dec: 0, desc: "Número do Documento", valid: "", relac: "", picture: "@!" },
+      { field: "D3_TM", type: "C", size: 3, dec: 0, desc: "Tipo de Movimento (SF5)", valid: "ExistCpo('SF5')", relac: "'501'", picture: "@!" },
+      { field: "D3_COD", type: "C", size: 15, dec: 0, desc: "Código do Produto", valid: "ExistCpo('SB1')", relac: "", picture: "@!" },
+      { field: "D3_UM", type: "C", size: 2, dec: 0, desc: "Unidade de Medida", valid: "", relac: "Posicione('SB1',1,xFilial('SB1')+M->D3_COD,'B1_UM')", picture: "@!" },
+      { field: "D3_QUANT", type: "N", size: 12, dec: 2, desc: "Quantidade Movimentada", valid: "Positivo()", relac: "1", picture: "@E 999,999.99" },
+      { field: "D3_LOCAL", type: "C", size: 2, dec: 0, desc: "Almoxarifado", valid: "ExistCpo('NNR')", relac: "'01'", picture: "@!" },
+      { field: "D3_EMISSAO", type: "D", size: 8, dec: 0, desc: "Data da Movimentação", valid: "NaoVazio()", relac: "dDataBase", picture: "" },
+      { field: "D3_CUSTO1", type: "N", size: 14, dec: 2, desc: "Custo Total do Movimento", valid: "", relac: "", picture: "@E 999,999.99" }
+    ]
+  },
+  "SC1": {
+    name: "Solicitações de Compras",
+    description: "Necessidades internas de compra emitidas pelos setores ou MRP (SIGACOM).",
+    module: "SIGACOM",
+    indices: [
+      { order: 1, key: "C1_FILIAL + C1_NUM + C1_ITEM", desc: "Número + Item (Chave Primária)" },
+      { order: 2, key: "C1_FILIAL + C1_PRODUTO", desc: "Código do Produto" }
+    ],
+    fields: [
+      { field: "C1_NUM", type: "C", size: 6, dec: 0, desc: "Número da Solicitação", valid: "ExistChav('SC1')", relac: "GetSX8Num('SC1','C1_NUM')", picture: "@!" },
+      { field: "C1_ITEM", type: "C", size: 4, dec: 0, desc: "Item Sequencial", valid: "", relac: "'0001'", picture: "@!" },
+      { field: "C1_PRODUTO", type: "C", size: 15, dec: 0, desc: "Código do Produto", valid: "ExistCpo('SB1')", relac: "", picture: "@!" },
+      { field: "C1_DESCRI", type: "C", size: 30, dec: 0, desc: "Descrição do Item", valid: "", relac: "", picture: "@!" },
+      { field: "C1_QUANT", type: "N", size: 12, dec: 2, desc: "Quantidade Solicitada", valid: "Positivo()", relac: "1", picture: "@E 999,999.99" },
+      { field: "C1_DATPRF", type: "D", size: 8, dec: 0, desc: "Data de Necessidade", valid: "", relac: "dDataBase + 7", picture: "" },
+      { field: "C1_SOLICIT", type: "C", size: 25, dec: 0, desc: "Nome do Solicitante", valid: "", relac: "cUserName", picture: "@!" }
     ]
   },
   "SC5": {
@@ -89,6 +181,123 @@ const TOTVS_DICTIONARY_DB = {
       { field: "C6_PRCVEN", type: "N", size: 14, dec: 2, desc: "Preço Unitário", valid: "Positivo()", relac: "", picture: "@E 999,999.99" },
       { field: "C6_VALOR", type: "N", size: 14, dec: 2, desc: "Valor Total do Item", valid: "", relac: "M->C6_QTDVEN * M->C6_PRCVEN", picture: "@E 999,999.99" },
       { field: "C6_TES", type: "C", size: 3, dec: 0, desc: "Tipo de Entrada/Saída", valid: "ExistCpo('SF4')", relac: "", picture: "@!" }
+    ]
+  },
+  "SC7": {
+    name: "Pedidos de Compras",
+    description: "Pedidos formalizados enviados aos fornecedores com prazos e valores (SIGACOM).",
+    module: "SIGACOM",
+    indices: [
+      { order: 1, key: "C7_FILIAL + C7_NUM + C7_ITEM", desc: "Pedido + Item (Chave Primária)" },
+      { order: 2, key: "C7_FILIAL + C7_FORNECE + C7_LOJA", desc: "Fornecedor + Loja" },
+      { order: 3, key: "C7_FILIAL + C7_PRODUTO", desc: "Produto" }
+    ],
+    fields: [
+      { field: "C7_NUM", type: "C", size: 6, dec: 0, desc: "Número do Pedido de Compra", valid: "ExistChav('SC7')", relac: "GetSX8Num('SC7','C7_NUM')", picture: "@!" },
+      { field: "C7_ITEM", type: "C", size: 4, dec: 0, desc: "Item do Pedido", valid: "", relac: "'0001'", picture: "@!" },
+      { field: "C7_PRODUTO", type: "C", size: 15, dec: 0, desc: "Código do Produto", valid: "ExistCpo('SB1')", relac: "", picture: "@!" },
+      { field: "C7_FORNECE", type: "C", size: 6, dec: 0, desc: "Código do Fornecedor", valid: "ExistCpo('SA2')", relac: "", picture: "@!" },
+      { field: "C7_LOJA", type: "C", size: 2, dec: 0, desc: "Loja do Fornecedor", valid: "", relac: "'01'", picture: "@!" },
+      { field: "C7_QUANT", type: "N", size: 12, dec: 2, desc: "Quantidade Pedida", valid: "Positivo()", relac: "1", picture: "@E 999,999.99" },
+      { field: "C7_PRECO", type: "N", size: 14, dec: 4, desc: "Preço Unitário", valid: "Positivo()", relac: "", picture: "@E 999,999.9999" },
+      { field: "C7_TOTAL", type: "N", size: 14, dec: 2, desc: "Total do Item", valid: "", relac: "M->C7_QUANT * M->C7_PRECO", picture: "@E 999,999.99" },
+      { field: "C7_EMISSAO", type: "D", size: 8, dec: 0, desc: "Data de Emissão", valid: "NaoVazio()", relac: "dDataBase", picture: "" }
+    ]
+  },
+  "SF1": {
+    name: "Cabeçalho NF de Entrada",
+    description: "Notas fiscais de entrada de mercadorias, devoluções e fretes (SIGACOM/FIS).",
+    module: "SIGACOM",
+    indices: [
+      { order: 1, key: "F1_FILIAL + F1_DOC + F1_SERIE + F1_FORNECE + F1_LOJA + F1_TIPO", desc: "NF + Série + Fornecedor + Loja" },
+      { order: 2, key: "F1_FILIAL + F1_FORNECE + F1_LOJA", desc: "Fornecedor + Loja" },
+      { order: 3, key: "F1_FILIAL + F1_EMISSAO", desc: "Data de Emissão" }
+    ],
+    fields: [
+      { field: "F1_DOC", type: "C", size: 9, dec: 0, desc: "Número da NF", valid: "NaoVazio()", relac: "", picture: "@!" },
+      { field: "F1_SERIE", type: "C", size: 3, dec: 0, desc: "Série da Nota Fiscal", valid: "", relac: "'1  '", picture: "@!" },
+      { field: "F1_FORNECE", type: "C", size: 6, dec: 0, desc: "Código do Fornecedor", valid: "ExistCpo('SA2')", relac: "", picture: "@!" },
+      { field: "F1_LOJA", type: "C", size: 2, dec: 0, desc: "Loja do Fornecedor", valid: "", relac: "'01'", picture: "@!" },
+      { field: "F1_EMISSAO", type: "D", size: 8, dec: 0, desc: "Data de Emissão", valid: "NaoVazio()", relac: "dDataBase", picture: "" },
+      { field: "F1_DTDIGIT", type: "D", size: 8, dec: 0, desc: "Data de Digitação", valid: "", relac: "dDataBase", picture: "" },
+      { field: "F1_VALBRUT", type: "N", size: 16, dec: 2, desc: "Valor Bruto da NF", valid: "Positivo()", relac: "", picture: "@E 999,999,999.92" },
+      { field: "F1_ESPECIE", type: "C", size: 5, dec: 0, desc: "Espécie (SPED, NFE)", valid: "", relac: "'SPED'", picture: "@!" }
+    ]
+  },
+  "SD1": {
+    name: "Itens da NF de Entrada",
+    description: "Itens recebidos, impostos creditados, TES e amarração com pedidos (SIGACOM/FIS).",
+    module: "SIGACOM",
+    indices: [
+      { order: 1, key: "D1_FILIAL + D1_DOC + D1_SERIE + D1_FORNECE + D1_LOJA + D1_ITEM", desc: "Documento + Série + Fornecedor + Item" },
+      { order: 2, key: "D1_FILIAL + D1_COD", desc: "Produto" }
+    ],
+    fields: [
+      { field: "D1_DOC", type: "C", size: 9, dec: 0, desc: "Número da NF", valid: "", relac: "M->F1_DOC", picture: "@!" },
+      { field: "D1_SERIE", type: "C", size: 3, dec: 0, desc: "Série da NF", valid: "", relac: "M->F1_SERIE", picture: "@!" },
+      { field: "D1_ITEM", type: "C", size: 4, dec: 0, desc: "Item da Nota", valid: "", relac: "'0001'", picture: "@!" },
+      { field: "D1_COD", type: "C", size: 15, dec: 0, desc: "Código do Produto", valid: "ExistCpo('SB1')", relac: "", picture: "@!" },
+      { field: "D1_QUANT", type: "N", size: 12, dec: 2, desc: "Quantidade Recebida", valid: "Positivo()", relac: "1", picture: "@E 999,999.99" },
+      { field: "D1_VUNIT", type: "N", size: 14, dec: 4, desc: "Valor Unitário", valid: "Positivo()", relac: "", picture: "@E 999,999.9999" },
+      { field: "D1_TOTAL", type: "N", size: 16, dec: 2, desc: "Total do Item", valid: "", relac: "M->D1_QUANT * M->D1_VUNIT", picture: "@E 999,999,999.92" },
+      { field: "D1_TES", type: "C", size: 3, dec: 0, desc: "Tipo de Entrada (TES)", valid: "ExistCpo('SF4')", relac: "", picture: "@!" }
+    ]
+  },
+  "SF2": {
+    name: "Cabeçalho NF de Saída",
+    description: "Notas fiscais de venda emitidas, DANFE, chave da NF-e e totais (SIGAFAT/FIS).",
+    module: "SIGAFAT",
+    indices: [
+      { order: 1, key: "F2_FILIAL + F2_DOC + F2_SERIE + F2_CLIENTE + F2_LOJA", desc: "NF + Série + Cliente + Loja" },
+      { order: 2, key: "F2_FILIAL + F2_CLIENTE + F2_LOJA", desc: "Cliente + Loja" },
+      { order: 3, key: "F2_FILIAL + F2_EMISSAO", desc: "Data de Emissão" }
+    ],
+    fields: [
+      { field: "F2_DOC", type: "C", size: 9, dec: 0, desc: "Número da NF", valid: "ExistChav('SF2')", relac: "GetSX8Num('SF2','F2_DOC')", picture: "@!" },
+      { field: "F2_SERIE", type: "C", size: 3, dec: 0, desc: "Série da Nota Fiscal", valid: "", relac: "'1  '", picture: "@!" },
+      { field: "F2_CLIENTE", type: "C", size: 6, dec: 0, desc: "Código do Cliente", valid: "ExistCpo('SA1')", relac: "", picture: "@!" },
+      { field: "F2_LOJA", type: "C", size: 2, dec: 0, desc: "Loja do Cliente", valid: "", relac: "'01'", picture: "@!" },
+      { field: "F2_EMISSAO", type: "D", size: 8, dec: 0, desc: "Data de Emissão", valid: "", relac: "dDataBase", picture: "" },
+      { field: "F2_VALBRUT", type: "N", size: 16, dec: 2, desc: "Valor Total da Nota", valid: "Positivo()", relac: "", picture: "@E 999,999,999.92" },
+      { field: "F2_CHVNFE", type: "C", size: 44, dec: 0, desc: "Chave da NF-e (44 Dígitos)", valid: "", relac: "", picture: "@!" }
+    ]
+  },
+  "SD2": {
+    name: "Itens da NF de Saída",
+    description: "Itens faturados, impostos destacados (ICMS, IPI, PIS, COFINS) e TES (SIGAFAT/FIS).",
+    module: "SIGAFAT",
+    indices: [
+      { order: 1, key: "D2_FILIAL + D2_DOC + D2_SERIE + D2_CLIENTE + D2_LOJA + D2_ITEM", desc: "Documento + Série + Cliente + Item" },
+      { order: 2, key: "D2_FILIAL + D2_COD", desc: "Produto" }
+    ],
+    fields: [
+      { field: "D2_DOC", type: "C", size: 9, dec: 0, desc: "Número da NF", valid: "", relac: "M->F2_DOC", picture: "@!" },
+      { field: "D2_SERIE", type: "C", size: 3, dec: 0, desc: "Série da NF", valid: "", relac: "M->F2_SERIE", picture: "@!" },
+      { field: "D2_ITEM", type: "C", size: 2, dec: 0, desc: "Item da Nota", valid: "", relac: "'01'", picture: "@!" },
+      { field: "D2_COD", type: "C", size: 15, dec: 0, desc: "Código do Produto", valid: "ExistCpo('SB1')", relac: "", picture: "@!" },
+      { field: "D2_QUANT", type: "N", size: 12, dec: 2, desc: "Quantidade Faturada", valid: "Positivo()", relac: "1", picture: "@E 999,999.99" },
+      { field: "D2_PRCVEN", type: "N", size: 14, dec: 2, desc: "Preço de Venda", valid: "Positivo()", relac: "", picture: "@E 999,999.99" },
+      { field: "D2_TOTAL", type: "N", size: 16, dec: 2, desc: "Total do Item", valid: "", relac: "M->D2_QUANT * M->D2_PRCVEN", picture: "@E 999,999,999.92" },
+      { field: "D2_TES", type: "C", size: 3, dec: 0, desc: "Tipo de Saída (TES)", valid: "ExistCpo('SF4')", relac: "", picture: "@!" }
+    ]
+  },
+  "SF4": {
+    name: "Tipos de Entrada e Saída (TES)",
+    description: "Regras fiscais mestras: gera duplicata, movimenta estoque, calcula impostos (SIGAFIS).",
+    module: "SIGAFIS",
+    indices: [
+      { order: 1, key: "F4_FILIAL + F4_CODIGO", desc: "Código da TES (Chave Primária)" },
+      { order: 2, key: "F4_FILIAL + F4_TEXTO", desc: "Descrição da Operação" }
+    ],
+    fields: [
+      { field: "F4_CODIGO", type: "C", size: 3, dec: 0, desc: "Código da TES (001 a 999)", valid: "ExistChav('SF4')", relac: "", picture: "@!" },
+      { field: "F4_TIPO", type: "C", size: 1, dec: 0, desc: "Tipo (E=Entrada / S=Saída)", valid: "Pertence('E/S')", relac: "'S'", picture: "@!" },
+      { field: "F4_TEXTO", type: "C", size: 20, dec: 0, desc: "Descrição Resumida", valid: "", relac: "", picture: "@!" },
+      { field: "F4_ESTOQUE", type: "C", size: 1, dec: 0, desc: "Movimenta Estoque? (S/N)", valid: "Pertence('S/N')", relac: "'S'", picture: "@!" },
+      { field: "F4_DUPLIC", type: "C", size: 1, dec: 0, desc: "Gera Financeiro? (S/N)", valid: "Pertence('S/N')", relac: "'S'", picture: "@!" },
+      { field: "F4_ICM", type: "C", size: 1, dec: 0, desc: "Calcula ICMS? (S/N)", valid: "Pertence('S/N')", relac: "'S'", picture: "@!" },
+      { field: "F4_IPI", type: "C", size: 1, dec: 0, desc: "Calcula IPI? (S/N)", valid: "Pertence('S/N')", relac: "'N'", picture: "@!" },
+      { field: "F4_PISCOF", type: "C", size: 1, dec: 0, desc: "Calcula PIS/COFINS? (1/2/3/4)", valid: "", relac: "'1'", picture: "@!" }
     ]
   },
   "SE1": {
@@ -131,6 +340,127 @@ const TOTVS_DICTIONARY_DB = {
       { field: "E2_LOJA", type: "C", size: 2, dec: 0, desc: "Loja do Fornecedor", valid: "", relac: "'01'", picture: "@!" },
       { field: "E2_VALOR", type: "N", size: 16, dec: 2, desc: "Valor a Pagar", valid: "Positivo()", relac: "", picture: "@E 999,999,999.92" },
       { field: "E2_SALDO", type: "N", size: 16, dec: 2, desc: "Saldo em Aberto", valid: "", relac: "M->E2_VALOR", picture: "@E 999,999,999.92" }
+    ]
+  },
+  "SE5": {
+    name: "Movimentação Bancária",
+    description: "Baixas a receber/pagar, cheques, conciliação e fluxo financeiro (SIGAFIN).",
+    module: "SIGAFIN",
+    indices: [
+      { order: 1, key: "E5_FILIAL + DTOS(E5_DATA) + E5_BANCO + E5_AGENCIA + E5_CONTA", desc: "Data + Banco + Agência + Conta" },
+      { order: 2, key: "E5_FILIAL + E5_PREFIXO + E5_NUMERO + E5_PARCELA + E5_TIPO", desc: "Amarração com Título Financeiro" }
+    ],
+    fields: [
+      { field: "E5_DATA", type: "D", size: 8, dec: 0, desc: "Data do Movimento", valid: "NaoVazio()", relac: "dDataBase", picture: "" },
+      { field: "E5_VALOR", type: "N", size: 16, dec: 2, desc: "Valor da Movimentação", valid: "Positivo()", relac: "", picture: "@E 999,999,999.92" },
+      { field: "E5_BANCO", type: "C", size: 3, dec: 0, desc: "Código do Banco", valid: "ExistCpo('SA6')", relac: "", picture: "@!" },
+      { field: "E5_AGENCIA", type: "C", size: 5, dec: 0, desc: "Agência Bancária", valid: "", relac: "", picture: "@!" },
+      { field: "E5_CONTA", type: "C", size: 10, dec: 0, desc: "Conta Corrente", valid: "", relac: "", picture: "@!" },
+      { field: "E5_DOCUMEN", type: "C", size: 9, dec: 0, desc: "Número do Documento", valid: "", relac: "", picture: "@!" },
+      { field: "E5_MOTBX", type: "C", size: 3, dec: 0, desc: "Motivo da Baixa (NOR, DAC, etc)", valid: "", relac: "'NOR'", picture: "@!" },
+      { field: "E5_HISTOR", type: "C", size: 40, dec: 0, desc: "Histórico da Movimentação", valid: "", relac: "", picture: "@!" }
+    ]
+  },
+  "CT2": {
+    name: "Lançamentos Contábeis",
+    description: "Partidas dobradas, débitos, créditos e histórico da contabilidade (SIGACTB).",
+    module: "SIGACTB",
+    indices: [
+      { order: 1, key: "CT2_FILIAL + DTOS(CT2_DATA) + CT2_LOTE + CT2_SBLOTE + CT2_DOC + CT2_LINHA", desc: "Data + Lote + Doc + Linha (Primária)" },
+      { order: 2, key: "CT2_FILIAL + CT2_DEBITO + DTOS(CT2_DATA)", desc: "Conta Débito + Data" },
+      { order: 3, key: "CT2_FILIAL + CT2_CREDIT + DTOS(CT2_DATA)", desc: "Conta Crédito + Data" }
+    ],
+    fields: [
+      { field: "CT2_DATA", type: "D", size: 8, dec: 0, desc: "Data do Lançamento", valid: "NaoVazio()", relac: "dDataBase", picture: "" },
+      { field: "CT2_LOTE", type: "C", size: 6, dec: 0, desc: "Número do Lote", valid: "", relac: "'000001'", picture: "@!" },
+      { field: "CT2_DOC", type: "C", size: 6, dec: 0, desc: "Documento Contábil", valid: "", relac: "'000001'", picture: "@!" },
+      { field: "CT2_LINHA", type: "C", size: 3, dec: 0, desc: "Linha Sequencial", valid: "", relac: "'001'", picture: "@!" },
+      { field: "CT2_DEBITO", type: "C", size: 20, dec: 0, desc: "Conta Contábil Débito", valid: "ExistCpo('CT1')", relac: "", picture: "@!" },
+      { field: "CT2_CREDIT", type: "C", size: 20, dec: 0, desc: "Conta Contábil Crédito", valid: "ExistCpo('CT1')", relac: "", picture: "@!" },
+      { field: "CT2_VALOR", type: "N", size: 16, dec: 2, desc: "Valor do Lançamento", valid: "Positivo()", relac: "", picture: "@E 999,999,999.92" },
+      { field: "CT2_HIST", type: "C", size: 40, dec: 0, desc: "Histórico Contábil", valid: "", relac: "", picture: "@!" }
+    ]
+  },
+  "SX1": {
+    name: "Perguntas do ERP (Pergunte)",
+    description: "Dicionário de filtros de relatórios, rotinas e grupos de perguntas (SIGACFG).",
+    module: "SIGACFG",
+    indices: [
+      { order: 1, key: "X1_GRUPO + X1_ORDEM", desc: "Grupo + Ordem (Chave Primária)" }
+    ],
+    fields: [
+      { field: "X1_GRUPO", type: "C", size: 10, dec: 0, desc: "Grupo da Pergunta", valid: "NaoVazio()", relac: "", picture: "@!" },
+      { field: "X1_ORDEM", type: "C", size: 2, dec: 0, desc: "Ordem / Sequência", valid: "", relac: "'01'", picture: "@!" },
+      { field: "X1_PERGUNT", type: "C", size: 30, dec: 0, desc: "Texto da Pergunta", valid: "", relac: "", picture: "" },
+      { field: "X1_VARIAVL", type: "C", size: 6, dec: 0, desc: "Variável Criada (mv_ch1)", valid: "", relac: "'mv_ch1'", picture: "@!" },
+      { field: "X1_TIPO", type: "C", size: 1, dec: 0, desc: "Tipo do Dado (C, N, D)", valid: "Pertence('C/N/D')", relac: "'C'", picture: "@!" },
+      { field: "X1_TAMANHO", type: "N", size: 3, dec: 0, desc: "Tamanho do Campo", valid: "Positivo()", relac: "10", picture: "999" },
+      { field: "X1_GSC", type: "C", size: 1, dec: 0, desc: "Tipo Interface (G=Get/C=Combo)", valid: "Pertence('G/C/R')", relac: "'G'", picture: "@!" }
+    ]
+  },
+  "SX2": {
+    name: "Dicionário de Tabelas do ERP",
+    description: "Catálogo mestre de todas as tabelas lógicas e físicas do banco de dados (SIGACFG).",
+    module: "SIGACFG",
+    indices: [
+      { order: 1, key: "X2_CHAVE", desc: "Alias da Tabela (Chave Primária)" }
+    ],
+    fields: [
+      { field: "X2_CHAVE", type: "C", size: 3, dec: 0, desc: "Alias da Tabela (ex: SA1)", valid: "ExistChav('SX2')", relac: "", picture: "@!" },
+      { field: "X2_NOME", type: "C", size: 30, dec: 0, desc: "Nome da Tabela", valid: "", relac: "", picture: "" },
+      { field: "X2_ARQUIVO", type: "C", size: 8, dec: 0, desc: "Nome Físico no DBAccess", valid: "", relac: "", picture: "@!" },
+      { field: "X2_MODO", type: "C", size: 1, dec: 0, desc: "Compartilhamento (E=Excl/C=Comp)", valid: "Pertence('E/C')", relac: "'E'", picture: "@!" },
+      { field: "X2_ROTINA", type: "C", size: 15, dec: 0, desc: "Rotina Padrão do Menu", valid: "", relac: "", picture: "@!" }
+    ]
+  },
+  "SX3": {
+    name: "Dicionário de Campos e Validações",
+    description: "Coração das regras de negócio: tipos, tamanhos, validações e inicializadores (SIGACFG).",
+    module: "SIGACFG",
+    indices: [
+      { order: 1, key: "X3_ARQUIVO + X3_ORDEM", desc: "Tabela + Ordem do Campo" },
+      { order: 2, key: "X3_CAMPO", desc: "Nome do Campo (ex: A1_NOME)" }
+    ],
+    fields: [
+      { field: "X3_ARQUIVO", type: "C", size: 3, dec: 0, desc: "Alias da Tabela", valid: "ExistCpo('SX2')", relac: "", picture: "@!" },
+      { field: "X3_ORDEM", type: "C", size: 2, dec: 0, desc: "Ordem Visual em Tela", valid: "", relac: "", picture: "@!" },
+      { field: "X3_CAMPO", type: "C", size: 10, dec: 0, desc: "Nome do Campo Protheus", valid: "ExistChav('SX3',M->X3_CAMPO)", relac: "", picture: "@!" },
+      { field: "X3_TIPO", type: "C", size: 1, dec: 0, desc: "Tipo (C=Carac, N=Num, D=Data)", valid: "Pertence('C/N/D/M/L')", relac: "'C'", picture: "@!" },
+      { field: "X3_TAMANHO", type: "N", size: 3, dec: 0, desc: "Tamanho em Caracteres", valid: "Positivo()", relac: "10", picture: "999" },
+      { field: "X3_TITULO", type: "C", size: 18, dec: 0, desc: "Título / Cabeçalho", valid: "", relac: "", picture: "" },
+      { field: "X3_VALID", type: "C", size: 80, dec: 0, desc: "Validação ADVPL (X3_VALID)", valid: "", relac: "", picture: "" },
+      { field: "X3_RELACAO", type: "C", size: 80, dec: 0, desc: "Inicializador Padrão", valid: "", relac: "", picture: "" },
+      { field: "X3_PICTURE", type: "C", size: 20, dec: 0, desc: "Máscara de Formatação", valid: "", relac: "", picture: "" }
+    ]
+  },
+  "SIX": {
+    name: "Dicionário de Índices do Protheus",
+    description: "Chaves de ordenação física criadas no DBAccess para alta performance (SIGACFG).",
+    module: "SIGACFG",
+    indices: [
+      { order: 1, key: "INDICE + ORDEM", desc: "Tabela + Ordem do Índice" }
+    ],
+    fields: [
+      { field: "INDICE", type: "C", size: 3, dec: 0, desc: "Alias da Tabela", valid: "ExistCpo('SX2')", relac: "", picture: "@!" },
+      { field: "ORDEM", type: "C", size: 2, dec: 0, desc: "Número da Ordem (1, 2...)", valid: "", relac: "'1'", picture: "@!" },
+      { field: "CHAVE", type: "C", size: 100, dec: 0, desc: "Expressão ADVPL do Índice", valid: "", relac: "", picture: "" },
+      { field: "DESCRICAO", type: "C", size: 40, dec: 0, desc: "Descrição Funcional", valid: "", relac: "", picture: "" },
+      { field: "PROPRI", type: "C", size: 1, dec: 0, desc: "Proprietário (S=Sistema/U=User)", valid: "Pertence('S/U')", relac: "'S'", picture: "@!" }
+    ]
+  },
+  "SX6": {
+    name: "Parâmetros Globais do ERP",
+    description: "Configurações gerais do sistema recuperadas via função GetMv() (SIGACFG).",
+    module: "SIGACFG",
+    indices: [
+      { order: 1, key: "X6_FIL + X6_VAR", desc: "Filial + Nome do Parâmetro (Primária)" }
+    ],
+    fields: [
+      { field: "X6_VAR", type: "C", size: 10, dec: 0, desc: "Nome do Parâmetro (ex: MV_ESTNEG)", valid: "ExistChav('SX6')", relac: "", picture: "@!" },
+      { field: "X6_TIPO", type: "C", size: 1, dec: 0, desc: "Tipo do Conteúdo (C/N/L/D)", valid: "Pertence('C/N/L/D')", relac: "'C'", picture: "@!" },
+      { field: "X6_DESCRIC", type: "C", size: 50, dec: 0, desc: "Descrição Funcional", valid: "", relac: "", picture: "" },
+      { field: "X6_CONTEUD", type: "C", size: 80, dec: 0, desc: "Conteúdo / Valor do Parâmetro", valid: "", relac: "", picture: "" },
+      { field: "X6_PROPRI", type: "C", size: 1, dec: 0, desc: "Proprietário (S=Padrão/U=Custom)", valid: "", relac: "'S'", picture: "@!" }
     ]
   }
 };
@@ -383,23 +713,163 @@ const CAREER_SKILLS_MATRIX = [
 // =========================================================================
 window.initDictionaryExplorer = function() {
   const inputSearch = document.getElementById('dictSearchInput');
+  const clearBtn = document.getElementById('dictSearchClearBtn');
   const tableContainer = document.getElementById('dictResultsContainer');
   if (!tableContainer) return;
 
-  window.renderDictionaryTable = function(tableKey) {
+  let currentSearchQuery = '';
+  let currentSearchResults = [];
+  let currentActiveTable = 'SA1';
+
+  function normalizeStr(str) {
+    return (str || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toUpperCase();
+  }
+
+  function escapeHtml(text) {
+    return (text || '').replace(/[&<>"']/g, m => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[m]);
+  }
+
+  // Executa busca avançada multi-nível no dicionário
+  window.searchDictionary = function(query) {
+    const qNorm = normalizeStr(query);
+    if (!qNorm) {
+      return [{ key: 'SA1', score: 100, matchedFields: [] }];
+    }
+
+    const results = [];
+
+    Object.keys(TOTVS_DICTIONARY_DB).forEach(key => {
+      const item = TOTVS_DICTIONARY_DB[key];
+      let score = 0;
+      const matchedFields = [];
+
+      // 1. Alias da tabela
+      if (key === qNorm) {
+        score += 150;
+      } else if (key.startsWith(qNorm)) {
+        score += 80;
+      } else if (key.includes(qNorm)) {
+        score += 50;
+      }
+
+      // 2. Nome da tabela
+      const nameNorm = normalizeStr(item.name);
+      if (nameNorm === qNorm) {
+        score += 120;
+      } else if (nameNorm.includes(qNorm)) {
+        score += 70;
+      }
+
+      // 3. Módulo (SIGAFAT, SIGAEST, FAT, EST, etc.)
+      const modNorm = normalizeStr(item.module);
+      if (modNorm === qNorm || modNorm.replace('SIGA', '') === qNorm) {
+        score += 60;
+      } else if (modNorm.includes(qNorm)) {
+        score += 35;
+      }
+
+      // 4. Descrição da tabela
+      const descNorm = normalizeStr(item.description);
+      if (descNorm.includes(qNorm)) {
+        score += 30;
+      }
+
+      // 5. Índices SIX
+      if (item.indices && item.indices.some(idx => normalizeStr(idx.key).includes(qNorm) || normalizeStr(idx.desc).includes(qNorm))) {
+        score += 40;
+      }
+
+      // 6. Campos SX3 e Validações
+      if (item.fields && Array.isArray(item.fields)) {
+        item.fields.forEach(f => {
+          const fieldNorm = normalizeStr(f.field);
+          const fDescNorm = normalizeStr(f.desc);
+          const fValidNorm = normalizeStr(f.valid);
+
+          let isFieldMatch = false;
+          if (fieldNorm === qNorm) {
+            score += 100;
+            isFieldMatch = true;
+          } else if (fieldNorm.includes(qNorm)) {
+            score += 55;
+            isFieldMatch = true;
+          } else if (fDescNorm.includes(qNorm)) {
+            score += 45;
+            isFieldMatch = true;
+          } else if (fValidNorm.includes(qNorm)) {
+            score += 25;
+            isFieldMatch = true;
+          }
+
+          if (isFieldMatch) {
+            matchedFields.push(f.field);
+          }
+        });
+      }
+
+      if (score > 0) {
+        results.push({ key, score, matchedFields });
+      }
+    });
+
+    results.sort((a, b) => b.score - a.score);
+    return results;
+  };
+
+  // Renderiza a estrutura da tabela e seus metadados
+  window.renderDictionaryTable = function(tableKey, searchFilter = '') {
     const data = TOTVS_DICTIONARY_DB[tableKey];
     if (!data) return;
 
-    // Atualiza botões ativos
+    currentActiveTable = tableKey;
+
+    // Atualiza pills de atalhos rápidos
     document.querySelectorAll('.dict-quick-pill').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-table') === tableKey);
     });
 
+    // Se temos mais de um resultado da busca, monta a barra de sugestões de tabelas
+    let searchChipsHtml = '';
+    if (currentSearchResults.length > 1 && searchFilter) {
+      searchChipsHtml = `
+        <div class="dict-search-results-bar">
+          <span style="font-size: 11px; font-weight: 800; color: var(--totvs-cyan); text-transform: uppercase;">
+            🎯 ${currentSearchResults.length} tabelas encontradas:
+          </span>
+          ${currentSearchResults.map(res => {
+            const tData = TOTVS_DICTIONARY_DB[res.key];
+            const isActive = res.key === tableKey;
+            return `
+              <button type="button" class="dict-search-chip ${isActive ? 'active' : ''}" onclick="renderDictionaryTable('${res.key}', '${escapeHtml(searchFilter)}')">
+                <span style="font-weight: 900;">${res.key}</span>
+                <span>${tData ? tData.name : ''}</span>
+                ${res.matchedFields.length > 0 ? `<span style="font-size: 9px; opacity: 0.8; background: rgba(0,0,0,0.25); padding: 1px 4px; border-radius: 4px;">${res.matchedFields.length} campo(s)</span>` : ''}
+              </button>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    const filterNorm = normalizeStr(searchFilter);
+
     let html = `
+      ${searchChipsHtml}
+
       <div class="dict-explorer-card">
         <div class="dict-card-top">
           <div>
-            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px;">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 4px; flex-wrap: wrap;">
               <span class="table-chip">${tableKey}</span>
               <span class="module-chip">${data.module}</span>
               <h3 style="margin: 0; font-size: 18px; color: var(--text-main); font-weight: 800;">${data.name}</h3>
@@ -417,11 +887,15 @@ window.initDictionaryExplorer = function() {
             🔍 Índices Oficiais da Tabela (Tabela SIX):
           </div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            ${data.indices.map(idx => `
-              <div style="font-size: 11.5px; background: rgba(255,255,255,0.04); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.08);">
-                <strong style="color: var(--totvs-cyan);">Ordem ${idx.order}:</strong> <code>${idx.key}</code> <span style="color: var(--text-muted);">(${idx.desc})</span>
-              </div>
-            `).join('')}
+            ${data.indices.map(idx => {
+              const isIdxMatch = filterNorm && (normalizeStr(idx.key).includes(filterNorm) || normalizeStr(idx.desc).includes(filterNorm));
+              return `
+                <div style="font-size: 11.5px; background: ${isIdxMatch ? 'rgba(0, 210, 211, 0.15)' : 'rgba(255,255,255,0.04)'}; padding: 4px 8px; border-radius: 4px; border: 1px solid ${isIdxMatch ? 'var(--totvs-cyan)' : 'rgba(255,255,255,0.08)'};">
+                  <strong style="color: var(--totvs-cyan);">Ordem ${idx.order}:</strong> <code>${idx.key}</code> <span style="color: var(--text-muted);">(${idx.desc})</span>
+                  ${isIdxMatch ? ' <span style="color: var(--totvs-cyan); font-weight: 800;">(Match)</span>' : ''}
+                </div>
+              `;
+            }).join('')}
           </div>
         </div>
 
@@ -440,17 +914,29 @@ window.initDictionaryExplorer = function() {
               </tr>
             </thead>
             <tbody>
-              ${data.fields.map(f => `
-                <tr>
-                  <td><code style="color: var(--totvs-cyan); font-weight: 700;">${f.field}</code></td>
-                  <td><span class="type-pill type-${f.type}">${f.type}</span></td>
-                  <td>${f.size}${f.dec > 0 ? ',' + f.dec : ''}</td>
-                  <td><strong>${f.desc}</strong></td>
-                  <td>${f.valid ? `<code>${f.valid}</code>` : '<span style="color:var(--text-dim);">-</span>'}</td>
-                  <td>${f.relac ? `<code>${f.relac}</code>` : '<span style="color:var(--text-dim);">-</span>'}</td>
-                  <td><code>${f.picture || '-'}</code></td>
-                </tr>
-              `).join('')}
+              ${data.fields.map(f => {
+                const isMatch = filterNorm && (
+                  normalizeStr(f.field).includes(filterNorm) || 
+                  normalizeStr(f.desc).includes(filterNorm) || 
+                  normalizeStr(f.valid).includes(filterNorm)
+                );
+                return `
+                  <tr class="${isMatch ? 'dict-field-match' : ''}">
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 6px;">
+                        <code style="color: var(--totvs-cyan); font-weight: 700;">${f.field}</code>
+                        ${isMatch ? '<span style="font-size: 9px; font-weight: 800; background: var(--totvs-cyan); color: #000; padding: 1px 4px; border-radius: 3px;">Match</span>' : ''}
+                      </div>
+                    </td>
+                    <td><span class="type-pill type-${f.type}">${f.type}</span></td>
+                    <td>${f.size}${f.dec > 0 ? ',' + f.dec : ''}</td>
+                    <td><strong>${f.desc}</strong></td>
+                    <td>${f.valid ? `<code>${f.valid}</code>` : '<span style="color:var(--text-dim);">-</span>'}</td>
+                    <td>${f.relac ? `<code>${f.relac}</code>` : '<span style="color:var(--text-dim);">-</span>'}</td>
+                    <td><code>${f.picture || '-'}</code></td>
+                  </tr>
+                `;
+              }).join('')}
             </tbody>
           </table>
         </div>
@@ -460,21 +946,92 @@ window.initDictionaryExplorer = function() {
     tableContainer.innerHTML = html;
   };
 
+  // Renderiza Empty State amigável quando nada for encontrado
+  function renderEmptyState(query) {
+    tableContainer.innerHTML = `
+      <div class="dict-empty-card">
+        <div style="font-size: 40px; margin-bottom: 10px;">🔍</div>
+        <h3 style="margin: 0 0 6px; color: var(--text-main); font-size: 17px; font-weight: 800;">Nenhuma tabela ou campo encontrado</h3>
+        <p style="margin: 0 auto 16px; max-width: 500px; font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+          Não encontramos resultados para "<strong>${escapeHtml(query)}</strong>". Você pode pesquisar por código da tabela (ex: <code>SA1</code>, <code>SA2</code>, <code>SB1</code>, <code>SF2</code>, <code>CT2</code>), campos (ex: <code>A1_NOME</code>, <code>CGC</code>, <code>EMISSAO</code>) ou módulo (ex: <code>FAT</code>, <code>EST</code>, <code>FIN</code>).
+        </p>
+        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="selectQuickDictTable('SA1')">Clientes (SA1)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="selectQuickDictTable('SA2')">Fornecedores (SA2)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="selectQuickDictTable('SB1')">Produtos (SB1)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="selectQuickDictTable('SC5')">Pedidos (SC5)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="selectQuickDictTable('SF2')">Notas Fiscais (SF2)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="clearDictionarySearch()">Limpar Pesquisa</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Atalhos rápidos dos botões
+  window.selectQuickDictTable = function(tableKey) {
+    if (inputSearch) {
+      inputSearch.value = '';
+    }
+    if (clearBtn) {
+      clearBtn.style.display = 'none';
+    }
+    currentSearchQuery = '';
+    currentSearchResults = [];
+    renderDictionaryTable(tableKey);
+  };
+
+  // Limpa campo de busca
+  window.clearDictionarySearch = function() {
+    if (inputSearch) {
+      inputSearch.value = '';
+      inputSearch.focus();
+    }
+    if (clearBtn) {
+      clearBtn.style.display = 'none';
+    }
+    currentSearchQuery = '';
+    currentSearchResults = [];
+    renderDictionaryTable('SA1');
+  };
+
+  // Eventos do input de busca
   if (inputSearch) {
-    inputSearch.addEventListener('input', (e) => {
-      const q = e.target.value.trim().toUpperCase();
+    const handleSearch = () => {
+      const q = inputSearch.value.trim();
+      currentSearchQuery = q;
+
+      if (clearBtn) {
+        clearBtn.style.display = q ? 'block' : 'none';
+      }
+
       if (!q) {
+        currentSearchResults = [];
         renderDictionaryTable('SA1');
         return;
       }
-      const matchKey = Object.keys(TOTVS_DICTIONARY_DB).find(k => k.includes(q) || TOTVS_DICTIONARY_DB[k].name.toUpperCase().includes(q));
-      if (matchKey) {
-        renderDictionaryTable(matchKey);
+
+      currentSearchResults = searchDictionary(q);
+
+      if (currentSearchResults.length > 0) {
+        renderDictionaryTable(currentSearchResults[0].key, q);
+      } else {
+        renderEmptyState(q);
+      }
+    };
+
+    inputSearch.addEventListener('input', handleSearch);
+    inputSearch.addEventListener('keyup', (e) => {
+      if (e.key === 'Escape') {
+        clearDictionarySearch();
       }
     });
   }
 
-  // Render inicial padrão com SA1
+  if (clearBtn) {
+    clearBtn.addEventListener('click', clearDictionarySearch);
+  }
+
+  // Render inicial padrão
   renderDictionaryTable('SA1');
 };
 

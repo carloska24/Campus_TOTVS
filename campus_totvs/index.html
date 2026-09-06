@@ -2074,6 +2074,68 @@
       border-color: var(--totvs-cyan);
       color: var(--totvs-cyan);
     }
+    .dict-field-match {
+      background: rgba(0, 210, 211, 0.12) !important;
+      outline: 1px solid rgba(0, 210, 211, 0.3);
+    }
+    .dict-search-results-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: rgba(0, 120, 255, 0.08);
+      border: 1px solid rgba(0, 120, 255, 0.25);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+    }
+    .dict-search-chip {
+      font-size: 11.5px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dict-search-chip:hover {
+      border-color: var(--totvs-cyan);
+      color: var(--totvs-cyan);
+    }
+    .dict-search-chip.active {
+      background: var(--totvs-cyan);
+      color: #000;
+      border-color: var(--totvs-cyan);
+    }
+    .dict-empty-card {
+      text-align: center;
+      padding: 36px 20px;
+      background: var(--card-inner-bg);
+      border: 1px dashed var(--border-color);
+      border-radius: 12px;
+    }
+    .dict-clear-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: none;
+    }
+    .dict-clear-btn:hover {
+      color: #ff5252;
+    }
 
     /* Skills Checklist */
     .skill-check-card {
@@ -3016,19 +3078,22 @@
 
           <!-- Barra de Pesquisa e Filtros Rápidos -->
           <div style="margin-top: 16px; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 260px; position: relative;">
-              <input type="text" id="dictSearchInput" placeholder="🔍 Digite o alias ou nome da tabela (ex: SA1, SB1, SC5, SE1)..." style="width: 100%; background: var(--bg-secondary); border: 1.5px solid var(--border-color); color: var(--text-main); padding: 10px 14px; border-radius: 10px; font-size: 13px; outline: none; transition: border-color 0.2s;">
+            <div style="flex: 1; min-width: 280px; position: relative;">
+              <input type="text" id="dictSearchInput" placeholder="🔍 Busque por tabela (SA1, SA2, SB1, SF2, CT2...), campo (A1_NOME, CGC, EMISSAO...) ou módulo..." style="width: 100%; background: var(--bg-secondary); border: 1.5px solid var(--border-color); color: var(--text-main); padding: 11px 40px 11px 16px; border-radius: 10px; font-size: 13.5px; outline: none; transition: border-color 0.2s;" autocomplete="off">
+              <button type="button" id="dictSearchClearBtn" class="dict-clear-btn" title="Limpar pesquisa (Esc)">✕</button>
             </div>
           </div>
 
           <div class="dict-quick-pills-bar">
             <span style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Atalhos Rápidos:</span>
-            <button type="button" class="dict-quick-pill active" data-table="SA1" onclick="renderDictionaryTable('SA1')">SA1 (Clientes)</button>
-            <button type="button" class="dict-quick-pill" data-table="SB1" onclick="renderDictionaryTable('SB1')">SB1 (Produtos)</button>
-            <button type="button" class="dict-quick-pill" data-table="SC5" onclick="renderDictionaryTable('SC5')">SC5 (Pedidos Venda)</button>
-            <button type="button" class="dict-quick-pill" data-table="SC6" onclick="renderDictionaryTable('SC6')">SC6 (Itens Pedido)</button>
-            <button type="button" class="dict-quick-pill" data-table="SE1" onclick="renderDictionaryTable('SE1')">SE1 (Contas a Receber)</button>
-            <button type="button" class="dict-quick-pill" data-table="SE2" onclick="renderDictionaryTable('SE2')">SE2 (Contas a Pagar)</button>
+            <button type="button" class="dict-quick-pill active" data-table="SA1" onclick="selectQuickDictTable('SA1')">SA1 (Clientes)</button>
+            <button type="button" class="dict-quick-pill" data-table="SA2" onclick="selectQuickDictTable('SA2')">SA2 (Fornecedores)</button>
+            <button type="button" class="dict-quick-pill" data-table="SB1" onclick="selectQuickDictTable('SB1')">SB1 (Produtos)</button>
+            <button type="button" class="dict-quick-pill" data-table="SB2" onclick="selectQuickDictTable('SB2')">SB2 (Saldos Estoque)</button>
+            <button type="button" class="dict-quick-pill" data-table="SC5" onclick="selectQuickDictTable('SC5')">SC5 (Pedidos Venda)</button>
+            <button type="button" class="dict-quick-pill" data-table="SF2" onclick="selectQuickDictTable('SF2')">SF2 (Notas Fiscais)</button>
+            <button type="button" class="dict-quick-pill" data-table="SE1" onclick="selectQuickDictTable('SE1')">SE1 (Financeiro)</button>
+            <button type="button" class="dict-quick-pill" data-table="CT2" onclick="selectQuickDictTable('CT2')">CT2 (Contábil)</button>
           </div>
 
           <!-- Container Dinâmico da Tabela Selecionada -->

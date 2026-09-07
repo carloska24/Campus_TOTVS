@@ -98,7 +98,7 @@ Este projeto foi construído respeitando as melhores práticas de governança t�
 1. **Clone o repositório:**
    ```bash
    git clone https://github.com/carloska24/Campus_TOTVS.git
-   cd Campus_TOTVS/campus_totvs_react
+   cd Campus_TOTVS
    ```
 
 2. **Instale as dependências:**

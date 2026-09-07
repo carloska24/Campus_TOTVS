@@ -8,7 +8,14 @@ import {
   Compass, 
   HelpCircle, 
   Briefcase,
-  CheckCircle
+  CheckCircle,
+  Building2,
+  Flame,
+  Code2,
+  Award,
+  ChevronRight,
+  ShieldCheck,
+  Check
 } from 'lucide-react';
 
 interface ISkillItem {
@@ -73,10 +80,11 @@ export const CarreiraView: React.FC = () => {
         isDark ? 'bg-[#0d1117] text-white' : 'bg-[#f8fafc] text-slate-900'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
-        {/* CABEÇALHO EDITORIAL (SEM CARDS ISOLADOS) */}
-        <div className="space-y-3 border-b pb-6 border-gray-800/40">
-          <div className="flex items-center gap-2 text-xs font-semibold text-cyan-400 uppercase tracking-wider">
+      <div className="max-w-6xl mx-auto px-6 py-8 space-y-7">
+        
+        {/* CABEÇALHO EDITORIAL COM IDENTIDADE DE CARREIRA */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
             <Compass className="w-4 h-4" />
             <span>Trilha de Carreira • Empregabilidade</span>
           </div>
@@ -89,289 +97,372 @@ export const CarreiraView: React.FC = () => {
             Roadmap técnico de competências, pegadinhas frequentes de entrevistas e evolução de maturidade profissional no ecossistema Protheus.
           </p>
 
-          {/* Faixa Integrada de Métricas (Inline Stats) */}
-          <div className={`flex flex-wrap items-center gap-6 pt-2 text-xs font-medium ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-              <span>Mercado no Brasil: <strong className={isDark ? 'text-white' : 'text-slate-900'}>+50.000 Empresas</strong></span>
+          {/* FAIXA INTEGRADA DE MÉTRICAS DE CARREIRA */}
+          <div 
+            className={`mt-4 rounded-xl border flex flex-col sm:flex-row items-stretch divide-y sm:divide-y-0 sm:divide-x overflow-hidden shadow-xs transition-colors ${
+              isDark 
+                ? 'bg-[#161b22]/70 border-[#30363d] divide-[#30363d]/60' 
+                : 'bg-white border-slate-200 divide-slate-200'
+            }`}
+          >
+            <div className="flex-1 p-3.5 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 border border-cyan-500/20">
+                <Building2 className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                  Mercado no Brasil
+                </span>
+                <span className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  +50.000 Empresas
+                </span>
+              </div>
             </div>
-            <span className="opacity-30">/</span>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-              <span>Demanda: <strong className={isDark ? 'text-white' : 'text-slate-900'}>Alta / Aquecida</strong></span>
+
+            <div className="flex-1 p-3.5 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/20">
+                <Flame className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                  Demanda por Consultores
+                </span>
+                <span className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Alta / Aquecida
+                </span>
+              </div>
             </div>
-            <span className="opacity-30">/</span>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
-              <span>Stack: <strong className={isDark ? 'text-white' : 'text-slate-900'}>TLPP • PO-UI • REST</strong></span>
+
+            <div className="flex-1 p-3.5 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/20">
+                <Code2 className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                  Stack Tecnológica
+                </span>
+                <span className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  TLPP • PO-UI • REST
+                </span>
+              </div>
             </div>
-            <span className="opacity-30">/</span>
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-              <span>Seu Progresso: <strong className={isDark ? 'text-emerald-400' : 'text-emerald-600'}>Nível 1 Concluído!</strong></span>
+
+            <div className="flex-1 p-3.5 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                <Award className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                  Seu Progresso no Campus
+                </span>
+                <span className={`text-xs font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                  Nível 1 Concluído!
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* NAVEGAÇÃO EM ABAS LINEARES */}
-        <div className="flex items-center gap-1 border-b border-gray-800/30 overflow-x-auto pb-0.5">
-          <button
-            onClick={() => { soundFx.playTick(); setActiveSubtab('niveis'); }}
-            className={`pb-3 px-4 text-xs font-semibold transition-all border-b-2 cursor-pointer whitespace-nowrap ${
-              activeSubtab === 'niveis' ? 'border-cyan-400 text-cyan-400 font-bold' : 'border-transparent text-gray-400 hover:text-gray-200'
-            }`}
-          >
-            <span>Roadmap dos 5 Níveis</span>
-          </button>
-
-          <button
-            onClick={() => { soundFx.playTick(); setActiveSubtab('entrevistas'); }}
-            className={`pb-3 px-4 text-xs font-semibold transition-all border-b-2 cursor-pointer whitespace-nowrap ${
-              activeSubtab === 'entrevistas' ? 'border-cyan-400 text-cyan-400 font-bold' : 'border-transparent text-gray-400 hover:text-gray-200'
-            }`}
-          >
-            <span>Guia de Entrevistas Técnicas</span>
-          </button>
-
-          <button
-            onClick={() => { soundFx.playTick(); setActiveSubtab('casos'); }}
-            className={`pb-3 px-4 text-xs font-semibold transition-all border-b-2 cursor-pointer whitespace-nowrap ${
-              activeSubtab === 'casos' ? 'border-cyan-400 text-cyan-400 font-bold' : 'border-transparent text-gray-400 hover:text-gray-200'
-            }`}
-          >
-            <span>Casos Reais de Consultoria</span>
-          </button>
-
-          <button
-            onClick={() => { soundFx.playTick(); setActiveSubtab('calculadora'); }}
-            className={`pb-3 px-4 text-xs font-semibold transition-all border-b-2 cursor-pointer whitespace-nowrap ${
-              activeSubtab === 'calculadora' ? 'border-cyan-400 text-cyan-400 font-bold' : 'border-transparent text-gray-400 hover:text-gray-200'
-            }`}
-          >
-            <span>Calculadora de Senioridade</span>
-          </button>
+        {/* CONTROLES DE SUB-ABAS (TÁTEIS CORPORATIVOS) */}
+        <div 
+          className={`p-1.5 rounded-xl border flex items-center gap-1.5 overflow-x-auto shadow-xs transition-colors ${
+            isDark ? 'bg-[#161b22]/50 border-[#30363d]' : 'bg-slate-100 border-slate-200'
+          }`}
+        >
+          {[
+            { id: 'niveis', label: 'Roadmap dos 5 Níveis' },
+            { id: 'entrevistas', label: 'Guia de Entrevistas Técnicas' },
+            { id: 'casos', label: 'Casos Reais de Consultoria' },
+            { id: 'calculadora', label: '🎯 Calculadora de Senioridade' }
+          ].map((tab) => {
+            const isSelected = activeSubtab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  soundFx.playTick();
+                  setActiveSubtab(tab.id as CarreiraTab);
+                }}
+                className={`py-2 px-3.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                  isSelected
+                    ? isDark
+                      ? tab.id === 'calculadora'
+                        ? 'bg-amber-500/15 text-amber-300 border border-amber-500/40 shadow-xs font-bold'
+                        : 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-xs font-bold'
+                      : tab.id === 'calculadora'
+                        ? 'bg-white text-amber-800 border-amber-300 shadow-xs font-bold'
+                        : 'bg-white text-cyan-800 border-cyan-300 shadow-xs font-bold'
+                    : isDark
+                      ? 'text-gray-400 hover:text-gray-200 hover:bg-white/5 border border-transparent'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
+                }`}
+              >
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* SUB-ABA 1: ROADMAP VERTICAL CONTÍNUO (SEM CARDS EMPILHADOS) */}
-        {activeSubtab === 'niveis' && (
-          <div className="space-y-6">
-            <div className="text-xs text-gray-400">
-              Trajetória oficial de maturação técnica e posições no mercado:
-            </div>
-
-            {/* Timeline Vertical Contínua */}
-            <div className="relative pl-6 border-l-2 border-gray-800 space-y-8">
-              {/* Nível 1 */}
-              <div className="relative">
-                <div className="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-emerald-500 border-4 border-[#0d1117]"></div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs text-emerald-400">NÍVEL 1: FUNDAMENTOS & MEMÓRIA RAM</span>
-                    <span className="text-[10px] font-bold text-emerald-500 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/30">
-                      ✓ Concluído
-                    </span>
-                  </div>
-                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                    Sintaxe ADVPL, Notação Húngara, variáveis locais, modularização com Static Functions, matrizes multidimensionais, ordenação nativa com aSort e telas MSDialog.
-                  </p>
-                </div>
+        {/* CONTAINER MACRO DE CONTEÚDO (NÍVEL 1) */}
+        <div 
+          className={`rounded-2xl border p-6 space-y-6 shadow-xs transition-colors ${
+            isDark ? 'bg-[#161b22]/40 border-[#30363d]' : 'bg-white border-slate-200'
+          }`}
+        >
+          {/* ========================================================= */}
+          {/* SUB-ABA 1: ROADMAP DOS 5 NÍVEIS COM MARCOS DE MATURIDADE   */}
+          {/* ========================================================= */}
+          {activeSubtab === 'niveis' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
+                  Trajetória Oficial de Maturação Técnica & Mercado
+                </span>
+                <span className="text-[10px] text-gray-400 font-mono">5 Estágios de Carreira</span>
               </div>
 
-              {/* Nível 2 */}
-              <div className="relative">
-                <div className="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-cyan-400 border-4 border-[#0d1117]"></div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs text-cyan-400">NÍVEL 2: BANCO DE DADOS & DICIONÁRIOS (SX)</span>
-                    <span className="text-[10px] font-bold text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-400/30">
-                      Próxima Etapa
-                    </span>
-                  </div>
-                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                    Manipulação de tabelas (SA1, SA2, SB1, SC5, SE1), consultas otimizadas com TCQuery, ChangeQuery, perguntas dinâmicas no SX1 e parâmetros globais no SX6.
-                  </p>
-                </div>
-              </div>
-
-              {/* Nível 3 */}
-              <div className="relative">
-                <div className="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-gray-600 border-4 border-[#0d1117]"></div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs text-gray-300">NÍVEL 3: PONTOS DE ENTRADA (PEs) & CUSTOMIZAÇÕES NÃO-INVASIVAS</span>
-                  </div>
-                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-                    Interceptação de rotinas padrões (MATA410, MATA120, MATA010) para aplicar regras customizadas de negócio sem perda de compatibilidade em viradas de release.
-                  </p>
-                </div>
-              </div>
-
-              {/* Nível 4 */}
-              <div className="relative">
-                <div className="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-gray-600 border-4 border-[#0d1117]"></div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs text-gray-300">NÍVEL 4: ARQUITETURA MVC (MODEL-VIEW-CONTROLLER) & TLPP</span>
-                  </div>
-                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-                    CRUDs corporativos desacoplados utilizando ModelDef, ViewDef e MenuDef com validações estruturadas via FwFormModel e tipagem estática TLPP.
-                  </p>
-                </div>
-              </div>
-
-              {/* Nível 5 */}
-              <div className="relative">
-                <div className="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-gray-600 border-4 border-[#0d1117]"></div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs text-gray-300">NÍVEL 5: MICROSSERVIÇOS REST & GOVERNANÇA SÊNIOR</span>
-                  </div>
-                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-                    Endpoints REST nativos em TLPP com JSON, autenticação Bearer/Basic, mensageria e arquitetura limpa com 100% de conformidade no TOTVS CodeAnalysis.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* SUB-ABA 2: GUIA DE ENTREVISTAS (LISTA EDITORIAL COM DIVISÓRIAS) */}
-        {activeSubtab === 'entrevistas' && (
-          <div className="space-y-6">
-            <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
-              Perguntas Mais Frequentes em Entrevistas Técnicas Protheus
-            </div>
-
-            <div className={`divide-y border-t border-b ${isDark ? 'divide-gray-800/60 border-gray-800/60' : 'divide-slate-200 border-slate-200'}`}>
-              <div className="py-4 space-y-1">
-                <div className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  1. Qual a diferença entre variável Local e Static no ADVPL?
-                </div>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                  <strong>Resposta recomendada:</strong> A variável <code className="text-cyan-400 font-mono">Local</code> existe apenas durante a execução da função onde foi criada e é liberada da memória no Return. A <code className="text-cyan-400 font-mono">Static</code> mantém seu valor entre chamadas sucessivas durante toda a thread, visível exclusivamente para as funções daquele mesmo arquivo .prw.
-                </p>
-              </div>
-
-              <div className="py-4 space-y-1">
-                <div className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  2. Por que nunca se deve usar SELECT * no Protheus?
-                </div>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                  <strong>Resposta recomendada:</strong> Tabelas do ERP contêm centenas de campos. O tráfego desnecessário de dados entre AppServer e DBAccess gera lentidão de rede e estouro de memória no servidor. Deve-se requisitar somente os campos utilizados.
-                </p>
-              </div>
-
-              <div className="py-4 space-y-1">
-                <div className={`font-bold text-xs ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  3. O que acontece se esquecer de fechar uma área de TCQuery com DbCloseArea()?
-                </div>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                  <strong>Resposta recomendada:</strong> Ocorre vazamento de conexão e memória (Memory Leak) no DBAccess e no AppServer. Com o esgotamento dos cursores do banco de dados, o ambiente do cliente cai.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* SUB-ABA 3: CASOS REAIS DE CONSULTORIA */}
-        {activeSubtab === 'casos' && (
-          <div className="space-y-6">
-            <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
-              Cenários Reais de Consultoria e Implantação
-            </div>
-
-            <div className="space-y-4">
-              <div className="border-l-2 border-amber-500 pl-4 py-1 space-y-1">
-                <h4 className="font-bold text-xs text-amber-400">Cenário 1: Trava de Liberação de Crédito no MATA410</h4>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                  Um cliente atacadista precisava impedir que pedidos de venda acima de R$ 50.000 fossem emitidos sem aprovação financeira. A regra foi implementada através do Ponto de Entrada MT410OK consultando o parâmetro MV_LIMPED no SX6.
-                </p>
-              </div>
-
-              <div className="border-l-2 border-cyan-500 pl-4 py-1 space-y-1">
-                <h4 className="font-bold text-xs text-cyan-400">Cenário 2: Otimização de Relatório Financeiro Lento</h4>
-                <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                  Um relatório de títulos demorava 25 minutos para gerar via DbSeek. A consultoria reescreveu a rotina utilizando TCQuery com ChangeQuery e RetSqlName("SE1"), reduzindo o tempo de resposta para 1,8 segundos.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* SUB-ABA 4: CALCULADORA DE SENIORIDADE */}
-        {activeSubtab === 'calculadora' && (
-          <div className="space-y-6">
-            {/* Header da Calculadora com Gauge Integrado */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 border-b pb-6 border-gray-800/40">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span 
-                    className="text-xs font-bold px-2 py-0.5 rounded border"
-                    style={{ color: levelInfo.color, borderColor: `${levelInfo.color}55`, backgroundColor: `${levelInfo.color}15` }}
+              {/* Lista de Marcos com Superfícies Leves */}
+              <div className="space-y-3.5">
+                {[
+                  {
+                    num: '1',
+                    title: 'NÍVEL 1: FUNDAMENTOS & MEMÓRIA RAM',
+                    badge: '✓ Concluído',
+                    badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+                    dotColor: 'bg-emerald-400',
+                    desc: 'Sintaxe ADVPL, Notação Húngara, variáveis locais, modularização com Static Functions, matrizes multidimensionais, ordenação nativa com aSort e telas MSDialog.'
+                  },
+                  {
+                    num: '2',
+                    title: 'NÍVEL 2: BANCO DE DADOS & DICIONÁRIOS (SX)',
+                    badge: 'Próxima Etapa',
+                    badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
+                    dotColor: 'bg-cyan-400',
+                    desc: 'Manipulação de tabelas (SA1, SA2, SB1, SC5, SE1), consultas otimizadas com TCQuery, ChangeQuery, perguntas dinâmicas no SX1 e parâmetros globais no SX6.'
+                  },
+                  {
+                    num: '3',
+                    title: 'NÍVEL 3: PONTOS DE ENTRADA (PEs) & CUSTOMIZAÇÕES NÃO-INVASIVAS',
+                    badge: 'Intermediário',
+                    badgeClass: 'bg-gray-800 text-gray-400 border-gray-700',
+                    dotColor: 'bg-gray-500',
+                    desc: 'Interceptação de rotinas padrões (MATA410, MATA120, MATA010) para aplicar regras customizadas de negócio sem perda de compatibilidade em viradas de release.'
+                  },
+                  {
+                    num: '4',
+                    title: 'NÍVEL 4: ARQUITETURA MVC (MODEL-VIEW-CONTROLLER) & TLPP',
+                    badge: 'Avançado',
+                    badgeClass: 'bg-gray-800 text-gray-400 border-gray-700',
+                    dotColor: 'bg-gray-500',
+                    desc: 'CRUDs corporativos desacoplados utilizando ModelDef, ViewDef e MenuDef com validações estruturadas via FwFormModel e tipagem estática TLPP.'
+                  },
+                  {
+                    num: '5',
+                    title: 'NÍVEL 5: MICROSSERVIÇOS REST & GOVERNANÇA SÊNIOR',
+                    badge: 'Especialista',
+                    badgeClass: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
+                    dotColor: 'bg-purple-400',
+                    desc: 'Endpoints REST nativos em TLPP com JSON, autenticação Bearer/Basic, mensageria e arquitetura limpa com 100% de conformidade no TOTVS CodeAnalysis.'
+                  }
+                ].map((step, idx) => (
+                  <div 
+                    key={idx}
+                    className={`p-4 rounded-xl border transition-all flex items-start gap-4 ${
+                      isDark ? 'bg-[#0d1117]/50 border-gray-800' : 'bg-slate-50 border-slate-200'
+                    }`}
                   >
-                    {levelInfo.badge}
-                  </span>
-                  <span className="text-xs text-gray-400 font-mono">
-                    Score: {totalScore} / {maxScore} pts ({percentage}%)
-                  </span>
-                </div>
-                <h2 className="text-xl font-bold">
-                  {levelInfo.title}
-                </h2>
-                <p className={`text-xs max-w-xl leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                  {levelInfo.desc}
-                </p>
-              </div>
+                    <div className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-bold font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">
+                      {step.num}
+                    </div>
 
-              {/* Medidor Circular */}
-              <div className={`w-24 h-24 rounded-full border-2 flex flex-col items-center justify-center shrink-0 ${
-                isDark ? 'border-cyan-500/30 bg-[#161b22]' : 'border-cyan-500/40 bg-white shadow-sm'
-              }`}>
-                <span className="text-lg font-black font-mono text-cyan-400">{percentage}%</span>
-                <span className="text-[9px] text-gray-400 uppercase tracking-wide">Score</span>
-              </div>
-            </div>
-
-            {/* Checklist de Competências em Tabela/Lista Limpa */}
-            <div className="space-y-3">
-              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                Matriz de Competências Oficiais do Mercado Protheus
-              </div>
-
-              <div className={`divide-y border rounded-xl overflow-hidden ${isDark ? 'border-gray-800/60 divide-gray-800/40 bg-[#161b22]/30' : 'border-slate-200 divide-slate-100 bg-white'}`}>
-                {SKILLS_LIST.map((skill) => {
-                  const isChecked = !!checkedSkills[skill.id];
-                  return (
-                    <div
-                      key={skill.id}
-                      onClick={() => toggleSkill(skill.id)}
-                      className={`p-3 flex items-center justify-between gap-4 cursor-pointer text-xs transition-colors ${
-                        isDark ? 'hover:bg-[#161b22]/60' : 'hover:bg-slate-50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 ${
-                          isChecked 
-                            ? 'bg-cyan-600 border-cyan-500 text-white font-bold' 
-                            : isDark ? 'border-gray-600' : 'border-slate-300'
-                        }`}>
-                          {isChecked ? '✓' : ''}
-                        </div>
-                        <span className={isChecked ? (isDark ? 'text-white font-medium' : 'text-slate-900 font-medium') : 'text-gray-400'}>
-                          {skill.name}
+                    <div className="space-y-1 flex-1">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <h3 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          {step.title}
+                        </h3>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${step.badgeClass}`}>
+                          {step.badge}
                         </span>
                       </div>
-
-                      <span className="text-[10px] font-mono text-cyan-400 font-bold shrink-0">
-                        +{skill.points} pts
-                      </span>
+                      <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
+                        {step.desc}
+                      </p>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {/* ========================================================= */}
+          {/* SUB-ABA 2: GUIA DE ENTREVISTAS                            */}
+          {/* ========================================================= */}
+          {activeSubtab === 'entrevistas' && (
+            <div className="space-y-5">
+              <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                Perguntas Frequentes & Respostas Oficiais de Entrevistas Técnicas
+              </div>
+
+              <div className={`divide-y border rounded-xl overflow-hidden shadow-xs ${
+                isDark ? 'border-gray-800 divide-gray-800/60 bg-[#0d1117]/40' : 'border-slate-200 divide-slate-100 bg-slate-50'
+              }`}>
+                {[
+                  {
+                    q: '1. Qual a diferença entre variável Local e Static no ADVPL?',
+                    a: 'A variável Local existe apenas durante a execução da função onde foi criada e é liberada da memória no Return. A Static mantém seu valor entre chamadas sucessivas durante toda a thread, visível exclusivamente para as funções daquele mesmo arquivo .prw.'
+                  },
+                  {
+                    q: '2. Por que nunca se deve usar SELECT * no Protheus?',
+                    a: 'Tabelas do ERP contêm centenas de campos. O tráfego desnecessário de dados entre AppServer e DBAccess gera latência de rede severa e estouro de memória no servidor. Deve-se requisitar exclusivamente os campos utilizados na rotina.'
+                  },
+                  {
+                    q: '3. O que acontece se esquecer de fechar uma área de TCQuery com DbCloseArea()?',
+                    a: 'Ocorre vazamento de conexão e memória (Memory Leak) no DBAccess e no AppServer. Com o esgotamento dos cursores do banco de dados, todo o ambiente do cliente é paralisado.'
+                  }
+                ].map((item, idx) => (
+                  <div key={idx} className="p-4 space-y-1.5">
+                    <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {item.q}
+                    </h4>
+                    <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
+                      <strong className="text-cyan-400">Resposta oficial recomendada:</strong> {item.a}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================= */}
+          {/* SUB-ABA 3: CASOS REAIS DE CONSULTORIA                     */}
+          {/* ========================================================= */}
+          {activeSubtab === 'casos' && (
+            <div className="space-y-5">
+              <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                Cenários Reais de Consultoria e Implantação Corporativa
+              </div>
+
+              <div className="space-y-3.5">
+                <div className={`p-4 rounded-xl border-l-4 border-amber-500 border space-y-1.5 ${
+                  isDark ? 'bg-amber-950/15 border-gray-800' : 'bg-amber-50/60 border-slate-200'
+                }`}>
+                  <h4 className="font-bold text-xs text-amber-400">
+                    Cenário 1: Trava de Liberação de Crédito no MATA410
+                  </h4>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
+                    Um cliente atacadista precisava impedir que pedidos de venda acima de R$ 50.000 fossem emitidos sem aprovação financeira. A regra foi implementada através do Ponto de Entrada MT410OK consultando o parâmetro MV_LIMPED no SX6 com tratamento elegante de Help.
+                  </p>
+                </div>
+
+                <div className={`p-4 rounded-xl border-l-4 border-cyan-500 border space-y-1.5 ${
+                  isDark ? 'bg-cyan-950/15 border-gray-800' : 'bg-cyan-50/60 border-slate-200'
+                }`}>
+                  <h4 className="font-bold text-xs text-cyan-400">
+                    Cenário 2: Otimização de Relatório Financeiro Lento
+                  </h4>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
+                    Um relatório de títulos demorava 25 minutos para gerar via DbSeek. A consultoria reescreveu a rotina utilizando TCQuery com ChangeQuery e RetSqlName("SE1"), reduzindo o tempo de resposta para 1,8 segundos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================= */}
+          {/* SUB-ABA 4: CALCULADORA DE SENIORIDADE INTERATIVA (NÍVEL 3)*/}
+          {/* ========================================================= */}
+          {activeSubtab === 'calculadora' && (
+            <div className="space-y-6">
+              {/* Painel do Nível com Medidor e Barra de Progresso */}
+              <div 
+                className={`p-5 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs ${
+                  isDark ? 'bg-[#0d1117] border-gray-800' : 'bg-slate-50 border-slate-200'
+                }`}
+              >
+                <div className="space-y-2 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span 
+                      className="text-xs font-bold px-2 py-0.5 rounded border"
+                      style={{ color: levelInfo.color, borderColor: `${levelInfo.color}55`, backgroundColor: `${levelInfo.color}15` }}
+                    >
+                      {levelInfo.badge}
+                    </span>
+                    <span className="text-xs text-gray-400 font-mono">
+                      Pontuação: <strong>{totalScore}</strong> / {maxScore} pts ({percentage}%)
+                    </span>
+                  </div>
+
+                  <h2 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    {levelInfo.title}
+                  </h2>
+
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
+                    {levelInfo.desc}
+                  </p>
+
+                  {/* Barra de Progresso Visual */}
+                  <div className="w-full bg-gray-800 h-2 rounded-full overflow-hidden mt-2">
+                    <div 
+                      className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all duration-300"
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                {/* Medidor Circular */}
+                <div className={`w-24 h-24 rounded-full border-2 flex flex-col items-center justify-center shrink-0 shadow-xs ${
+                  isDark ? 'border-cyan-500/30 bg-[#161b22]' : 'border-cyan-500/40 bg-white'
+                }`}>
+                  <span className="text-xl font-black font-mono text-cyan-400">{percentage}%</span>
+                  <span className="text-[9px] text-gray-400 uppercase tracking-wider font-semibold">Senioridade</span>
+                </div>
+              </div>
+
+              {/* Matriz de Competências Interativa */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-gray-400">
+                  <span>Matriz de Competências Oficiais do Mercado Protheus</span>
+                  <span className="text-[10px] text-cyan-400 font-mono font-normal">Clique para marcar/desmarcar</span>
+                </div>
+
+                <div className={`divide-y border rounded-xl overflow-hidden shadow-xs ${
+                  isDark ? 'border-gray-800/80 divide-gray-800/60 bg-[#0d1117]/30' : 'border-slate-200 divide-slate-100 bg-white'
+                }`}>
+                  {SKILLS_LIST.map((skill) => {
+                    const isChecked = !!checkedSkills[skill.id];
+                    return (
+                      <div
+                        key={skill.id}
+                        onClick={() => toggleSkill(skill.id)}
+                        className={`p-3 flex items-center justify-between gap-4 cursor-pointer text-xs transition-colors ${
+                          isDark ? 'hover:bg-white/5' : 'hover:bg-slate-50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 transition-colors ${
+                            isChecked 
+                              ? 'bg-cyan-600 border-cyan-500 text-white font-bold' 
+                              : isDark ? 'border-gray-600 bg-transparent' : 'border-slate-300 bg-white'
+                          }`}>
+                            {isChecked ? '✓' : ''}
+                          </div>
+                          <span className={isChecked ? (isDark ? 'text-white font-medium' : 'text-slate-900 font-medium') : 'text-gray-400'}>
+                            {skill.name}
+                          </span>
+                        </div>
+
+                        <span className="text-[10px] font-mono text-cyan-400 font-bold shrink-0">
+                          +{skill.points} pts
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

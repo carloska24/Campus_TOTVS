@@ -7174,13 +7174,7 @@
     // Botão para restaurar o código original da aula ativa
     if (btnResetCode) {
       btnResetCode.addEventListener('click', () => {
-        if (!currentLesson) return;
-        localStorage.removeItem('totvs_user_code_' + currentLesson.id);
-        if (monacoEditorInstance) {
-          monacoEditorInstance.setValue(currentLesson.code);
-          monacoEditorInstance.setPosition({ lineNumber: 1, column: 1 });
-        }
-        updateModifiedState(false);
+        resetCurrentLesson();
         playAudioFx('tick');
       });
     }
@@ -7928,7 +7922,7 @@
               : "Crie o Codeblock: bBuscaCat := {|x| x[3] == 'Perifericos'} para buscar por categoria."
           });
 
-          const hasAScanCat = /aScan\s*\(\s*aProdutos\s*,\s*(?:bBuscaCat|bFiltro|\{[^}]*Perifericos)/i.test(cleanCode) && /Perifericos/i.test(cleanCode);
+          const hasAScanCat = hasCodeblockCat && /aScan\s*\(\s*aProdutos\s*,\s*(?:bBuscaCat|bCat|\{[^}]*(?:\[\s*3\s*\]|Perifericos))/i.test(cleanCode) && !/aScan\s*\(\s*aProdutos\s*,\s*bFiltro\s*\)/i.test(cleanCode);
           criteria.push({
             id: 1,
             title: "Localizar produto por categoria na matriz usando aScan()",
@@ -7938,7 +7932,7 @@
               : "Execute a busca: nPos := aScan(aProdutos, bBuscaCat) para encontrar o primeiro periférico."
           });
 
-          const hasPosCheck = /nPos\w*\s*>\s*0/i.test(cleanCode) && /Perifericos/i.test(cleanCode);
+          const hasPosCheck = hasCodeblockCat && hasAScanCat && (/nPos\w*\s*>\s*0/i.test(cleanCode) || /nPos\s*>\s*0/i.test(cleanCode));
           criteria.push({
             id: 2,
             title: "Validar se o produto da categoria foi localizado (nPos > 0)",
@@ -7948,7 +7942,7 @@
               : "Adicione If nPos > 0 para garantir que o produto foi encontrado antes de ler seus dados."
           });
 
-          const hasOutA4 = isRunSuccess && /Perifericos/i.test(cleanCode) && /(?:Teclado Mecanico|Mouse Sem Fio|Perifericos)/i.test(outMsg);
+          const hasOutA4 = isRunSuccess && hasCodeblockCat && hasAScanCat && /(?:Teclado Mecanico|Mouse Sem Fio|Perifericos)/i.test(outMsg);
           criteria.push({
             id: 3,
             title: "Executar no Protheus Virtual e validar a busca por categoria",
@@ -8006,7 +8000,7 @@
 
         case "aula06": {
           // Desafio: Filtro SQL Regional (A1_EST == 'SP') e Ordenacao por A1_LC DESC
-          const hasFilterSP = /A1_EST\s*=\s*['"]SP['"]/i.test(cleanCode);
+          const hasFilterSP = /(?:AND\s+.*A1_EST\s*=\s*['"]SP['"]|WHERE\s+.*A1_EST\s*=\s*['"]SP['"])/i.test(cleanCode) || (cleanCode.includes("A1_EST = 'SP'") && !cleanCode.includes("SELECT A1_COD, A1_NOME, A1_MUN, A1_EST FROM SA1010"));
           criteria.push({
             id: 0,
             title: "Filtrar clientes do estado 'SP' (AND SA1.A1_EST = 'SP')",
@@ -8026,7 +8020,7 @@
               : "Substitua a ordenação por: cQuery += \" ORDER BY SA1.A1_LC DESC \"."
           });
 
-          const hasDeletAndClose = /D_E_L_E_T_\s*=\s*['"]\s+['"]/i.test(cleanCode) && /DbCloseArea\s*\(\s*\)/i.test(cleanCode) && /A1_EST/i.test(cleanCode);
+          const hasDeletAndClose = hasFilterSP && hasOrderByLC && /D_E_L_E_T_\s*=\s*['"]\s+['"]/i.test(cleanCode) && /DbCloseArea\s*\(\s*\)/i.test(cleanCode);
           criteria.push({
             id: 2,
             title: "Preservar deleção lógica obrigatória e fechamento com DbCloseArea()",
@@ -8036,7 +8030,7 @@
               : "Mantenha o filtro D_E_L_E_T_ = ' ' e certifique-se de liberar a área com DbCloseArea()."
           });
 
-          const hasOutA6 = isRunSuccess && /A1_EST/i.test(cleanCode) && /A1_LC/i.test(cleanCode) && /(?:SP|Sao Paulo|CLIENTES)/i.test(outMsg);
+          const hasOutA6 = isRunSuccess && hasFilterSP && hasOrderByLC && /(?:SP|Sao Paulo|CLIENTES)/i.test(outMsg);
           criteria.push({
             id: 3,
             title: "Executar e validar listagem filtrada de SP no Protheus Virtual",
@@ -8094,7 +8088,7 @@
 
         case "aula08": {
           // Desafio: Eliminacao de Hard-Code com comparacao de pedido via GetMV('MV_LIMPED')
-          const hasDynamicParamCheck = /If\s+.*(?:nVlrTotal|nTotal|nValor)\s*>\s*GetMV\s*\(\s*["']MV_LIMPED["']/i.test(cleanCode) || /If\s+.*GetMV\s*\(\s*["']MV_LIMPED["'].*<\s*(?:nVlrTotal|nTotal|nValor)/i.test(cleanCode);
+          const hasDynamicParamCheck = (/^\s*If\s+.*(?:nVlrTotal|nTotal|nValor|nVlr)\s*>\s*GetMV\s*\(\s*["']MV_LIMPED["']/im.test(cleanCode) || /^\s*If\s+.*GetMV\s*\(\s*["']MV_LIMPED["'].*<\s*(?:nVlrTotal|nTotal|nValor|nVlr)/im.test(cleanCode)) && !cleanCode.includes('cRelatorio += "CORRETO : If nVlrTotal > GetMV(\'MV_LIMPED\')"');
           criteria.push({
             id: 0,
             title: "Comparação condicional do valor do pedido com GetMV('MV_LIMPED')",
@@ -8104,7 +8098,7 @@
               : "Substitua a trava fixa por: If nVlrTotal > GetMV('MV_LIMPED', .F., 50000)."
           });
 
-          const hasFallbackParam = /GetMV\s*\(\s*["']MV_LIMPED["']\s*,\s*\.F\.\s*,\s*\d+\s*\)/i.test(cleanCode) || /GetMV\s*\(\s*["']MV_LIMPED["']\s*,/i.test(cleanCode);
+          const hasFallbackParam = hasDynamicParamCheck && (/GetMV\s*\(\s*["']MV_LIMPED["']\s*,\s*\.F\.\s*,\s*\d+\s*\)/i.test(cleanCode) || /GetMV\s*\(\s*["']MV_LIMPED["']\s*,/i.test(cleanCode));
           criteria.push({
             id: 1,
             title: "Uso de parâmetros opcionais de segurança no GetMV (fallback)",
@@ -8114,7 +8108,7 @@
               : "Passe o valor padrão defensivo: GetMV('MV_LIMPED', .F., 50000) caso o parâmetro não exista."
           });
 
-          const hasBlockAction = /(?:lRetorno\s*:=\s*\.F\.|ApMsgStop|Help\s*\()/i.test(cleanCode) && /MV_LIMPED/i.test(cleanCode) && /If\s+/i.test(cleanCode);
+          const hasBlockAction = hasDynamicParamCheck && /(?:lRetorno\s*:=\s*\.F\.|ApMsgStop|Help\s*\()/i.test(cleanCode);
           criteria.push({
             id: 2,
             title: "Bloqueio da rotina ou alerta quando o limite for ultrapassado",
@@ -8124,7 +8118,7 @@
               : "Dentro da condição, defina lRetorno := .F. ou acione Help()/ApMsgStop alertando o operador."
           });
 
-          const hasOutA8 = isRunSuccess && /(?:ultrapassado|bloqueado|limite|LIMEXCED)/i.test(outMsg) && /MV_LIMPED/i.test(cleanCode);
+          const hasOutA8 = isRunSuccess && hasDynamicParamCheck && hasBlockAction && /(?:ultrapassado|bloqueado|LIMEXCED)/i.test(outMsg);
           criteria.push({
             id: 3,
             title: "Executar e validar regra de bloqueio dinâmico no Protheus Virtual",
@@ -8297,6 +8291,7 @@
         monacoEditorInstance.setValue(currentLesson.code);
         monacoEditorInstance.setPosition({ lineNumber: 1, column: 1 });
       }
+      updateModifiedState(false);
       renderLessonsList();
       renderChallenge(currentLesson);
 
@@ -8346,12 +8341,18 @@
     function sanitizeChallengesProgress() {
       let changed = false;
       LESSONS_DATABASE.forEach(lesson => {
-        if (completedChallenges[lesson.id]) {
-          const savedCode = localStorage.getItem('totvs_user_code_' + lesson.id);
-          const currentCode = (savedCode !== null && savedCode !== undefined) ? savedCode : lesson.code;
-          const grade = gradeLessonChallenge(lesson, currentCode);
-          if (!grade.passed) {
+        const savedCode = localStorage.getItem('totvs_user_code_' + lesson.id);
+        const currentCode = (savedCode !== null && savedCode !== undefined) ? savedCode : lesson.code;
+        const grade = gradeLessonChallenge(lesson, currentCode);
+        if (!grade.passed) {
+          if (completedChallenges[lesson.id]) {
             delete completedChallenges[lesson.id];
+            changed = true;
+          }
+        }
+        // Se o código é o original limpo (sem edições salvas), limpa qualquer tarefa parcialmente marcada
+        if (!savedCode || savedCode === lesson.code) {
+          if (localStorage.getItem('totvs_quest_tasks_' + lesson.id)) {
             localStorage.removeItem('totvs_quest_tasks_' + lesson.id);
             changed = true;
           }
@@ -8395,9 +8396,8 @@
     const btnResetLessonCode = document.getElementById('btnResetLessonCode');
     if (btnResetLessonCode) {
       btnResetLessonCode.addEventListener('click', () => {
-        if (confirm(`Deseja restaurar o código original de "${currentLesson ? currentLesson.title : ''}" descartando todas as alterações feitas?`)) {
-          resetCurrentLesson();
-        }
+        resetCurrentLesson();
+        playAudioFx('tick');
       });
     }
     const graderBtnResetOriginal = document.getElementById('graderBtnResetOriginal');

@@ -15,6 +15,49 @@ export function gradeLessonChallenge(
     .replace(/\/\/.*/g, "");
 
   switch (lessonId) {
+    case "aula00": {
+      const hasRpc = /RpcSetEnv\s*\(/i.test(cleanCode) || /cEmpAnt/i.test(cleanCode);
+      criteria.push({
+        id: 0,
+        title: "Inicializar ambiente defensivamente com RpcSetEnv ou testar cEmpAnt",
+        pass: hasRpc,
+        tip: hasRpc
+          ? "Ambiente Protheus protegido e inicializado defensivamente."
+          : "Utilize If Empty(cEmpAnt) RpcSetEnv('99', '01') EndIf para garantir sessão ativa."
+      });
+
+      const hasEmpFil = /cEmpAnt/i.test(cleanCode) && /cFilAnt/i.test(cleanCode);
+      criteria.push({
+        id: 1,
+        title: "Consultar as variáveis globais de sessão cEmpAnt e cFilAnt",
+        pass: hasEmpFil,
+        tip: hasEmpFil
+          ? "Empresa e filial ativas obtidas com sucesso do contexto da thread."
+          : "Leia as variáveis cEmpAnt (empresa) e cFilAnt (filial) mantidas pelo AppServer."
+      });
+
+      const hasXFilial = /xFilial\s*\(\s*["']SA1["']\s*\)/i.test(cleanCode);
+      criteria.push({
+        id: 2,
+        title: "Obter a filial da tabela SA1 com a função oficial xFilial('SA1')",
+        pass: hasXFilial,
+        tip: hasXFilial
+          ? "Função xFilial aplicada! Respeita compartilhamento exclusivo ou compartilhado."
+          : "Invoque xFilial('SA1') para determinar a filial correta da tabela de clientes."
+      });
+
+      const hasOutA0 = isRunSuccess && /CAMPUS TOTVS - AUDITORIA DE AMBIENTE/i.test(outMsg);
+      criteria.push({
+        id: 3,
+        title: "Executar no Protheus Virtual e validar o relatório de auditoria",
+        pass: hasOutA0,
+        tip: hasOutA0
+          ? "Auditoria do ambiente executada com louvor na interface do ERP!"
+          : "Clique em 'Executar no Protheus Virtual' para verificar a tela de auditoria corporativa."
+      });
+      break;
+    }
+
     case "aula01": {
       const hasCargoVar = /Local\s+.*cCargo\b/i.test(cleanCode);
       criteria.push({
@@ -398,6 +441,49 @@ export function gradeLessonChallenge(
         tip: hasOutA8 
           ? "Parametrização dinâmica validada com louvor no Protheus Virtual!" 
           : "Execute no Protheus Virtual e valide o comportamento da rotina parametrizada dinamicamente."
+      });
+      break;
+    }
+
+    case "aula09": {
+      const hasMenuDef = /Static\s+Function\s+MenuDef/i.test(cleanCode) && /ADD\s+OPTION/i.test(cleanCode);
+      criteria.push({
+        id: 0,
+        title: "Definir MenuDef() com catálogo de operações oficiais (ADD OPTION)",
+        pass: hasMenuDef,
+        tip: hasMenuDef
+          ? "Catálogo de operações MenuDef estruturado no padrão oficial TOTVS."
+          : "Implemente Static Function MenuDef() adicionando opções com ADD OPTION aRotina."
+      });
+
+      const hasModelDef = /Static\s+Function\s+ModelDef/i.test(cleanCode) && /MPFormModel/i.test(cleanCode) && /FWFormStruct\s*\(\s*1/i.test(cleanCode);
+      criteria.push({
+        id: 1,
+        title: "Definir ModelDef() com MPFormModel e FWFormStruct(1, 'SA1')",
+        pass: hasModelDef,
+        tip: hasModelDef
+          ? "Modelo de dados MPFormModel instanciado com a estrutura de dicionário SA1."
+          : "Instancie MPFormModel():New() e adicione os campos com FWFormStruct(1, 'SA1')."
+      });
+
+      const hasViewDef = /Static\s+Function\s+ViewDef/i.test(cleanCode) && /FWFormView/i.test(cleanCode) && /FWFormStruct\s*\(\s*2/i.test(cleanCode);
+      criteria.push({
+        id: 2,
+        title: "Definir ViewDef() desacoplada com FWFormView e FWFormStruct(2, 'SA1')",
+        pass: hasViewDef,
+        tip: hasViewDef
+          ? "Interface visual desacoplada desenhada com FWFormView e vinculada ao modelo."
+          : "Crie a ViewDef() com FWFormView():New() e vincule a estrutura FWFormStruct(2, 'SA1')."
+      });
+
+      const hasOutA9 = isRunSuccess && /AMBIENTE MVC PROTHEUS INICIALIZADO/i.test(outMsg);
+      criteria.push({
+        id: 3,
+        title: "Executar no Protheus Virtual e inicializar o ecossistema MVC",
+        pass: hasOutA9,
+        tip: hasOutA9
+          ? "Arquitetura MVC Protheus executada e validada com excelência corporativa!"
+          : "Execute no Protheus Virtual para comprovar a instanciação da arquitetura MVC."
       });
       break;
     }

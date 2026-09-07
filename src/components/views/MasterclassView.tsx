@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MASTERCLASS_TRACKS } from '../../data/masterclass';
+import { LESSONS_DATABASE } from '../../data/lessons';
 import { useCampusStore } from '../../store/useCampusStore';
 import { soundFx } from '../../utils/audio';
 import { 
@@ -17,11 +18,14 @@ import {
   Lightning,
   ShieldCheck,
   Cpu,
+  Buildings,
+  Code,
   type IconWeight
 } from '@phosphor-icons/react';
 
 const getTrackIcon = (id: string, size = 18, weight: IconWeight = 'duotone') => {
   switch (id) {
+    case 'imersao-erp': return <Buildings size={size} weight={weight} className="text-amber-400 shrink-0" />;
     case 'fundamentos': return <BookOpen size={size} weight={weight} className="text-cyan-400 shrink-0" />;
     case 'banco-de-dados': return <Database size={size} weight={weight} className="text-blue-400 shrink-0" />;
     case 'arquitetura': return <TreeStructure size={size} weight={weight} className="text-purple-400 shrink-0" />;
@@ -48,31 +52,33 @@ const getLevelBadgeColor = (level: string, isDark: boolean) => {
 };
 
 export const MasterclassView: React.FC = () => {
-  const [activeTrackId, setActiveTrackId] = useState('fundamentos');
-  const [selectedChapterId, setSelectedChapterId] = useState('cap01');
+  const [activeTrackId, setActiveTrackId] = useState('imersao-erp');
+  const [selectedChapterId, setSelectedChapterId] = useState('cap00a');
   const [isCopied, setIsCopied] = useState(false);
 
-  const { setUserCode, setActiveTab, activeLessonId, theme } = useCampusStore();
+  const { setActiveTab, setActiveLessonId, theme } = useCampusStore();
   const isDark = theme === 'dark';
 
   const currentTrack = MASTERCLASS_TRACKS.find((t) => t.id === activeTrackId) || MASTERCLASS_TRACKS[0];
   const chapters = currentTrack?.chapters || [];
   const totalMinutes = chapters.reduce((acc, curr) => acc + (parseInt(curr.duration || '0') || 0), 0);
   const currentChapter = chapters.find((c) => c.id === selectedChapterId) || chapters[0] || {
-    id: 'cap01',
-    title: 'Capítulo 01',
-    badge: '01_Variaveis.prw',
+    id: 'cap00a',
+    title: 'Capítulo 00A',
+    badge: '00_ConceitoERP.md',
     duration: '15 min',
     level: 'Iniciante',
-    category: 'Fundamentos',
+    category: 'Arquitetura',
     description: '',
     snippetCode: '',
     keyPoints: []
   };
 
-  const handleLoadSnippet = (snippet: string) => {
+  const handleOpenInLab = (lessonId?: string) => {
     soundFx.playSuccess();
-    setUserCode(activeLessonId, snippet);
+    if (lessonId) {
+      setActiveLessonId(lessonId);
+    }
     setActiveTab('lab');
   };
 
@@ -125,7 +131,7 @@ export const MasterclassView: React.FC = () => {
                   Trilha Prática
                 </span>
                 <span className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  9 Aulas Completas
+                  {LESSONS_DATABASE.length} Aulas Práticas
                 </span>
               </div>
             </div>
@@ -280,7 +286,10 @@ export const MasterclassView: React.FC = () => {
                           ? 'bg-[#1c2128] text-gray-400 border border-gray-700/50 group-hover:border-gray-600 group-hover:text-gray-300'
                           : 'bg-slate-100 text-slate-600 border border-slate-200 group-hover:border-slate-300 group-hover:text-slate-800'
                     }`}>
-                      {String(idx + 1).padStart(2, '0')}
+                      {(() => {
+                        const capMatch = ch.title.match(/Capítulo\s+([0-9A-Za-z]+)/i);
+                        return capMatch ? capMatch[1] : String(idx + 1).padStart(2, '0');
+                      })()}
                     </div>
 
                     {/* Metadados e Título */}
@@ -296,6 +305,14 @@ export const MasterclassView: React.FC = () => {
                         {ch.level && (
                           <span className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-semibold border ${getLevelBadgeColor(ch.level, isDark)}`}>
                             {ch.level}
+                          </span>
+                        )}
+
+                        {ch.lessonId && (
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-bold border ${
+                            isDark ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/40' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          }`}>
+                            Prática Lab
                           </span>
                         )}
 
@@ -381,15 +398,26 @@ export const MasterclassView: React.FC = () => {
                 </h2>
               </div>
 
-              {currentChapter.snippetCode && (
-                <button
-                  onClick={() => handleLoadSnippet(currentChapter.snippetCode)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
-                >
-                  <span>Abrir Fonte no Editor</span>
-                  <ArrowRight size={14} weight="bold" />
-                </button>
-              )}
+              <div className="flex items-center gap-2">
+                {currentChapter.lessonId ? (
+                  <button
+                    onClick={() => handleOpenInLab(currentChapter.lessonId)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
+                  >
+                    <Code size={15} weight="bold" />
+                    <span>Praticar no Laboratório</span>
+                    <ArrowRight size={14} weight="bold" />
+                  </button>
+                ) : currentChapter.snippetCode ? (
+                  <button
+                    onClick={() => handleCopyCode(currentChapter.snippetCode)}
+                    className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
+                  >
+                    <Copy size={14} weight="bold" />
+                    <span>{isCopied ? 'Código Copiado!' : 'Copiar Exemplo'}</span>
+                  </button>
+                ) : null}
+              </div>
             </div>
 
             {/* Descrição em Prosa de Consultoria */}

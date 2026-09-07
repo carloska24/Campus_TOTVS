@@ -17,6 +17,28 @@ export function runProtheusCode(code: string, lessonId: string): IRunnerResult {
 
   // Simulação pedagógica por aula
   switch (lessonId) {
+    case "aula00": {
+      const hasRpc = /RpcSetEnv/i.test(code);
+      const hasFilial = /xFilial/i.test(code);
+      const hasSX2 = /SX2/i.test(code);
+
+      let msg = "=== CAMPUS TOTVS - AUDITORIA DE AMBIENTE ERP ===\n\n";
+      msg += "Status da Conexao  : CONECTADO COM SUCESSO\n";
+      msg += "Empresa Ativa      : 99 (Empresa Matriz Fiscal)\n";
+      msg += "Filial Ativa       : 01 (Filial Principal SP)\n";
+      msg += `Filial SA1 Clientes: ${hasFilial ? "01 (xFilial ativa)" : "[COMPARTILHADA]"}\n`;
+      msg += "Data Base Protheus : 07/09/2026\n\n";
+      msg += `Dicionario SX2     : ${hasSX2 ? "Ativo (Tabelas do ERP carregadas no AppServer)" : "Ativo"}\n`;
+      msg += `Inicializacao Rpc  : ${hasRpc ? "RpcSetEnv('99', '01') validado defensivamente" : "Sessao SmartClient Padrao"}\n`;
+      msg += "Camada Arquitetura : SmartClient Desktop -> AppServer (RPO) -> DBAccess (PostgreSQL)";
+
+      return {
+        title: "Campus TOTVS - Aula 00: Arquitetura ERP",
+        output: msg,
+        success: true
+      };
+    }
+
     case "aula01": {
       const nomeMatch = code.match(/cNome\s*:=\s*["']([^"']+)["']/i);
       const cargoMatch = code.match(/cCargo\s*:=\s*["']([^"']+)["']/i);
@@ -178,9 +200,22 @@ export function runProtheusCode(code: string, lessonId: string): IRunnerResult {
     }
 
     case "aula07": {
+      const hasEntregaCheck = /C5_ENTREG/i.test(code) && (/<.*C5_EMISSAO\s*\+\s*5/i.test(code) || /C5_ENTREG.*-.*C5_EMISSAO/i.test(code));
+      let msg = "=== VALIDACAO DE PEDIDO DE VENDA (MATA410) ===\n\n";
+      msg += "Ponto de Entrada MT410OK executado no SIGAFAT!\n";
+      msg += "Ponteiros e contexto de tabelas preservados com GetArea() e RestArea().\n\n";
+      if (hasEntregaCheck) {
+        msg += "--- TRAVA DE NEGOCIO ADICIONADA ---\n";
+        msg += "Validacao de Prazo de Entrega: C5_ENTREG < C5_EMISSAO + 5\n";
+        msg += "Pedido com prazo inferior a 5 dias bloqueado com Help() ou MsgStop()!\n";
+        msg += "Retorno: .F. quando prazo for violado / .T. quando conforme.";
+      } else {
+        msg += "Retorno: .T. (Permissao de Gravacao Concedida).";
+      }
+
       return {
         title: "Ponto de Entrada MT410OK - SIGAFAT",
-        output: "=== VALIDACAO DE PEDIDO DE VENDA (MATA410) ===\n\nPonto de Entrada MT410OK executado com sucesso!\nPonteiros e contexto de tabelas preservados com GetArea() e RestArea().\nRetorno: .T. (Permissao de Gravacao Concedida).",
+        output: msg,
         success: true
       };
     }
@@ -211,6 +246,28 @@ export function runProtheusCode(code: string, lessonId: string): IRunnerResult {
 
       return {
         title: "Campus TOTVS - Aula 08: Parametros SX6",
+        output: msg,
+        success: true
+      };
+    }
+
+    case "aula09": {
+      const hasMenu = /MenuDef/i.test(code);
+      const hasModel = /ModelDef/i.test(code) && /MPFormModel/i.test(code);
+      const hasView = /ViewDef/i.test(code) && /FWFormView/i.test(code);
+
+      let msg = "=== AMBIENTE MVC PROTHEUS INICIALIZADO ===\n\n";
+      msg += "Rotina: AULA09 (Cadastro de Clientes MVC)\n";
+      msg += "Tabela Base: SA1 (Clientes)\n";
+      msg += "------------------------------------------------------------\n";
+      msg += `1. MenuDef : ${hasMenu ? "Operacoes AxPesqui e VIEWDEF registradas" : "Nao configurado"}\n`;
+      msg += `2. ModelDef: ${hasModel ? "MPFormModel com estrutura SA1 e validacoes ativas" : "Nao configurado"}\n`;
+      msg += `3. ViewDef : ${hasView ? "FWFormView desacoplada desenhada na tela" : "Nao configurado"}\n`;
+      msg += "------------------------------------------------------------\n\n";
+      msg += "FWMBrowse ativo e pronto para navegacao e manutencao de registros!";
+
+      return {
+        title: "Campus TOTVS - Aula 09: Arquitetura MVC",
         output: msg,
         success: true
       };

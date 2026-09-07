@@ -8,6 +8,7 @@ export interface IMasterclassChapter {
   description: string;
   snippetCode: string;
   keyPoints: string[];
+  lessonId?: string;
 }
 
 export interface IMasterclassTrack {

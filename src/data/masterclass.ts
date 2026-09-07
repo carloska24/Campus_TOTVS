@@ -2,6 +2,98 @@ import type { IMasterclassTrack } from '../types/masterclass';
 
 export const MASTERCLASS_TRACKS: IMasterclassTrack[] = [
   {
+    id: "imersao-erp",
+    name: "Trilha 0: Imersão ERP",
+    icon: "🏢",
+    description: "Introdução a ERPs, arquitetura em 3 camadas, empresas, filiais e dicionários.",
+    chapters: [
+      {
+        id: "cap00a",
+        title: "Capítulo 00A: O que é um ERP & O Papel do Desenvolvedor Protheus",
+        badge: "00_ConceitoERP.md",
+        duration: "15 min",
+        level: "Iniciante",
+        category: "Arquitetura",
+        description: "Compreenda o propósito de um Enterprise Resource Planning (ERP): unificação de processos de faturamento, compras, contabilidade, estoque e folha em uma única base de dados relacional. Entenda onde o desenvolvedor ADVPL/TLPP atua customizando regras de negócio sem quebrar o padrão do fabricante.",
+        snippetCode: `/*
+* PAPEL DO DESENVOLVEDOR TOTVS PROTHEUS:
+* 1. Preservar o padrão do sistema (RPO Padrão)
+* 2. Estender funcionalidades com Pontos de Entrada e MVC
+* 3. Integrar com ecossistemas externos via TLPP REST/WebServices
+* 4. Garantir performance e integridade transacional ACID
+*/`,
+        keyPoints: [
+          "Um ERP elimina ilhas de informação conectando Compras (SIGACOM), Faturamento (SIGAFAT), Financeiro (SIGAFIN) e Estoque (SIGAEST)",
+          "O código fonte padrão da TOTVS é compilado no repositório RPO; customizações são adicionadas como User Functions e Pontos de Entrada",
+          "O desenvolvedor Protheus é o guardião das regras tributárias, operacionais e financeiras da empresa"
+        ]
+      },
+      {
+        id: "cap00b",
+        title: "Capítulo 00B: Arquitetura em 3 Camadas (SmartClient, AppServer/RPO, DBAccess)",
+        badge: "00_Arquitetura.md",
+        duration: "20 min",
+        level: "Iniciante",
+        category: "Arquitetura",
+        description: "O ecossistema Protheus é dividido em 3 camadas essenciais: Camada 1 (SmartClient / WebApp no frontend), Camada 2 (AppServer executando bytecode ADVPL/TLPP a partir do RPO) e Camada 3 (DBAccess / TopConnect traduzindo comandos ISAM para o SGBD relacional Oracle, SQL Server ou PostgreSQL).",
+        snippetCode: `// FLUXO DE EXECUÇÃO EM 3 CAMADAS:
+// [1. SmartClient Desktop / WebApp] (Renderização de Telas e Coleta de Eventos)
+//                 ↕ (Protocolo TCP/IP Criptografado)
+// [2. AppServer + RPO] (Execução de Threads ADVPL, Cache de Dicionários SX e Memória)
+//                 ↕ (Comunicação Binária TopConnect)
+// [3. DBAccess + SGBD] (Tradução SQL ANSI para PostgreSQL / SQL Server / Oracle)`,
+        keyPoints: [
+          "SmartClient é um cliente leve que apenas desenha elementos da tela; todo o processamento reside no AppServer",
+          "O RPO (Repository of Objects) armazena os bytecodes compilados de todos os programas padrão e customizados",
+          "DBAccess unifica o acesso a múltiplos bancos de dados sem necessidade de reescrever queries para cada SGBD"
+        ]
+      },
+      {
+        id: "cap00c",
+        title: "Capítulo 00C: Contexto Corporativo: Empresa, Filial e Variáveis Globais",
+        badge: "00_IntroducaoERP.prw",
+        duration: "25 min",
+        level: "Iniciante",
+        category: "Fundamentos",
+        description: "Como o Protheus sabe em qual filial você está trabalhando? Aprenda sobre as variáveis cEmpAnt (empresa ativa), cFilAnt (filial ativa), dDataBase (data de trabalho) e a inicialização de ambiente com RpcSetEnv.",
+        lessonId: "aula00",
+        snippetCode: `// Inicialização e Leitura do Contexto Corporativo
+If Select("SX2") == 0 .Or. Type("cEmpAnt") == "U" .Or. Empty(cEmpAnt)
+    RpcSetEnv("99", "01") // Inicializa Empresa 99 (Matriz), Filial 01
+EndIf
+
+ConOut("Empresa Corrente: " + cEmpAnt)
+ConOut("Filial Corrente : " + cFilAnt)
+ConOut("Data de Trabalho: " + dToC(dDataBase))`,
+        keyPoints: [
+          "cEmpAnt guarda o código da empresa ativa (ex: '01' ou '99') e cFilAnt a filial ativa (ex: '0101')",
+          "xFilial('TABELA') retorna a filial correta considerando o compartilhamento de tabelas (exclusiva ou compartilhada)",
+          "Nunca execute RpcSetType(3) ou RpcClearEnv() em rotinas de interface SmartClient"
+        ]
+      },
+      {
+        id: "cap00d",
+        title: "Capítulo 00D: O Segredo das Tabelas do Protheus (Regra das 3 Letras & SX)",
+        badge: "00_Dicionarios.md",
+        duration: "20 min",
+        level: "Iniciante",
+        category: "Banco de Dados",
+        description: "Desvende a regra das 3 letras de todas as tabelas Protheus (S + Módulo + Sequencial: SA1=Clientes, SA2=Fornecedores, SB1=Produtos, SC5=Pedidos) e os Dicionários SX (SX2=Tabelas, SX3=Campos, SX6=Parâmetros, SX1=Perguntas).",
+        snippetCode: `// Mapeamento e Consulta com RetSqlName e Dicionário
+Local cTabSA1 := RetSqlName("SA1") // Retorna 'SA1010' ou conforme empresa ativa
+Local cCampo  := "A1_NOME"
+
+// Regra de Prefixo de Campos:
+// Sempre 2 caracteres da tabela + '_' + nome do campo (A1_NOME, B1_DESC, C5_NUM)`,
+        keyPoints: [
+          "Tabelas de negócio começam com 'S': SA1 (Clientes), SB1 (Produtos), SC5 (Cabeçalho de Pedidos), SC6 (Itens)",
+          "Dicionários do Sistema começam com 'SX': SX2 (Tabelas), SX3 (Campos), SX6 (Parâmetros), SX1 (Perguntas)",
+          "Campos sempre possuem prefixo de 2 letras identificando a tabela de origem (ex: A1_ para SA1, B1_ para SB1)"
+        ]
+      }
+    ]
+  },
+  {
     id: "fundamentos",
     name: "Trilha 1: Fundamentos",
     icon: "🌱",
@@ -14,6 +106,7 @@ export const MASTERCLASS_TRACKS: IMasterclassTrack[] = [
         duration: "15 min",
         level: "Iniciante",
         category: "Fundamentos",
+        lessonId: "aula01",
         description: "Declaração estrita no início da função (regra Blocker SonarQube), tipos C, N, D, L, A e notação húngara oficial TOTVS.",
         snippetCode: `// Declaração Oficial TOTVS no Topo
 Local cNome     := "Maria Oliveira"
@@ -34,6 +127,7 @@ Local aCursos   := {"ADVPL", "TLPP", "MVC"}`,
         duration: "20 min",
         level: "Iniciante",
         category: "Fundamentos",
+        lessonId: "aula02",
         description: "Estruturas de decisão If/ElseIf/Else, operador ternário Iif(), e modularização segura com Static Function.",
         snippetCode: `If nPontos >= 90
     cStatus := "Aprovado com Louvor"
@@ -55,6 +149,7 @@ EndIf`,
         duration: "25 min",
         level: "Iniciante",
         category: "Fundamentos",
+        lessonId: "aula02b",
         description: "Laços While com acumuladores, For...Next com salto Loop (continue) e interrupção Exit (break).",
         snippetCode: `Static Function Fatorial(nNum)
     Local nResultado := 1
@@ -80,6 +175,7 @@ Return nResultado`,
         duration: "25 min",
         level: "Intermediário",
         category: "Fundamentos",
+        lessonId: "aula03",
         description: "Construção de vetores com aAdd, manipulação de strings com AllTrim, PadR, SubStr e formatação monetária.",
         snippetCode: `Local aItens := {}
 aAdd(aItens, {"PRD001", "Notebook Pro", 1, 4500.00})
@@ -100,6 +196,7 @@ cLinha := PadR(aItens[1][2], 25) + " | R$ " + Transform(aItens[1][4], "@E 999,99
         duration: "30 min",
         level: "Intermediário",
         category: "Fundamentos",
+        lessonId: "aula04",
         description: "Funções de primeira classe no ADVPL. Ordenação in-place com aSort e buscas em matrizes com predicados lambdas.",
         snippetCode: `// Codeblock de comparação decrescente de preço:
 Local bOrdena := { |x, y| x[4] > y[4] }
@@ -121,6 +218,7 @@ Local nPos := aScan(aProdutos, bBuscaCat)`,
         duration: "35 min",
         level: "Avançado",
         category: "Fundamentos",
+        lessonId: "aula05",
         description: "Criação de janelas modais nativas com MSDialog, rótulos TSay, campos de entrada MSGET e botões com blocos ACTION.",
         snippetCode: `DEFINE MSDIALOG oDlg TITLE "Calculadora Financeira" FROM 000, 000 TO 260, 420 PIXEL
 @ 020, 020 SAY "Valor (R$):" SIZE 080, 012 OF oDlg PIXEL
@@ -148,6 +246,7 @@ ACTIVATE MSDIALOG oDlg CENTERED`,
         duration: "35 min",
         level: "Avançado",
         category: "Banco de Dados",
+        lessonId: "aula06",
         description: "Acesso a tabelas corporativas (SA1, SB1) via DBAccess, resolução física com RetSqlName e prevenção de memory leak com DbCloseArea.",
         snippetCode: `cQuery := " SELECT A1_COD, A1_NOME, A1_EST, A1_LC "
 cQuery += " FROM " + RetSqlName("SA1") + " SA1 "
@@ -176,6 +275,7 @@ QRY_CLI->(DbCloseArea()) // OBRIGATÓRIO`,
         duration: "40 min",
         level: "Avançado",
         category: "Banco de Dados",
+        lessonId: "aula07",
         description: "Customização sem alterar fontes padrão TOTVS. Leitura de áreas posicionadas e preservação sagrada de contexto com GetArea/RestArea.",
         snippetCode: `User Function MT410OK()
     Local aArea    := GetArea()
@@ -201,6 +301,7 @@ Return lRetorno`,
         duration: "30 min",
         level: "Especialista",
         category: "Banco de Dados",
+        lessonId: "aula08",
         description: "Eliminação de valores fixos (hard-coded) na lógica de negócios com parametrização dinâmica via tabela SX6.",
         snippetCode: `// Leitura segura com fallback defensivo:
 Local nLimite := GetMV("MV_LIMPED", .F., 50000)
@@ -225,11 +326,12 @@ EndIf`,
     chapters: [
       {
         id: "cap-mvc",
-        title: "Capítulo MVC: ModelDef, ViewDef e MenuDef",
-        badge: "COMP011_MVC.prw",
+        title: "Capítulo 09: Arquitetura MVC (ModelDef, ViewDef e MenuDef)",
+        badge: "09_MVC_Basico.prw",
         duration: "50 min",
         level: "Especialista",
         category: "Arquitetura",
+        lessonId: "aula09",
         description: "Desenvolvimento corporativo desacoplado seguindo o padrão oficial MVC Protheus (Model-View-Controller).",
         snippetCode: `// 1. Menu de Operações
 Static Function MenuDef()

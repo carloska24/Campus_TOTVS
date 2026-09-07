@@ -2,6 +2,106 @@ import type { ILesson } from '../types/lesson';
 
 export const LESSONS_DATABASE: ILesson[] = [
   {
+    "id": "aula00",
+    "module": "Nível 0: Arquitetura ERP",
+    "title": "Aula 00: Arquitetura & Contexto Corporativo",
+    "badge": "00_IntroducaoERP.prw",
+    "description": "Compreenda a inicialização de ambiente (RpcSetEnv), leitura de variáveis globais de sessão (cEmpAnt, cFilAnt, dDataBase) e verificação do dicionário SX2.",
+    "challenge": {
+      "title": "Auditoria de Empresa, Filial e Dicionário SX2",
+      "icon": "🏢",
+      "badgeName": "Explorador de Arquitetura",
+      "xp": 40,
+      "difficulty": "Iniciante",
+      "difficultyColor": "#38bdf8",
+      "description": "Todo fonte executado no Protheus necessita de um ambiente corporativo ativo. Verifique se o ambiente está inicializado com Select('SX2') > 0. Obtenha a filial ativa através da função xFilial('SA1') e exiba o resultado da auditoria na tela.",
+      "objectives": [
+        "Inicializar o ambiente defensivamente caso cEmpAnt não esteja definido",
+        "Obter a filial da tabela SA1 através da função xFilial('SA1')",
+        "Verificar se o Dicionário SX2 está aberto usando Select('SX2') > 0",
+        "Executar no Protheus Virtual e validar a exibição do contexto corporativo"
+      ],
+      "hint": "Utilize a função xFilial('SA1') para descobrir se a tabela é exclusiva da filial ou compartilhada em toda a empresa!",
+      "solution": "// Leitura da filial de clientes:\nLocal cFilSA1 := xFilial('SA1')\nConOut('Filial SA1: ' + cFilSA1)"
+    },
+    "code": "#Include \"Totvs.ch\"\n\n/*/{Protheus.doc} User Function Aula00\n    Aula 00 - Introducao a Arquitetura ERP e Contexto Corporativo.\n    @type     Function\n    @author   Campus TOTVS / Pair Programming\n    @since    07/09/2026\n    @version  1.0\n/*/\nUser Function Aula00()\n    // Declaracao de Variaveis Locais no Topo\n    Local cEmpresa  := \"\"\n    Local cFilial   := \"\"\n    Local cFilSA1   := \"\"\n    Local lAmbOk    := .F.\n    Local cRelat    := \"\"\n\n    // Inicializacao defensiva de ambiente se necessario\n    If Select(\"SX2\") == 0 .Or. Type(\"cEmpAnt\") == \"U\" .Or. Empty(cEmpAnt)\n        If !RpcSetEnv(\"99\", \"01\")\n            RpcSetEnv(\"01\", \"01\")\n        EndIf\n    EndIf\n\n    // Leitura do Contexto Corporativo\n    cEmpresa := cEmpAnt\n    cFilial  := cFilAnt\n    lAmbOk   := (Select(\"SX2\") > 0)\n    cFilSA1  := xFilial(\"SA1\")\n\n    // Formatando Relatorio de Auditoria do Ambiente\n    cRelat := \"=== CAMPUS TOTVS - AUDITORIA DE AMBIENTE ERP ===\" + CRLF + CRLF\n    cRelat += \"Status do Ambiente : \" + Iif(lAmbOk, \"CONECTADO COM SUCESSO\", \"FALHA DE AMBIENTE\") + CRLF\n    cRelat += \"Empresa Ativa      : \" + cEmpresa + \" (Matriz)\" + CRLF\n    cRelat += \"Filial Ativa       : \" + cFilial + \" (Filial Operacional)\" + CRLF\n    cRelat += \"Filial Clientes SA1: \" + Iif(Empty(cFilSA1), \"[COMPARTILHADA]\", cFilSA1) + CRLF\n    cRelat += \"Data Base Protheus : \" + dToC(dDataBase) + CRLF + CRLF\n    cRelat += \"Camada Arquitetura : SmartClient -> AppServer -> DBAccess\" + CRLF\n\n    ApMsgInfo(cRelat, \"Campus TOTVS - Aula 00: Arquitetura ERP\")\n\nReturn Nil",
+    "lineExplanations": {
+      "1": {
+        "title": "Diretiva #Include \"Totvs.ch\"",
+        "desc": "Importa constantes e macros fundamentais de interface, mensagens e formatação do ecossistema Protheus.",
+        "audioHint": "Totvs ponto c-h é a biblioteca base. Ela disponibiliza variáveis globais e comandos de tela.",
+        "tags": [
+          "Pré-Processador",
+          "Include"
+        ]
+      },
+      "10": {
+        "title": "Declaração de User Function Aula00",
+        "desc": "Ponto de entrada customizado no repositório RPO executável via SmartClient ou chamada direta U_Aula00.",
+        "audioHint": "User Function é a função de usuário aberta para o operador ou outros programas.",
+        "tags": [
+          "User Function",
+          "Escopo"
+        ]
+      },
+      "12": {
+        "title": "Declaração Estrita de Variáveis Locais",
+        "desc": "Regra Blocker do SonarQube e TOTVS CodeAnalysis: todas as variáveis devem ser declaradas no topo.",
+        "audioHint": "Declare todas as variáveis locais no início antes de qualquer instrução de lógica.",
+        "tags": [
+          "SonarQube",
+          "Local"
+        ]
+      },
+      "19": {
+        "title": "Inicialização Defensiva de Sessão (RpcSetEnv)",
+        "desc": "Garante que o ambiente esteja preparado com a Empresa 99 e Filial 01, abrindo os dicionários de dados SX.",
+        "audioHint": "RpcSetEnv prepara os dicionários de dados e tabelas corporativas para execução segura.",
+        "tags": [
+          "RpcSetEnv",
+          "Ambiente"
+        ]
+      },
+      "26": {
+        "title": "Variáveis Globais de Sessão (cEmpAnt e cFilAnt)",
+        "desc": "cEmpAnt identifica a empresa ativa no login e cFilAnt identifica a filial atual da thread de execução.",
+        "audioHint": "cEmpAnt e cFilAnt são variáveis de sistema mantidas em memória pelo AppServer durante toda a sessão.",
+        "tags": [
+          "cEmpAnt",
+          "cFilAnt",
+          "Sessão"
+        ]
+      },
+      "29": {
+        "title": "Função xFilial('SA1')",
+        "desc": "Retorna o código da filial a ser gravado ou pesquisado, respeitando se o cadastro é exclusivo ou compartilhado entre filiais.",
+        "audioHint": "X-Filial é vital. Se a empresa compartilha clientes entre todas as filiais, ela retorna vazio. Se for exclusiva, retorna o código da filial.",
+        "tags": [
+          "xFilial",
+          "Compartilhamento"
+        ]
+      },
+      "32": {
+        "title": "Montagem do Relatório de Auditoria",
+        "desc": "Concatena os parâmetros operacionais do ERP para validação do desenvolvedor.",
+        "audioHint": "Aqui formatamos o relatório que comprova que a arquitetura em 3 camadas está operacional.",
+        "tags": [
+          "Auditoria",
+          "Clean Code"
+        ]
+      },
+      "40": {
+        "title": "Exibição na Interface com ApMsgInfo",
+        "desc": "Dispara a caixa de diálogo modal informativa na camada SmartClient.",
+        "audioHint": "ApMsgInfo projeta na tela do operador os dados auditados do servidor.",
+        "tags": [
+          "ApMsgInfo",
+          "SmartClient"
+        ]
+      }
+    }
+  },
+  {
     "id": "aula01",
     "module": "Nível 1: Fundamentos",
     "title": "Aula 01: Tipos de Dados & Variáveis",
@@ -2311,6 +2411,78 @@ export const LESSONS_DATABASE: ILesson[] = [
           "Return",
           "Nil",
           "Encerramento"
+        ]
+      }
+    }
+  },
+  {
+    "id": "aula09",
+    "module": "Nível 3: Arquitetura Avançada",
+    "title": "Aula 09: Arquitetura MVC Protheus (ModelDef, ViewDef, MenuDef)",
+    "badge": "09_MVC_Basico.prw",
+    "description": "Domine o padrão oficial TOTVS Model-View-Controller: MenuDef() para catálogo de ações, ModelDef() para modelo de dados (MPFormModel) e ViewDef() para interface (FWFormView).",
+    "challenge": {
+      "title": "Implementação do Padrão MVC Oficial TOTVS",
+      "icon": "🏛️",
+      "badgeName": "Mestre em MVC Protheus",
+      "xp": 100,
+      "difficulty": "Especialista",
+      "difficultyColor": "#a855f7",
+      "description": "O padrão MVC é a base do Protheus moderno. Implemente a função estática MenuDef() contendo as opções 'Pesquisar', 'Visualizar', 'Incluir' e 'Alterar'. Instancie o MPFormModel() na ModelDef() usando a estrutura FWFormStruct(1, 'SA1'), e desenhe a interface na ViewDef() com FWFormView() e FWFormStruct(2, 'SA1').",
+      "objectives": [
+        "Definir MenuDef() com catálogo de operações da rotina (AxPesqui e VIEWDEF)",
+        "Definir ModelDef() instanciando MPFormModel com FWFormStruct(1, 'SA1')",
+        "Definir ViewDef() instanciando FWFormView com FWFormStruct(2, 'SA1')",
+        "Executar no Protheus Virtual e validar a inicialização da arquitetura MVC"
+      ],
+      "hint": "No MVC, o número 1 em FWFormStruct(1, cAlias) cria a estrutura para o Model (regras de dados) e o número 2 em FWFormStruct(2, cAlias) cria a estrutura para a View (tela).",
+      "solution": "// 1. Menu de Operações:\nStatic Function MenuDef()\n    Local aRotina := {}\n    ADD OPTION aRotina TITLE 'Pesquisar' ACTION 'AxPesqui' OPERATION 1 ACCESS 0\n    ADD OPTION aRotina TITLE 'Visualizar' ACTION 'VIEWDEF.AULA09' OPERATION 2 ACCESS 0\nReturn aRotina\n\n// 2. Modelo de Dados:\nStatic Function ModelDef()\n    Local oModel := MPFormModel():New('AULA09M')\n    Local oStruSA1 := FWFormStruct(1, 'SA1')\n    oModel:AddFields('FORMSA1', , oStruSA1)\nReturn oModel"
+    },
+    "code": "#Include \"Totvs.ch\"\n#Include \"FWMVCDef.ch\"\n\n/*/{Protheus.doc} User Function Aula09\n    Aula 09 - Arquitetura MVC Protheus (Model-View-Controller).\n    @type     Function\n    @author   Campus TOTVS / Pair Programming\n    @since    07/09/2026\n    @version  1.0\n/*/\nUser Function Aula09()\n    Local oBrowse := Nil\n\n    oBrowse := FWMBrowse():New()\n    oBrowse:SetAlias(\"SA1\")\n    oBrowse:SetDescription(\"Cadastro de Clientes - Arquitetura MVC\")\n    oBrowse:Activate()\nReturn Nil\n\n/*/{Protheus.doc} MenuDef\n    Catalogo de operacoes da rotina MVC.\n/*/\nStatic Function MenuDef()\n    Local aRotina := {}\n\n    ADD OPTION aRotina TITLE \"Pesquisar\"  ACTION \"AxPesqui\"       OPERATION 1 ACCESS 0\n    ADD OPTION aRotina TITLE \"Visualizar\" ACTION \"VIEWDEF.AULA09\" OPERATION 2 ACCESS 0\n    ADD OPTION aRotina TITLE \"Incluir\"    ACTION \"VIEWDEF.AULA09\" OPERATION 3 ACCESS 0\n    ADD OPTION aRotina TITLE \"Alterar\"    ACTION \"VIEWDEF.AULA09\" OPERATION 4 ACCESS 0\n    ADD OPTION aRotina TITLE \"Excluir\"    ACTION \"VIEWDEF.AULA09\" OPERATION 5 ACCESS 0\nReturn aRotina\n\n/*/{Protheus.doc} ModelDef\n    Definicao do Modelo de Dados.\n/*/\nStatic Function ModelDef()\n    Local oModel   := MPFormModel():New(\"AULA09M\")\n    Local oStruSA1 := FWFormStruct(1, \"SA1\")\n\n    oModel:AddFields(\"FORMSA1\", , oStruSA1)\n    oModel:SetDescription(\"Modelo de Dados de Clientes - MVC\")\n    oModel:GetModel(\"FORMSA1\"):SetDescription(\"Formulario de Dados do Cliente\")\nReturn oModel\n\n/*/{Protheus.doc} ViewDef\n    Definicao da Interface Visual.\n/*/\nStatic Function ViewDef()\n    Local oModel   := FWLoadModel(\"AULA09\")\n    Local oView    := FWFormView():New()\n    Local oStruSA1 := FWFormStruct(2, \"SA1\")\n\n    oView:SetModel(oModel)\n    oView:AddField(\"VIEW_SA1\", oStruSA1, \"FORMSA1\")\n    oView:CreateHorizontalBox(\"EMCIMA\", 100)\n    oView:SetOwnerView(\"VIEW_SA1\", \"EMCIMA\")\nReturn oView",
+    "lineExplanations": {
+      "1": {
+        "title": "Includes Totvs.ch e FWMVCDef.ch",
+        "desc": "Importa as constantes fundamentais e comandos MVC oficiais como ADD OPTION e constantes de operações.",
+        "audioHint": "FWMVCDef ponto c-h traz as macros e constantes do framework MVC, essenciais para o compilador.",
+        "tags": [
+          "FWMVCDef",
+          "Include"
+        ]
+      },
+      "10": {
+        "title": "Função Principal e FWMBrowse",
+        "desc": "Instancia o browse padrão para exibir a listagem em grade dos registros cadastrados.",
+        "audioHint": "O FWMBrowse renderiza a tabela na tela e gerencia filtros, buscas e a barra de ferramentas.",
+        "tags": [
+          "FWMBrowse",
+          "Browse"
+        ]
+      },
+      "21": {
+        "title": "Função MenuDef()",
+        "desc": "Define as operações permitidas no menu e associa cada ação a sua função ou operação VIEWDEF.",
+        "audioHint": "MenuDef é o catálogo de ações. Nela você define quem pode incluir, alterar ou apenas visualizar.",
+        "tags": [
+          "MenuDef",
+          "Catálogo"
+        ]
+      },
+      "33": {
+        "title": "Função ModelDef()",
+        "desc": "Cria a instância do MPFormModel e adiciona as regras de negócio e campos com FWFormStruct(1, alias).",
+        "audioHint": "ModelDef contém a alma do sistema: regras de validação, integridade referencial e gravação.",
+        "tags": [
+          "ModelDef",
+          "MPFormModel"
+        ]
+      },
+      "46": {
+        "title": "Função ViewDef()",
+        "desc": "Cria a interface gráfica com FWFormView vinculada ao modelo e campos com FWFormStruct(2, alias).",
+        "audioHint": "ViewDef define exclusivamente como os campos serão distribuídos na tela do usuário.",
+        "tags": [
+          "ViewDef",
+          "FWFormView"
         ]
       }
     }

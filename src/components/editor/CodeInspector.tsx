@@ -16,6 +16,7 @@ export const CodeInspector: React.FC<CodeInspectorProps> = ({ currentLine }) => 
 
   // Encontra a explicação mais próxima da linha atual ou a primeira
   const lineKeys = Object.keys(explanations).map(Number).sort((a, b) => a - b);
+  const isExactLine = lineKeys.includes(currentLine);
   let activeKey = lineKeys.find((k) => k === currentLine);
   if (!activeKey) {
     // Procura a chave imediatamente anterior
@@ -35,7 +36,9 @@ export const CodeInspector: React.FC<CodeInspectorProps> = ({ currentLine }) => 
       return;
     }
 
-    const rawText = `${exp.title}. ${exp.desc}. ${exp.audioHint || ''}`;
+    const rawText = isExactLine
+      ? `${exp.title}. ${exp.desc}. ${exp.audioHint || ''}`
+      : `Linha ${currentLine}. Contexto da instrução: ${exp.title}. ${exp.desc}`;
     const cleanText = sanitizeForSpeech(rawText);
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
@@ -62,7 +65,7 @@ export const CodeInspector: React.FC<CodeInspectorProps> = ({ currentLine }) => 
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400">
             <Sparkle size={14} weight="fill" />
-            <span>Inspetor & Tutor IA da Linha {activeKey || currentLine}</span>
+            <span>Inspetor & Tutor IA da Linha {currentLine}</span>
           </div>
           {exp?.tags && (
             <div className="flex gap-1">

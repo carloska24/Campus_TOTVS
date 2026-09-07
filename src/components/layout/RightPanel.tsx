@@ -53,6 +53,7 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
 
   // Encontra a explicação mais próxima da linha atual ou a primeira
   const lineKeys = Object.keys(explanations).map(Number).sort((a, b) => a - b);
+  const isExactLine = lineKeys.includes(currentLine);
   let activeKey = lineKeys.find((k) => k === currentLine);
   if (!activeKey) {
     const prevKeys = lineKeys.filter((k) => k <= currentLine);
@@ -80,7 +81,9 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
     window.speechSynthesis.cancel();
     
     // Tratamento fonético e limpeza de caracteres de código para leitura humana e natural
-    const rawText = `${exp.title}. ${exp.desc}. ${exp.audioHint ? 'Dica prática: ' + exp.audioHint : ''}`;
+    const rawText = isExactLine
+      ? `${exp.title}. ${exp.desc}. ${exp.audioHint ? 'Dica prática: ' + exp.audioHint : ''}`
+      : `Linha ${currentLine}. Contexto da instrução: ${exp.title}. ${exp.desc}`;
     const cleanText = sanitizeForSpeech(rawText);
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
@@ -189,12 +192,12 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
                 <span>Análise Semântica</span>
               </span>
               <span className={`font-mono ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-                Linha {activeKey || currentLine}
+                Linha {currentLine}
               </span>
             </div>
 
             <h3 className={`text-xs font-bold leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>
-              {exp ? exp.title : `Linha ${currentLine}: Instrução ADVPL`}
+              {isExactLine && exp ? exp.title : exp ? `Linha ${currentLine}: ${exp.title}` : `Linha ${currentLine}: Instrução ADVPL`}
             </h3>
           </div>
 

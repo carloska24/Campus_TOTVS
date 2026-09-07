@@ -2,7 +2,7 @@ import React from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
 import { LESSONS_DATABASE } from '../../data/lessons';
 import { soundFx } from '../../utils/audio';
-import { BookOpen, Award, Edit3, CheckCircle2 } from 'lucide-react';
+import { BookOpen, Trophy, PencilSimple } from '@phosphor-icons/react';
 
 export const Sidebar: React.FC = () => {
   const { 
@@ -39,7 +39,7 @@ export const Sidebar: React.FC = () => {
         }`}
       >
         <div className="text-[11px] font-bold tracking-wider text-cyan-500 uppercase flex items-center gap-1.5">
-          <BookOpen className="w-3.5 h-3.5" />
+          <BookOpen weight="duotone" className="w-3.5 h-3.5" />
           <span>Trilha de Aprendizado</span>
         </div>
         <span 
@@ -113,12 +113,12 @@ export const Sidebar: React.FC = () => {
                     <div className="flex items-center gap-1 shrink-0">
                       {isModified && (
                         <span title="Código com edições salvas">
-                          <Edit3 className="w-3 h-3 text-amber-500" />
+                          <PencilSimple weight="bold" className="w-3.5 h-3.5 text-amber-400" />
                         </span>
                       )}
                       {isCompleted && (
                         <span title="Missão prática concluída!">
-                          <Award className="w-3.5 h-3.5 text-emerald-500" />
+                          <Trophy weight="fill" className="w-3.5 h-3.5 text-emerald-400" />
                         </span>
                       )}
                     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
-import { Volume2, VolumeX, Sparkles, BookOpen } from 'lucide-react';
+import { SpeakerHigh, SpeakerSlash, Sparkle, BookOpen } from '@phosphor-icons/react';
 
 interface CodeInspectorProps {
   currentLine: number;
@@ -52,7 +52,7 @@ export const CodeInspector: React.FC<CodeInspectorProps> = ({ currentLine }) => 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkle size={14} weight="fill" />
             <span>Inspetor & Tutor IA da Linha {activeKey || currentLine}</span>
           </div>
           {exp?.tags && (
@@ -78,7 +78,7 @@ export const CodeInspector: React.FC<CodeInspectorProps> = ({ currentLine }) => 
               : 'bg-[#21262d] text-gray-300 hover:text-white border-[#30363d] hover:bg-[#30363d]'
           }`}
         >
-          {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+          {isSpeaking ? <SpeakerSlash size={14} weight="bold" /> : <SpeakerHigh size={14} weight="bold" />}
           <span>{isSpeaking ? 'Pausar Voz' : 'Ouvir Tutor'}</span>
         </button>
       </div>
@@ -88,7 +88,7 @@ export const CodeInspector: React.FC<CodeInspectorProps> = ({ currentLine }) => 
         {exp ? (
           <div className="space-y-1">
             <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
-              <BookOpen className="w-3 h-3 text-cyan-400" />
+              <BookOpen size={13} weight="duotone" className="text-cyan-400" />
               <span>{exp.title}</span>
             </h4>
             <p className="text-xs text-gray-300 leading-relaxed">

@@ -2,20 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
 import { soundFx } from '../../utils/audio';
 import { 
-  Sparkles, 
-  Volume2, 
-  VolumeX, 
-  Terminal, 
-  BookOpen, 
+  Sparkle, 
+  SpeakerHigh, 
+  SpeakerSlash, 
   Trophy, 
-  HelpCircle, 
-  Code2, 
-  ChevronDown, 
-  ChevronRight, 
+  Question, 
+  Code, 
+  CaretDown, 
+  CaretRight, 
   CheckCircle, 
-  Lightbulb,
-  Cpu
-} from 'lucide-react';
+  Cpu, 
+  Play, 
+  ArrowCounterClockwise, 
+  Check, 
+  Copy, 
+  Lightning, 
+  PencilSimple, 
+  ShieldCheck 
+} from '@phosphor-icons/react';
 
 interface RightPanelProps {
   currentLine: number;
@@ -31,15 +35,17 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
     completedChallenges, 
     questTasks, 
     toggleTask, 
+    setChallengeCompleted,
+    resetAllChallenges,
     isCurrentCodeModified,
     resetCurrentLesson,
     theme 
   } = useCampusStore();
 
-  const [activeRightTab, setActiveRightTab] = useState<'inspector' | 'challenge'>('inspector');
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isHintOpen, setIsHintOpen] = useState(false);
   const [isSolutionOpen, setIsSolutionOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const lesson = getCurrentLesson();
   const explanations = lesson?.lineExplanations || {};
@@ -104,126 +110,125 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
   const objectives = ch?.objectives || [];
   const completedCount = objectives.filter((_, idx) => !!lessonTasks[idx]).length;
 
+  const handleCopySolution = (code: string) => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(code);
+      setIsCopied(true);
+      soundFx.playSuccess();
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  };
+
   const isDark = theme === 'dark';
 
   return (
     <aside 
-      className={`w-96 h-[calc(100vh-3.5rem)] flex flex-col shrink-0 select-none overflow-hidden border-l transition-colors duration-200 ${
-        isDark ? 'bg-[#161b22] border-[#30363d]' : 'bg-[#ffffff] border-[#e2e8f0]'
+      className={`w-96 h-[calc(100vh-3.5rem)] flex flex-col shrink-0 select-none border-l transition-colors duration-200 ${
+        isDark ? 'bg-[#0d1117] border-[#30363d]' : 'bg-[#f8fafc] border-[#e2e8f0]'
       }`}
     >
-      {/* Abas Superiores Integradas (Sem molduras duplas) */}
+      {/* CABEÇALHO ESTRUTURAL DO PAINEL DIREITO */}
       <div 
-        className={`flex items-center border-b shrink-0 ${
-          isDark ? 'bg-[#0d1117] border-gray-800/80' : 'bg-[#f8fafc] border-slate-200'
+        className={`px-4 py-3 flex items-center justify-between border-b shrink-0 ${
+          isDark ? 'bg-[#161b22] border-[#30363d]' : 'bg-white border-slate-200'
         }`}
       >
-        <button
-          onClick={() => {
-            soundFx.playTick();
-            setActiveRightTab('inspector');
-          }}
-          className={`flex-1 py-3 px-3 text-xs font-semibold flex items-center justify-center gap-2 border-b-2 transition-all cursor-pointer ${
-            activeRightTab === 'inspector'
-              ? 'border-cyan-400 text-cyan-400 font-bold bg-transparent'
-              : 'border-transparent text-gray-400 hover:text-gray-200'
-          }`}
-        >
-          <Sparkles className="w-3.5 h-3.5 text-fuchsia-400" />
-          <span>Inspetor & Tutor IA</span>
+        <div className="flex items-center gap-2">
+          <Sparkle weight="duotone" className="w-4 h-4 text-cyan-400" />
+          <span className={`text-xs font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            Inspetor & Tutor IA
+          </span>
           <span 
-            className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-              isDark ? 'bg-cyan-950 text-cyan-400 border border-cyan-800/40' : 'bg-cyan-50 text-cyan-700 border border-cyan-200'
+            className={`text-[10px] px-1.5 py-0.2 rounded font-mono font-bold ${
+              isDark ? 'bg-cyan-950/80 text-cyan-400 border border-cyan-800/40' : 'bg-cyan-50 text-cyan-700 border border-cyan-200'
             }`}
           >
             L.{currentLine}
           </span>
-        </button>
+        </div>
 
-        <button
-          onClick={() => {
-            soundFx.playTick();
-            setActiveRightTab('challenge');
-          }}
-          className={`flex-1 py-3 px-3 text-xs font-semibold flex items-center justify-center gap-2 border-b-2 transition-all cursor-pointer ${
-            activeRightTab === 'challenge'
-              ? 'border-amber-400 text-amber-400 font-bold bg-transparent'
-              : 'border-transparent text-gray-400 hover:text-gray-200'
-          }`}
-        >
-          <span>🎯</span>
-          <span>Missão Prática</span>
-          {ch && (
-            <span 
-              className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
-                isCompleted 
-                  ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30' 
-                  : 'bg-amber-500/10 text-amber-500 border border-amber-500/30'
-              }`}
-            >
-              +{ch.xp} XP
-            </span>
-          )}
-        </button>
+        {ch && (
+          <div className="flex items-center gap-1.5 text-[10px] font-semibold">
+            {isCompleted ? (
+              <span className="flex items-center gap-1 text-emerald-500 font-bold">
+                <CheckCircle weight="fill" className="w-3 h-3" />
+                <span>Concluído</span>
+              </span>
+            ) : (
+              <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/30 font-mono font-bold flex items-center gap-1">
+                <Lightning weight="fill" className="w-3 h-3 text-amber-400" />
+                <span>+{ch.xp} XP</span>
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* CONTEÚDO DA ABA 1: INSPETOR & TUTOR IA (SUPERFÍCIE EDITORIAL LIMPA) */}
-      {activeRightTab === 'inspector' && (
-        <div className="flex-1 p-5 overflow-y-auto space-y-5">
-          {/* Header da Linha Inspecionada */}
+      {/* ÁREA DE CONTEÚDO ROLÁVEL COM 3 SUPERFÍCIES INDEPENDENTES */}
+      <div className="flex-1 p-3.5 overflow-y-auto space-y-3.5">
+        
+        {/* ========================================================= */}
+        {/* SUPERFÍCIE 1: INSPETOR & TUTOR IA (SÓBRIO - NÍVEL 1/2)     */}
+        {/* ========================================================= */}
+        <div 
+          className={`rounded-xl border p-4 space-y-3 shadow-xs transition-colors ${
+            isDark ? 'bg-[#161b22] border-[#30363d]' : 'bg-white border-slate-200'
+          }`}
+        >
+          {/* Header da Análise Semântica */}
           <div className="space-y-1">
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-                <Cpu className="w-3 h-3" />
+            <div className="flex items-center justify-between text-[10px]">
+              <span className="font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                <Cpu weight="duotone" className="w-3.5 h-3.5" />
                 <span>Análise Semântica</span>
               </span>
-              <span className={`text-[10px] font-mono ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+              <span className={`font-mono ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
                 Linha {activeKey || currentLine}
               </span>
             </div>
 
-            <h3 className={`text-sm font-bold leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            <h3 className={`text-xs font-bold leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>
               {exp ? exp.title : `Linha ${currentLine}: Instrução ADVPL`}
             </h3>
           </div>
 
-          {/* BOTÃO HERÓI DE ÁUDIO DA IA */}
-          <div className="space-y-2">
+          {/* Botão Herói de Voz da IA */}
+          <div className="space-y-1.5">
             <button
               onClick={handleToggleSpeech}
               title={isSpeaking ? 'Pausar narração de voz' : 'Ouvir explicação técnica narrada pelo Tutor IA'}
-              className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2.5 transition-all shadow-md cursor-pointer ${
+              className={`w-full py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs ${
                 isSpeaking
-                  ? 'bg-gradient-to-r from-rose-600 to-amber-500 text-white shadow-rose-900/30 animate-pulse'
-                  : 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-500 hover:from-violet-500 hover:to-pink-400 text-white shadow-[0_4px_16px_rgba(192,38,211,0.25)]'
+                  ? 'bg-gradient-to-r from-rose-600 to-amber-500 text-white shadow-rose-900/30'
+                  : 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-500 hover:opacity-95 text-white'
               }`}
             >
               {isSpeaking ? (
                 <>
-                  <VolumeX className="w-4 h-4" />
+                  <SpeakerSlash weight="bold" className="w-3.5 h-3.5" />
                   <span>Pausar Narração IA</span>
                 </>
               ) : (
                 <>
-                  <Volume2 className="w-4 h-4" />
+                  <SpeakerHigh weight="bold" className="w-3.5 h-3.5" />
                   <span>Ouvir Explicação da IA (Áudio)</span>
                 </>
               )}
             </button>
 
-            {/* Visualizador de Onda Sonora Sincronizado */}
+            {/* Equalizador de Ondas Sonoras (Visível apenas durante a fala) */}
             {isSpeaking && (
               <div 
-                className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg border ${
+                className={`flex items-center justify-center gap-2 py-1.5 px-3 rounded-md border ${
                   isDark 
                     ? 'bg-purple-950/20 border-purple-500/30' 
                     : 'bg-purple-50 border-purple-200'
                 }`}
               >
-                <span className="text-[11px] font-bold text-fuchsia-400 tracking-wide">
+                <span className="text-[10px] font-bold text-fuchsia-400">
                   Tutor IA Falando:
                 </span>
-                <div className="flex items-center gap-1 h-5">
+                <div className="flex items-center gap-1 h-4">
                   <div className="voice-wave-bar"></div>
                   <div className="voice-wave-bar"></div>
                   <div className="voice-wave-bar"></div>
@@ -235,48 +240,43 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
             )}
           </div>
 
-          {/* PREVIEW DO CÓDIGO DA LINHA EM TERMINAL (CONTAINER FOCADO) */}
+          {/* Preview da Linha Inspecionada (Mini-Terminal) */}
           <div 
-            className={`rounded-xl border overflow-hidden ${
-              isDark ? 'bg-[#090d16] border-gray-800/80' : 'bg-[#f1f5f9] border-slate-200'
+            className={`rounded-lg border overflow-hidden ${
+              isDark ? 'bg-[#090d16] border-gray-800' : 'bg-slate-100 border-slate-200'
             }`}
           >
             <div 
-              className={`px-3 py-1 flex items-center justify-between text-[10px] font-mono border-b ${
-                isDark ? 'border-gray-800/80 text-gray-500' : 'border-slate-200 text-slate-500 bg-slate-100'
+              className={`px-2.5 py-1 flex items-center justify-between text-[9px] font-mono border-b ${
+                isDark ? 'border-gray-800 text-gray-500' : 'border-slate-200 text-slate-500 bg-slate-50'
               }`}
             >
-              <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-rose-500 inline-block"></span>
-                <span className="w-2 h-2 rounded-full bg-amber-500 inline-block"></span>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+              <div className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 inline-block"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
                 <span className="ml-1 text-cyan-400 font-semibold">preview.prw</span>
               </div>
               <span>Linha {currentLine}</span>
             </div>
 
-            <div className="p-3 font-mono text-xs overflow-x-auto whitespace-pre">
-              <span className={isDark ? 'text-cyan-300' : 'text-cyan-700 font-semibold'}>
+            <div className="p-2.5 font-mono text-[11px] overflow-x-auto whitespace-pre">
+              <span className={isDark ? 'text-cyan-300' : 'text-cyan-800 font-semibold'}>
                 {activeLineSnippet.trim() || '// Linha em branco ou comentário'}
               </span>
             </div>
           </div>
 
-          {/* EXPLICAÇÃO TÉCNICA EM FLUXO DE PROSA (SEM CAIXAS DENTRO DE CAIXAS) */}
-          <div className="space-y-3 pt-1">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Conceito & Diretriz TDN</span>
-            </div>
-
-            <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+          {/* Explicação Técnica e Diretriz TDN */}
+          <div className="space-y-2 pt-0.5">
+            <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
               {exp ? exp.desc : 'Clique em qualquer linha do editor de código para ver a explicação técnica detalhada, regras do SonarQube e ouvir o tutor da IA.'}
             </p>
 
-            {/* Dica Prática como Callout Lateral Discreto */}
+            {/* Dica do Consultor (Callout Lateral Elegante) */}
             {exp?.audioHint && (
-              <div className="border-l-2 border-cyan-500 pl-3 py-1 space-y-0.5">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
+              <div className="border-l-2 border-cyan-500 pl-2.5 py-0.5 space-y-0.5">
+                <div className="text-[9px] font-bold text-cyan-400 uppercase tracking-wider">
                   Dica do Consultor Sênior:
                 </div>
                 <div className={`text-[11px] leading-relaxed ${isDark ? 'text-cyan-200/90' : 'text-cyan-900'}`}>
@@ -285,13 +285,13 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
               </div>
             )}
 
-            {/* Tags como Metadados Sutis */}
+            {/* Tags Semânticas */}
             {exp?.tags && (
-              <div className="flex flex-wrap gap-1.5 pt-2">
+              <div className="flex flex-wrap gap-1 pt-1">
                 {exp.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${
+                    className={`text-[9px] font-medium px-1.5 py-0.5 rounded border ${
                       isDark 
                         ? 'bg-[#21262d] text-gray-300 border-[#30363d]' 
                         : 'bg-slate-100 text-slate-600 border-slate-200'
@@ -303,88 +303,142 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
               </div>
             )}
           </div>
+        </div>
 
-          {/* Atalho Discreto de Simulação */}
-          <div 
-            onClick={onRunCode}
-            className={`pt-3 border-t flex items-center justify-between text-xs transition-colors cursor-pointer ${
-              isDark ? 'border-gray-800/60 text-gray-400 hover:text-cyan-400' : 'border-slate-200 text-slate-500 hover:text-cyan-600'
-            }`}
-          >
-            <div className="flex items-center gap-1.5 text-[11px]">
-              <span>🚀</span>
-              <span>Executar no Protheus Virtual</span>
+        {/* ========================================================= */}
+        {/* SUPERFÍCIE 2: SIMULAÇÃO INTERATIVA (DESTAQUE INTERMEDIÁRIO) */}
+        {/* ========================================================= */}
+        <div 
+          className={`rounded-xl border p-3.5 space-y-2.5 shadow-xs transition-colors ${
+            isDark 
+              ? 'bg-cyan-950/20 border-cyan-500/30 text-cyan-100' 
+              : 'bg-cyan-50/70 border-cyan-200 text-cyan-950'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400">
+              <Play weight="fill" className="w-3.5 h-3.5" />
+              <span>Simulação Interativa</span>
             </div>
-            <kbd className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-cyan-950/40 text-cyan-400 border border-cyan-800/40">
+            <kbd className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
+              isDark ? 'bg-cyan-900/40 text-cyan-300 border border-cyan-700/40' : 'bg-white text-cyan-800 border border-cyan-200'
+            }`}>
               F5
             </kbd>
           </div>
-        </div>
-      )}
 
-      {/* CONTEÚDO DA ABA 2: MISSÃO PRÁTICA GAMIFICADA */}
-      {activeRightTab === 'challenge' && (
-        <div className="flex-1 p-5 overflow-y-auto space-y-5">
-          {!ch ? (
-            <div className={`text-center py-12 text-xs ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-              Esta aula não possui desafio prático ativo.
-            </div>
-          ) : (
-            <div className="space-y-5">
-              {/* Header da Missão */}
-              <div className="space-y-1.5 border-b pb-4 border-gray-800/40">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-base">{ch.icon || '🎯'}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">
-                      Missão Prática
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span 
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded border"
-                      style={{ color: ch.difficultyColor, borderColor: `${ch.difficultyColor}55`, backgroundColor: `${ch.difficultyColor}15` }}
-                    >
-                      {ch.difficulty}
-                    </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/30">
-                      +{ch.xp} XP
-                    </span>
-                  </div>
+          <p className={`text-[11px] leading-relaxed ${isDark ? 'text-cyan-200/80' : 'text-cyan-900/80'}`}>
+            Clique para abrir a tela simulada do Protheus e validar a saída visual da sua rotina em tempo real.
+          </p>
+
+          <button
+            onClick={() => {
+              soundFx.playTick();
+              onRunCode();
+            }}
+            className="w-full py-1.5 px-3 rounded-lg text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+          >
+            <span>Executar no Protheus Virtual</span>
+            <span className="opacity-70 text-[10px]">(F5)</span>
+          </button>
+        </div>
+
+        {/* ========================================================= */}
+        {/* SUPERFÍCIE 3: MISSÃO PRÁTICA (MAIOR DESTAQUE - NÍVEL 3)    */}
+        {/* ========================================================= */}
+        {ch ? (
+          <div 
+            className={`rounded-xl border relative overflow-hidden shadow-xs transition-colors ${
+              isDark 
+                ? 'bg-[#161b22] border-amber-500/35' 
+                : 'bg-white border-amber-400/50'
+            }`}
+          >
+            {/* Acento Dourado Refinado no Topo (2px) */}
+            <div className="h-0.5 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600"></div>
+
+            <div className="p-4 space-y-3.5">
+              {/* Barra de Metadados: Tag, Dificuldade e Recompensa */}
+              <div className="flex items-center justify-between text-[10px]">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                  <span className="font-bold uppercase tracking-wider text-amber-400">
+                    Missão Prática
+                  </span>
+                  <span 
+                    className="font-semibold px-1.5 py-0.2 rounded border text-[9px]"
+                    style={{ 
+                      color: ch.difficultyColor, 
+                      borderColor: `${ch.difficultyColor}44`, 
+                      backgroundColor: `${ch.difficultyColor}12` 
+                    }}
+                  >
+                    {ch.difficulty}
+                  </span>
                 </div>
 
-                <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  {ch.title}
-                </h3>
-
-                <div className="flex items-center gap-1.5 text-[11px] text-amber-500 font-medium">
-                  <Trophy className="w-3.5 h-3.5" />
-                  <span>Conquista: {ch.badgeName}</span>
+                <div 
+                  className={`px-2 py-0.5 rounded font-bold font-mono text-[10px] flex items-center gap-1 ${
+                    isCompleted 
+                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30' 
+                      : 'bg-amber-500/10 text-amber-500 border border-amber-500/30'
+                  }`}
+                >
+                  <Lightning weight="fill" className="w-3 h-3 text-amber-400" />
+                  <span>+{ch.xp} XP</span>
                 </div>
               </div>
 
-              {/* Enunciado da Missão */}
-              <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
-                {ch.description}
-              </p>
+              {/* Título da Missão e Conquista */}
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-[11px] text-amber-500 font-semibold">
+                  <Trophy weight="duotone" className="w-3.5 h-3.5" />
+                  <span>Conquista: {ch.badgeName}</span>
+                </div>
 
-              {/* Status de Código Modificado */}
+                <h3 className={`text-xs font-bold leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {ch.title}
+                </h3>
+              </div>
+
+              {/* Banner de Código Customizado no Editor */}
               {isModified && (
-                <div className="border-l-2 border-amber-500 pl-3 py-1 text-[11px] text-amber-400 leading-tight">
-                  Código customizado no editor. Pressione F9 para validar!
+                <div 
+                  className={`p-2 rounded-lg border text-[10px] flex items-start gap-2 ${
+                    isDark 
+                      ? 'bg-amber-950/20 border-amber-500/30 text-amber-300' 
+                      : 'bg-amber-50 border-amber-200 text-amber-900'
+                  }`}
+                >
+                  <PencilSimple weight="duotone" className="w-3.5 h-3.5 text-amber-400 mt-0.5 shrink-0" />
+                  <div>
+                    <span className="font-bold">Código Customizado no Editor:</span>
+                    <p className="opacity-80 leading-tight pt-0.5">Suas alterações serão executadas e avaliadas pelo validador do Campus.</p>
+                  </div>
                 </div>
               )}
 
-              {/* Checklist de Objetivos */}
-              <div className="space-y-2 pt-1">
+              {/* Enunciado do Desafio */}
+              <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
+                {ch.description}
+              </p>
+
+              {/* Checklist Agrupado de Objetivos */}
+              <div className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs font-semibold">
-                  <span className={isDark ? 'text-gray-300' : 'text-slate-700'}>Objetivos</span>
-                  <span className="text-cyan-400 font-mono text-[11px]">
+                  <span className={`text-[11px] ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                    Objetivos da Missão
+                  </span>
+                  <span className="text-cyan-400 font-mono text-[10px]">
                     ({completedCount}/{objectives.length})
                   </span>
                 </div>
 
-                <div className={`divide-y border rounded-xl overflow-hidden ${isDark ? 'border-gray-800/60 divide-gray-800/40 bg-[#0d1117]/50' : 'border-slate-200 divide-slate-100 bg-slate-50'}`}>
+                <div 
+                  className={`divide-y border rounded-lg overflow-hidden ${
+                    isDark ? 'border-gray-800 divide-gray-800/60 bg-[#0d1117]/50' : 'border-slate-200 divide-slate-100 bg-slate-50'
+                  }`}
+                >
                   {objectives.map((taskDesc, idx) => {
                     const isTaskDone = !!lessonTasks[idx];
                     return (
@@ -394,18 +448,20 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
                           soundFx.playTick();
                           toggleTask(lesson.id, idx);
                         }}
-                        className={`p-3 flex items-start gap-2.5 transition-colors cursor-pointer text-xs ${
-                          isDark ? 'hover:bg-gray-800/20' : 'hover:bg-slate-100'
+                        className={`p-2.5 flex items-start gap-2.5 transition-colors cursor-pointer text-xs ${
+                          isDark ? 'hover:bg-gray-800/30' : 'hover:bg-slate-100'
                         }`}
                       >
-                        <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 mt-0.5 text-[10px] ${
+                        <span className={`w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0 mt-0.5 text-[9px] ${
                           isTaskDone 
                             ? 'bg-emerald-600 border-emerald-500 text-white font-bold' 
                             : isDark ? 'border-gray-600' : 'border-slate-300'
                         }`}>
                           {isTaskDone ? '✓' : ''}
                         </span>
-                        <span className={`flex-1 leading-snug ${isTaskDone ? 'line-through opacity-70' : (isDark ? 'text-gray-300' : 'text-slate-700')}`}>
+                        <span className={`flex-1 text-[11px] leading-snug ${
+                          isTaskDone ? 'line-through opacity-60' : (isDark ? 'text-gray-300' : 'text-slate-700')
+                        }`}>
                           {taskDesc}
                         </span>
                       </div>
@@ -414,82 +470,149 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
                 </div>
               </div>
 
-              {/* Dica e Solução */}
-              <div className="space-y-2 pt-1">
-                {ch.hints && ch.hints.length > 0 && (
-                  <div className="border-b pb-2 border-gray-800/30">
-                    <button
-                      onClick={() => setIsHintOpen(!isHintOpen)}
-                      className={`w-full py-1.5 flex items-center justify-between text-xs font-semibold cursor-pointer ${
-                        isDark ? 'text-gray-400 hover:text-gray-200' : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
-                        <span>Ver Dica Prática</span>
-                      </div>
-                      {isHintOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-                    </button>
-                    {isHintOpen && (
-                      <ul className="list-disc pl-4 space-y-1 text-xs text-gray-400 pt-1">
-                        {ch.hints.map((h, i) => (
-                          <li key={i}>{h}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
+              {/* Acordeão: Dica do Mentor ADVPL */}
+              {ch.hint && (
+                <div className={`border rounded-lg overflow-hidden ${isDark ? 'border-gray-800' : 'border-slate-200'}`}>
+                  <button
+                    onClick={() => setIsHintOpen(!isHintOpen)}
+                    className={`w-full p-2 flex items-center justify-between text-xs font-semibold cursor-pointer transition-colors ${
+                      isDark ? 'hover:bg-gray-800/30 text-gray-300' : 'hover:bg-slate-50 text-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5 text-[11px]">
+                      <Question weight="bold" className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Dica do Mentor ADVPL</span>
+                    </div>
+                    {isHintOpen ? <CaretDown weight="bold" className="w-3.5 h-3.5 text-gray-400" /> : <CaretRight weight="bold" className="w-3.5 h-3.5 text-gray-400" />}
+                  </button>
 
-                {ch.solution && (
-                  <div>
-                    <button
-                      onClick={() => setIsSolutionOpen(!isSolutionOpen)}
-                      className={`w-full py-1.5 flex items-center justify-between text-xs font-semibold cursor-pointer ${
-                        isDark ? 'text-gray-400 hover:text-gray-200' : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5">
-                        <Code2 className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Revelar Solução Oficial</span>
-                      </div>
-                      {isSolutionOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-                    </button>
-                    {isSolutionOpen && (
-                      <div className="space-y-2 pt-2">
-                        <pre className={`p-3 rounded-lg text-[11px] font-mono overflow-x-auto ${
-                          isDark ? 'bg-[#0d1117] text-amber-200 border border-gray-800' : 'bg-slate-100 text-slate-800 border border-slate-200'
-                        }`}>
-                          {ch.solution}
-                        </pre>
+                  {isHintOpen && (
+                    <div className={`p-2.5 border-t text-xs space-y-1.5 ${
+                      isDark ? 'bg-[#0d1117]/40 border-gray-800 text-gray-400' : 'bg-slate-50 border-slate-200 text-slate-600'
+                    }`}>
+                      <p className="text-[11px] leading-relaxed">{ch.hint}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Acordeão: Código da Solução Oficial */}
+              {ch.solution && (
+                <div className={`border rounded-lg overflow-hidden ${isDark ? 'border-gray-800' : 'border-slate-200'}`}>
+                  <button
+                    onClick={() => setIsSolutionOpen(!isSolutionOpen)}
+                    className={`w-full p-2 flex items-center justify-between text-xs font-semibold cursor-pointer transition-colors ${
+                      isDark ? 'hover:bg-gray-800/30 text-gray-300' : 'hover:bg-slate-50 text-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5 text-[11px]">
+                      <Code weight="bold" className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Ver Código da Solução</span>
+                    </div>
+                    {isSolutionOpen ? <CaretDown weight="bold" className="w-3.5 h-3.5 text-gray-400" /> : <CaretRight weight="bold" className="w-3.5 h-3.5 text-gray-400" />}
+                  </button>
+
+                  {isSolutionOpen && (
+                    <div className={`p-2.5 border-t space-y-2 ${
+                      isDark ? 'bg-[#0d1117] border-gray-800' : 'bg-slate-50 border-slate-200'
+                    }`}>
+                      <pre className={`p-2 rounded text-[10px] font-mono overflow-x-auto leading-relaxed ${
+                        isDark ? 'bg-black/50 text-amber-200 border border-gray-800' : 'bg-white text-slate-800 border border-slate-200'
+                      }`}>
+                        {ch.solution}
+                      </pre>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleCopySolution(ch.solution)}
+                          className={`flex-1 py-1 px-2 rounded text-[10px] font-semibold border flex items-center justify-center gap-1 transition-all cursor-pointer ${
+                            isDark 
+                              ? 'bg-gray-800 hover:bg-gray-700 text-gray-200 border-gray-700' 
+                              : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300'
+                          }`}
+                        >
+                          {isCopied ? <Check weight="bold" className="w-3 h-3 text-emerald-400" /> : <Copy weight="bold" className="w-3 h-3" />}
+                          <span>{isCopied ? 'Copiado!' : 'Copiar Código'}</span>
+                        </button>
+
                         <button
                           onClick={() => {
                             soundFx.playSuccess();
                             setUserCode(lesson.id, lesson.code + '\n\n// --- SOLUÇÃO OFICIAL ---\n' + ch.solution);
                           }}
-                          className="w-full py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition-all cursor-pointer"
+                          className="flex-1 py-1 px-2 rounded text-[10px] font-bold bg-amber-600 hover:bg-amber-500 text-white transition-all cursor-pointer text-center"
                         >
-                          Aplicar Solução no Editor
+                          Aplicar no Editor
                         </button>
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
-              {/* Botão de Validar Desafio (F9) */}
-              <button
-                onClick={() => {
-                  soundFx.playTick();
-                  onGradeCode();
-                }}
-                className="w-full py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 shadow-md shadow-emerald-900/20 transition-all cursor-pointer mt-2"
-              >
-                <span>Validar Desafio da Aula (F9)</span>
-              </button>
+              {/* Ações da Missão: Avaliar e Concluir */}
+              <div className="space-y-2 pt-1">
+                <button
+                  onClick={() => {
+                    soundFx.playTick();
+                    onGradeCode();
+                  }}
+                  className="w-full py-2.5 px-3 rounded-lg text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 transition-all cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
+                >
+                  <ShieldCheck weight="bold" className="w-4 h-4" />
+                  <span>Avaliar & Corrigir Código (F9)</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    soundFx.playSuccess();
+                    setChallengeCompleted(lesson.id, ch.xp);
+                  }}
+                  className={`w-full py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                    isCompleted
+                      ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20'
+                      : 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white shadow-xs'
+                  }`}
+                >
+                  <CheckCircle weight="fill" className="w-4 h-4" />
+                  <span>{isCompleted ? 'Missão Concluída (Refazer)' : `Concluir Missão (+${ch.xp} XP)`}</span>
+                </button>
+
+                <div className="flex items-center justify-between pt-1 text-[10px]">
+                  <button
+                    onClick={() => {
+                      if (confirm('Deseja restaurar o código original desta aula?')) {
+                        soundFx.playTick();
+                        resetCurrentLesson();
+                      }
+                    }}
+                    className={`hover:underline cursor-pointer flex items-center gap-1 ${isDark ? 'text-gray-400 hover:text-gray-200' : 'text-slate-500 hover:text-slate-800'}`}
+                  >
+                    <ArrowCounterClockwise weight="bold" className="w-2.5 h-2.5" />
+                    <span>Restaurar Código da Aula</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (confirm('Deseja resetar o progresso de todos os desafios para praticar novamente do início?')) {
+                        soundFx.playTick();
+                        resetAllChallenges();
+                      }
+                    }}
+                    className={`hover:underline cursor-pointer opacity-75 ${isDark ? 'text-gray-500 hover:text-gray-300' : 'text-slate-400 hover:text-slate-700'}`}
+                  >
+                    Resetar Desafios
+                  </button>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        ) : (
+          <div className={`text-center py-6 text-xs ${isDark ? 'text-gray-500' : 'text-slate-400'}`}>
+            Esta aula não possui missão prática ativa.
+          </div>
+        )}
+      </div>
     </aside>
   );
 };

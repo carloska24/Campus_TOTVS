@@ -3,15 +3,15 @@ import { useCampusStore } from '../../store/useCampusStore';
 import { soundFx } from '../../utils/audio';
 import { 
   Trophy, 
-  HelpCircle, 
-  Code2, 
-  ChevronDown, 
-  ChevronRight, 
+  Question, 
+  Code, 
+  CaretDown, 
+  CaretRight, 
   CheckCircle, 
-  AlertTriangle,
-  PlaySquare,
-  Sparkles
-} from 'lucide-react';
+  Warning,
+  Play,
+  Sparkle
+} from '@phosphor-icons/react';
 
 interface ChallengeCardProps {
   onGradeCode: () => void;
@@ -75,7 +75,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ onGradeCode }) => 
         </h3>
 
         <div className="mt-1.5 flex items-center gap-1 text-[11px] text-amber-300 font-medium">
-          <Trophy className="w-3.5 h-3.5" />
+          <Trophy size={14} weight="fill" />
           <span>{ch.badgeName}</span>
         </div>
       </div>
@@ -89,7 +89,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ onGradeCode }) => 
         {/* Status de Código Editado */}
         {isModified && (
           <div className="px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center gap-2 text-[11px] text-amber-300">
-            <Sparkles className="w-4 h-4 shrink-0 text-amber-400" />
+            <Sparkle size={15} weight="fill" className="shrink-0 text-amber-400" />
             <span>Código customizado no editor. Valide para conferir seus acertos!</span>
           </div>
         )}
@@ -121,9 +121,9 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ onGradeCode }) => 
                 >
                   <div className="mt-0.5 shrink-0">
                     {isTaskDone ? (
-                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle size={15} weight="fill" className="text-emerald-400" />
                     ) : (
-                      <AlertTriangle className="w-4 h-4 text-amber-500/70" />
+                      <Warning size={15} weight="fill" className="text-amber-500/70" />
                     )}
                   </div>
                   <span className={`leading-snug ${isTaskDone ? 'line-through text-gray-400' : ''}`}>
@@ -142,10 +142,10 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ onGradeCode }) => 
             className="w-full p-2.5 flex items-center justify-between text-xs font-medium text-amber-300 hover:bg-[#161b22] transition-colors"
           >
             <div className="flex items-center gap-2">
-              <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+              <Question size={14} weight="duotone" className="text-amber-400" />
               <span>Dica do Mentor ADVPL</span>
             </div>
-            {isHintOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
+            {isHintOpen ? <CaretDown size={14} weight="bold" /> : <CaretRight size={14} weight="bold" />}
           </button>
           {isHintOpen && (
             <div className="p-3 text-xs text-gray-300 bg-[#161b22] border-t border-[#30363d] leading-relaxed">
@@ -161,10 +161,10 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ onGradeCode }) => 
             className="w-full p-2.5 flex items-center justify-between text-xs font-medium text-cyan-300 hover:bg-[#161b22] transition-colors"
           >
             <div className="flex items-center gap-2">
-              <Code2 className="w-3.5 h-3.5 text-cyan-400" />
+              <Code size={14} weight="bold" className="text-cyan-400" />
               <span>Ver Código da Solução</span>
             </div>
-            {isSolutionOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
+            {isSolutionOpen ? <CaretDown size={14} weight="bold" /> : <CaretRight size={14} weight="bold" />}
           </button>
           {isSolutionOpen && (
             <div className="p-3 bg-[#161b22] border-t border-[#30363d]">
@@ -180,7 +180,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ onGradeCode }) => 
       <div className="p-3 border-t border-[#30363d] bg-[#0d1117]">
         {isCompleted ? (
           <div className="w-full p-2.5 rounded-lg bg-emerald-900/30 border border-emerald-500/40 text-emerald-400 flex items-center justify-center gap-2 text-xs font-bold">
-            <CheckCircle className="w-4 h-4" />
+            <CheckCircle size={16} weight="fill" />
             <span>Missão Cumprida! (+{ch.xp} XP)</span>
           </div>
         ) : (
@@ -191,7 +191,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({ onGradeCode }) => 
             }}
             className="w-full p-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
-            <PlaySquare className="w-4 h-4" />
+            <Play size={15} weight="fill" />
             <span>Avaliar & Corrigir Código</span>
           </button>
         )}

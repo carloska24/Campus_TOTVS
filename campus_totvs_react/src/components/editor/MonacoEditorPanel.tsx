@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
-import Editor, { type OnMount } from '@monaco-editor/react';
+import Editor, { type OnMount, type BeforeMount } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 import { useCampusStore } from '../../store/useCampusStore';
 import { setupMonacoAdvpl } from '../../utils/monacoConfig';
 import { soundFx } from '../../utils/audio';
 import { EditorStatusBar } from './EditorStatusBar';
-import { RotateCcw, FileCode, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowCounterClockwise, FileCode, CheckCircle, WarningCircle, Lightbulb } from '@phosphor-icons/react';
 
 interface MonacoEditorPanelProps {
   onSelectLine?: (lineNumber: number) => void;
@@ -28,9 +28,15 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
   const isModified = isCurrentCodeModified();
   const isDark = theme === 'dark';
 
+  // Configuração pré-montagem: garante que o tema e gramática ADVPL existam ANTES da criação da instância
+  const handleEditorWillMount: BeforeMount = (monaco) => {
+    setupMonacoAdvpl(monaco);
+  };
+
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
     setupMonacoAdvpl(monaco);
+    monaco.editor.setTheme(isDark ? 'totvs-dark-plus' : 'totvs-light-plus');
 
     // Evento de alteração de posição do cursor para atualizar o tutor/inspetor
     editor.onDidChangeCursorPosition((e) => {
@@ -73,26 +79,26 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
                 : 'bg-white text-cyan-700 border-slate-200 shadow-sm'
             }`}
           >
-            <FileCode className="w-3.5 h-3.5" />
+            <FileCode weight="duotone" className="w-3.5 h-3.5" />
             <span>{lesson ? lesson.badge : 'Editor'}</span>
           </div>
 
           {isModified ? (
             <span className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/30">
-              <AlertCircle className="w-3 h-3" />
+              <WarningCircle weight="bold" className="w-3 h-3" />
               <span>Modificado</span>
             </span>
           ) : (
             <span className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/30">
-              <CheckCircle2 className="w-3 h-3" />
+              <CheckCircle weight="fill" className="w-3 h-3" />
               <span>Original Limpo</span>
             </span>
           )}
         </div>
 
         <div className="flex items-center gap-3">
-          <div className={`text-[11px] hidden sm:flex items-center gap-1 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-            <span>💡</span>
+          <div className={`text-[11px] hidden sm:flex items-center gap-1.5 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+            <Lightbulb weight="duotone" className="w-3.5 h-3.5 text-amber-400" />
             <span>Clique em qualquer linha para inspecionar & ouvir a IA</span>
           </div>
 
@@ -106,7 +112,7 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
                   : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200'
               }`}
             >
-              <RotateCcw className="w-3 h-3" />
+              <ArrowCounterClockwise weight="bold" className="w-3 h-3" />
               <span>Restaurar Código</span>
             </button>
           )}
@@ -114,13 +120,21 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
       </div>
 
       {/* Editor Container */}
-      <div className="flex-1 w-full h-full relative">
+      <div className={`flex-1 w-full h-full relative ${isDark ? 'bg-[#161b22]' : 'bg-[#ffffff]'}`}>
         <Editor
           height="100%"
           language="advpl"
           value={currentCode}
           theme={isDark ? 'totvs-dark-plus' : 'totvs-light-plus'}
+          beforeMount={handleEditorWillMount}
           onMount={handleEditorDidMount}
+          loading={
+            <div className={`h-full w-full flex items-center justify-center font-mono text-xs ${
+              isDark ? 'bg-[#161b22] text-gray-500' : 'bg-white text-gray-400'
+            }`}>
+              Carregando editor ADVPL...
+            </div>
+          }
           onChange={(value) => {
             if (lesson && value !== undefined) {
               setUserCode(lesson.id, value);
@@ -128,7 +142,8 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
           }}
           options={{
             fontSize: 13.5,
-            fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
+            fontFamily: "var(--font-mono)",
+            fontLigatures: false, // Desativado para fins educacionais ADVPL
             lineHeight: 22,
             minimap: { enabled: false },
             bracketPairColorization: { enabled: true },

@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
 import { soundFx } from '../../utils/audio';
 import { 
-  Trophy, 
-  CheckCircle2, 
-  TrendingUp, 
   Compass, 
-  HelpCircle, 
-  Briefcase,
-  CheckCircle,
-  Building2,
-  Flame,
-  Code2,
-  Award,
-  ChevronRight,
-  ShieldCheck,
-  Check
-} from 'lucide-react';
+  Buildings, 
+  Fire, 
+  Code, 
+  Trophy, 
+  Target, 
+  Briefcase, 
+  ChartLineUp, 
+  ChatCircleText, 
+  CheckCircle, 
+  Check, 
+  Question,
+  Lightbulb,
+  ShieldCheck
+} from '@phosphor-icons/react';
 
 interface ISkillItem {
   id: string;
@@ -85,7 +85,7 @@ export const CarreiraView: React.FC = () => {
         {/* CABEÇALHO EDITORIAL COM IDENTIDADE DE CARREIRA */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-            <Compass className="w-4 h-4" />
+            <Compass size={18} weight="duotone" />
             <span>Trilha de Carreira • Empregabilidade</span>
           </div>
 
@@ -107,7 +107,7 @@ export const CarreiraView: React.FC = () => {
           >
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 border border-cyan-500/20">
-                <Building2 className="w-4 h-4" />
+                <Buildings size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -121,7 +121,7 @@ export const CarreiraView: React.FC = () => {
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/20">
-                <Flame className="w-4 h-4" />
+                <Fire size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -135,7 +135,7 @@ export const CarreiraView: React.FC = () => {
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/20">
-                <Code2 className="w-4 h-4" />
+                <Code size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -149,7 +149,7 @@ export const CarreiraView: React.FC = () => {
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
-                <Award className="w-4 h-4" />
+                <Trophy size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -170,12 +170,13 @@ export const CarreiraView: React.FC = () => {
           }`}
         >
           {[
-            { id: 'niveis', label: 'Roadmap dos 5 Níveis' },
-            { id: 'entrevistas', label: 'Guia de Entrevistas Técnicas' },
-            { id: 'casos', label: 'Casos Reais de Consultoria' },
-            { id: 'calculadora', label: '🎯 Calculadora de Senioridade' }
+            { id: 'niveis', label: 'Roadmap dos 5 Níveis', icon: ChartLineUp },
+            { id: 'entrevistas', label: 'Guia de Entrevistas Técnicas', icon: ChatCircleText },
+            { id: 'casos', label: 'Casos Reais de Consultoria', icon: Briefcase },
+            { id: 'calculadora', label: 'Calculadora de Senioridade', icon: Target }
           ].map((tab) => {
             const isSelected = activeSubtab === tab.id;
+            const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
@@ -197,6 +198,7 @@ export const CarreiraView: React.FC = () => {
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
                 }`}
               >
+                <Icon size={15} weight="duotone" className="shrink-0" />
                 <span>{tab.label}</span>
               </button>
             );
@@ -227,41 +229,41 @@ export const CarreiraView: React.FC = () => {
                   {
                     num: '1',
                     title: 'NÍVEL 1: FUNDAMENTOS & MEMÓRIA RAM',
-                    badge: '✓ Concluído',
-                    badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-                    dotColor: 'bg-emerald-400',
+                    badge: 'Concluído',
+                    badgeClass: isDark ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/40' : 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                    isCompleted: true,
                     desc: 'Sintaxe ADVPL, Notação Húngara, variáveis locais, modularização com Static Functions, matrizes multidimensionais, ordenação nativa com aSort e telas MSDialog.'
                   },
                   {
                     num: '2',
                     title: 'NÍVEL 2: BANCO DE DADOS & DICIONÁRIOS (SX)',
                     badge: 'Próxima Etapa',
-                    badgeClass: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
-                    dotColor: 'bg-cyan-400',
+                    badgeClass: isDark ? 'bg-cyan-950/60 text-cyan-400 border-cyan-800/40' : 'bg-cyan-50 text-cyan-700 border-cyan-200',
+                    isCompleted: false,
                     desc: 'Manipulação de tabelas (SA1, SA2, SB1, SC5, SE1), consultas otimizadas com TCQuery, ChangeQuery, perguntas dinâmicas no SX1 e parâmetros globais no SX6.'
                   },
                   {
                     num: '3',
                     title: 'NÍVEL 3: PONTOS DE ENTRADA (PEs) & CUSTOMIZAÇÕES NÃO-INVASIVAS',
                     badge: 'Intermediário',
-                    badgeClass: 'bg-gray-800 text-gray-400 border-gray-700',
-                    dotColor: 'bg-gray-500',
+                    badgeClass: isDark ? 'bg-gray-800 text-gray-400 border-gray-700' : 'bg-slate-100 text-slate-600 border-slate-200',
+                    isCompleted: false,
                     desc: 'Interceptação de rotinas padrões (MATA410, MATA120, MATA010) para aplicar regras customizadas de negócio sem perda de compatibilidade em viradas de release.'
                   },
                   {
                     num: '4',
                     title: 'NÍVEL 4: ARQUITETURA MVC (MODEL-VIEW-CONTROLLER) & TLPP',
                     badge: 'Avançado',
-                    badgeClass: 'bg-gray-800 text-gray-400 border-gray-700',
-                    dotColor: 'bg-gray-500',
+                    badgeClass: isDark ? 'bg-purple-950/60 text-purple-400 border-purple-800/40' : 'bg-purple-50 text-purple-700 border-purple-200',
+                    isCompleted: false,
                     desc: 'CRUDs corporativos desacoplados utilizando ModelDef, ViewDef e MenuDef com validações estruturadas via FwFormModel e tipagem estática TLPP.'
                   },
                   {
                     num: '5',
                     title: 'NÍVEL 5: MICROSSERVIÇOS REST & GOVERNANÇA SÊNIOR',
                     badge: 'Especialista',
-                    badgeClass: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
-                    dotColor: 'bg-purple-400',
+                    badgeClass: isDark ? 'bg-amber-950/60 text-amber-400 border-amber-800/40' : 'bg-amber-50 text-amber-700 border-amber-200',
+                    isCompleted: false,
                     desc: 'Endpoints REST nativos em TLPP com JSON, autenticação Bearer/Basic, mensageria e arquitetura limpa com 100% de conformidade no TOTVS CodeAnalysis.'
                   }
                 ].map((step, idx) => (
@@ -271,16 +273,20 @@ export const CarreiraView: React.FC = () => {
                       isDark ? 'bg-[#0d1117]/50 border-gray-800' : 'bg-slate-50 border-slate-200'
                     }`}
                   >
-                    <div className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-bold font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">
-                      {step.num}
+                    <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-bold font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">
+                      {step.isCompleted ? (
+                        <CheckCircle size={18} weight="fill" className="text-emerald-400" />
+                      ) : (
+                        <span>{step.num}</span>
+                      )}
                     </div>
 
-                    <div className="space-y-1 flex-1">
+                    <div className="space-y-1.5 flex-1">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <h3 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {step.title}
                         </h3>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${step.badgeClass}`}>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border font-mono ${step.badgeClass}`}>
                           {step.badge}
                         </span>
                       </div>
@@ -299,8 +305,9 @@ export const CarreiraView: React.FC = () => {
           {/* ========================================================= */}
           {activeSubtab === 'entrevistas' && (
             <div className="space-y-5">
-              <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
-                Perguntas Frequentes & Respostas Oficiais de Entrevistas Técnicas
+              <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                <ChatCircleText size={16} weight="duotone" />
+                <span>Perguntas Frequentes & Respostas Oficiais de Entrevistas Técnicas</span>
               </div>
 
               <div className={`divide-y border rounded-xl overflow-hidden shadow-xs ${
@@ -320,13 +327,18 @@ export const CarreiraView: React.FC = () => {
                     a: 'Ocorre vazamento de conexão e memória (Memory Leak) no DBAccess e no AppServer. Com o esgotamento dos cursores do banco de dados, todo o ambiente do cliente é paralisado.'
                   }
                 ].map((item, idx) => (
-                  <div key={idx} className="p-4 space-y-1.5">
-                    <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {item.q}
-                    </h4>
-                    <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-                      <strong className="text-cyan-400">Resposta oficial recomendada:</strong> {item.a}
-                    </p>
+                  <div key={idx} className="p-4 space-y-2">
+                    <div className="flex items-start gap-2.5">
+                      <Question size={16} weight="duotone" className="text-cyan-400 mt-0.5 shrink-0" />
+                      <h4 className={`text-xs font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        {item.q}
+                      </h4>
+                    </div>
+                    <div className="pl-6.5">
+                      <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
+                        <strong className="text-cyan-400">Resposta oficial recomendada:</strong> {item.a}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -338,28 +350,35 @@ export const CarreiraView: React.FC = () => {
           {/* ========================================================= */}
           {activeSubtab === 'casos' && (
             <div className="space-y-5">
-              <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
-                Cenários Reais de Consultoria e Implantação Corporativa
+              <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                <Briefcase size={16} weight="duotone" />
+                <span>Cenários Reais de Consultoria e Implantação Corporativa</span>
               </div>
 
               <div className="space-y-3.5">
-                <div className={`p-4 rounded-xl border-l-4 border-amber-500 border space-y-1.5 ${
+                <div className={`p-4 rounded-xl border-l-4 border-amber-500 border space-y-2 ${
                   isDark ? 'bg-amber-950/15 border-gray-800' : 'bg-amber-50/60 border-slate-200'
                 }`}>
-                  <h4 className="font-bold text-xs text-amber-400">
-                    Cenário 1: Trava de Liberação de Crédito no MATA410
-                  </h4>
+                  <div className="flex items-center gap-2">
+                    <Lightbulb size={16} weight="duotone" className="text-amber-400" />
+                    <h4 className="font-bold text-xs text-amber-400">
+                      Cenário 1: Trava de Liberação de Crédito no MATA410
+                    </h4>
+                  </div>
                   <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
                     Um cliente atacadista precisava impedir que pedidos de venda acima de R$ 50.000 fossem emitidos sem aprovação financeira. A regra foi implementada através do Ponto de Entrada MT410OK consultando o parâmetro MV_LIMPED no SX6 com tratamento elegante de Help.
                   </p>
                 </div>
 
-                <div className={`p-4 rounded-xl border-l-4 border-cyan-500 border space-y-1.5 ${
+                <div className={`p-4 rounded-xl border-l-4 border-cyan-500 border space-y-2 ${
                   isDark ? 'bg-cyan-950/15 border-gray-800' : 'bg-cyan-50/60 border-slate-200'
                 }`}>
-                  <h4 className="font-bold text-xs text-cyan-400">
-                    Cenário 2: Otimização de Relatório Financeiro Lento
-                  </h4>
+                  <div className="flex items-center gap-2">
+                    <Lightbulb size={16} weight="duotone" className="text-cyan-400" />
+                    <h4 className="font-bold text-xs text-cyan-400">
+                      Cenário 2: Otimização de Relatório Financeiro Lento
+                    </h4>
+                  </div>
                   <p className={`text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
                     Um relatório de títulos demorava 25 minutos para gerar via DbSeek. A consultoria reescreveu a rotina utilizando TCQuery com ChangeQuery e RetSqlName("SE1"), reduzindo o tempo de resposta para 1,8 segundos.
                   </p>
@@ -382,7 +401,7 @@ export const CarreiraView: React.FC = () => {
                 <div className="space-y-2 flex-1">
                   <div className="flex items-center gap-2">
                     <span 
-                      className="text-xs font-bold px-2 py-0.5 rounded border"
+                      className="text-xs font-bold px-2 py-0.5 rounded border font-mono"
                       style={{ color: levelInfo.color, borderColor: `${levelInfo.color}55`, backgroundColor: `${levelInfo.color}15` }}
                     >
                       {levelInfo.badge}
@@ -421,7 +440,10 @@ export const CarreiraView: React.FC = () => {
               {/* Matriz de Competências Interativa */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-gray-400">
-                  <span>Matriz de Competências Oficiais do Mercado Protheus</span>
+                  <span className="flex items-center gap-2">
+                    <ShieldCheck size={16} weight="duotone" className="text-cyan-400" />
+                    <span>Matriz de Competências Oficiais do Mercado Protheus</span>
+                  </span>
                   <span className="text-[10px] text-cyan-400 font-mono font-normal">Clique para marcar/desmarcar</span>
                 </div>
 
@@ -434,17 +456,17 @@ export const CarreiraView: React.FC = () => {
                       <div
                         key={skill.id}
                         onClick={() => toggleSkill(skill.id)}
-                        className={`p-3 flex items-center justify-between gap-4 cursor-pointer text-xs transition-colors ${
+                        className={`p-3.5 flex items-center justify-between gap-4 cursor-pointer text-xs transition-colors ${
                           isDark ? 'hover:bg-white/5' : 'hover:bg-slate-50'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] shrink-0 transition-colors ${
+                          <div className={`w-4.5 h-4.5 rounded border flex items-center justify-center text-[10px] shrink-0 transition-colors ${
                             isChecked 
                               ? 'bg-cyan-600 border-cyan-500 text-white font-bold' 
                               : isDark ? 'border-gray-600 bg-transparent' : 'border-slate-300 bg-white'
                           }`}>
-                            {isChecked ? '✓' : ''}
+                            {isChecked && <Check size={12} weight="bold" className="text-white" />}
                           </div>
                           <span className={isChecked ? (isDark ? 'text-white font-medium' : 'text-slate-900 font-medium') : 'text-gray-400'}>
                             {skill.name}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
-import { X, CheckCircle2, AlertTriangle, Monitor } from 'lucide-react';
+import { X, CheckCircle, Warning, Desktop } from '@phosphor-icons/react';
 
 export const VirtualProtheusModal: React.FC = () => {
   const { isProtheusModalOpen, openProtheusModal, protheusOutput, theme } = useCampusStore();
@@ -29,14 +29,14 @@ export const VirtualProtheusModal: React.FC = () => {
           }`}
         >
           <div className="flex items-center gap-2 text-xs font-bold">
-            <Monitor className="w-3.5 h-3.5 text-cyan-500" />
+            <Desktop size={16} weight="duotone" className="text-cyan-500" />
             <span className="truncate">{title || 'TOTVS Protheus - SmartClient'}</span>
           </div>
           <button
             onClick={() => openProtheusModal(false)}
             className="text-gray-400 hover:text-gray-700 dark:hover:text-white p-0.5 rounded transition-colors cursor-pointer"
           >
-            <X className="w-4 h-4" />
+            <X size={16} weight="bold" />
           </button>
         </div>
 
@@ -44,9 +44,9 @@ export const VirtualProtheusModal: React.FC = () => {
         <div className={`p-5 text-xs flex gap-4 items-start ${isDark ? 'bg-[#0f172a] text-gray-200' : 'bg-slate-50 text-slate-800'}`}>
           <div className="mt-0.5 shrink-0">
             {isError ? (
-              <AlertTriangle className="w-7 h-7 text-rose-500" />
+              <Warning size={28} weight="fill" className="text-rose-500" />
             ) : (
-              <CheckCircle2 className="w-7 h-7 text-cyan-500" />
+              <CheckCircle size={28} weight="fill" className="text-cyan-500" />
             )}
           </div>
 

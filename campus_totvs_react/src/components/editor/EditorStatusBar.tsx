@@ -1,14 +1,13 @@
 import React from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
-import { Volume2, Sparkles, Terminal, FileCheck } from 'lucide-react';
+import { TerminalWindow, Sparkle } from '@phosphor-icons/react';
 
 interface EditorStatusBarProps {
   currentLine: number;
 }
 
 export const EditorStatusBar: React.FC<EditorStatusBarProps> = ({ currentLine }) => {
-  const { theme, getCurrentLesson } = useCampusStore();
-  const lesson = getCurrentLesson();
+  const { theme } = useCampusStore();
   const isDark = theme === 'dark';
 
   return (
@@ -21,7 +20,7 @@ export const EditorStatusBar: React.FC<EditorStatusBarProps> = ({ currentLine })
     >
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1.5 text-cyan-400 font-semibold">
-          <Terminal className="w-3 h-3" />
+          <TerminalWindow size={13} weight="bold" />
           <span>ADVPL / TLPP 2026</span>
         </div>
 
@@ -42,7 +41,7 @@ export const EditorStatusBar: React.FC<EditorStatusBarProps> = ({ currentLine })
 
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1 text-[10px] text-fuchsia-400">
-          <Sparkles className="w-3 h-3" />
+          <Sparkle size={13} weight="fill" />
           <span>Tutor IA Ativo</span>
         </div>
       </div>

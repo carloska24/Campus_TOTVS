@@ -3,22 +3,19 @@ import { TOTVS_DICTIONARY_DB, type ISXTableDetail } from '../../data/dictionary'
 import { useCampusStore } from '../../store/useCampusStore';
 import { soundFx } from '../../utils/audio';
 import { 
-  Search, 
+  MagnifyingGlass, 
   Database, 
-  CheckCircle2, 
-  Terminal, 
-  Code,
+  CheckCircle,
   ArrowRight,
-  ShieldAlert,
+  ShieldWarning,
   Lightbulb,
   Cpu,
-  Layers,
-  Network,
+  Stack,
+  TreeStructure,
   Copy,
   Check,
-  Table as TableIcon,
-  Server
-} from 'lucide-react';
+  HardDrives
+} from '@phosphor-icons/react';
 
 type DictTab = 'sx1' | 'sx2' | 'sx3' | 'sx6' | 'six' | 'explorer';
 
@@ -75,7 +72,7 @@ export const DicionarioView: React.FC = () => {
         {/* CABEÇALHO COM IDENTIDADE ARQUITETURAL */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-            <Database className="w-4 h-4" />
+            <Database size={18} weight="duotone" />
             <span>O Motor do Protheus • Dicionário SX</span>
           </div>
 
@@ -97,7 +94,7 @@ export const DicionarioView: React.FC = () => {
           >
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 border border-cyan-500/20">
-                <Server className="w-4 h-4" />
+                <HardDrives size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -111,7 +108,7 @@ export const DicionarioView: React.FC = () => {
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
-                <ShieldAlert className="w-4 h-4" />
+                <ShieldWarning size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -125,7 +122,7 @@ export const DicionarioView: React.FC = () => {
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/20">
-                <Layers className="w-4 h-4" />
+                <Stack size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -139,7 +136,7 @@ export const DicionarioView: React.FC = () => {
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20">
-                <Cpu className="w-4 h-4" />
+                <Cpu size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -165,7 +162,7 @@ export const DicionarioView: React.FC = () => {
             { id: 'sx3', label: 'SX3 (Campos & Validações)', code: 'SX3' },
             { id: 'sx6', label: 'SX6 (Parâmetros Globais)', code: 'SX6' },
             { id: 'six', label: 'SIX (Índices & Busca)', code: 'SIX' },
-            { id: 'explorer', label: '🔎 Configurador Virtual', code: 'SX3 Explorer' }
+            { id: 'explorer', label: 'Configurador Virtual', code: 'SX3 Explorer', hasSearchIcon: true }
           ].map((tab) => {
             const isSelected = activeSubtab === tab.id;
             return (
@@ -189,6 +186,7 @@ export const DicionarioView: React.FC = () => {
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
                 }`}
               >
+                {tab.hasSearchIcon && <MagnifyingGlass size={15} weight="duotone" className="shrink-0" />}
                 <span>{tab.label}</span>
               </button>
             );
@@ -226,7 +224,7 @@ export const DicionarioView: React.FC = () => {
                 isDark ? 'bg-cyan-950/15 border-gray-800/60 text-cyan-100' : 'bg-cyan-50/60 border-slate-200 text-cyan-950'
               }`}>
                 <div className="flex items-center gap-2 text-xs font-bold text-cyan-400">
-                  <Lightbulb className="w-4 h-4" />
+                  <Lightbulb size={18} weight="duotone" />
                   <span>Leitura de Variáveis no Código ADVPL</span>
                 </div>
                 <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
@@ -239,7 +237,7 @@ export const DicionarioView: React.FC = () => {
                 isDark ? 'bg-blue-950/15 border-gray-800/60 text-blue-100' : 'bg-blue-50/60 border-slate-200 text-blue-950'
               }`}>
                 <div className="flex items-center gap-2 text-xs font-bold text-blue-400">
-                  <Cpu className="w-4 h-4" />
+                  <Cpu size={18} weight="duotone" />
                   <span>Função Nativa de Carregamento</span>
                 </div>
                 <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
@@ -255,7 +253,7 @@ export const DicionarioView: React.FC = () => {
                     onClick={() => handleCopyCode(`// Exemplo de uso de SX1 corporativo:\nIf Pergunte("MTA410", .T.)\n    cClienteDe  := MV_PAR01\n    cClienteAte := MV_PAR02\n    dDataDe     := MV_PAR03\nEndIf`, 'sx1')}
                     className="text-[10px] text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    {copiedSnippet === 'sx1' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {copiedSnippet === 'sx1' ? <Check size={14} weight="bold" className="text-emerald-400" /> : <Copy size={14} weight="bold" />}
                     <span>{copiedSnippet === 'sx1' ? 'Copiado!' : 'Copiar Exemplo'}</span>
                   </button>
                 </div>
@@ -301,7 +299,7 @@ EndIf`}
                 isDark ? 'bg-amber-950/20 border-gray-800/60 text-amber-100' : 'bg-amber-50/70 border-slate-200 text-amber-950'
               }`}>
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-400">
-                  <ShieldAlert className="w-4 h-4" />
+                  <ShieldWarning size={18} weight="duotone" />
                   <span>Regra de Ouro Oficial TOTVS: RetSqlName</span>
                 </div>
                 <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
@@ -317,7 +315,7 @@ EndIf`}
                     onClick={() => handleCopyCode(`Local cQuery := " SELECT A1_COD, A1_NOME FROM " + RetSqlName("SA1") + " SA1 "\ncQuery += " WHERE SA1.D_E_L_E_T_ = ' ' AND SA1.A1_FILIAL = '" + xFilial("SA1") + "' "\nTCQuery ChangeQuery(cQuery) New Alias "QRY_CLI"`, 'sx2')}
                     className="text-[10px] text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    {copiedSnippet === 'sx2' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {copiedSnippet === 'sx2' ? <Check size={14} weight="bold" className="text-emerald-400" /> : <Copy size={14} weight="bold" />}
                     <span>{copiedSnippet === 'sx2' ? 'Copiado!' : 'Copiar Query'}</span>
                   </button>
                 </div>
@@ -359,7 +357,7 @@ TCQuery ChangeQuery(cQuery) New Alias "QRY_CLI"`}
               {/* Relacionamento e Atributos Chave do SX3 */}
               <div className="space-y-3">
                 <div className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <Network className="w-4 h-4 text-cyan-400" />
+                  <TreeStructure size={18} weight="duotone" className="text-cyan-400" />
                   <span>Trindade de Validação e Inicialização no SX3:</span>
                 </div>
 
@@ -431,7 +429,7 @@ TCQuery ChangeQuery(cQuery) New Alias "QRY_CLI"`}
                 isDark ? 'bg-emerald-950/15 border-gray-800/60 text-emerald-100' : 'bg-emerald-50/60 border-slate-200 text-emerald-950'
               }`}>
                 <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
-                  <CheckCircle2 className="w-4 h-4" />
+                  <CheckCircle size={18} weight="fill" />
                   <span>Sintaxe Recomendada: GetMV com Fallback</span>
                 </div>
                 <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
@@ -447,7 +445,7 @@ TCQuery ChangeQuery(cQuery) New Alias "QRY_CLI"`}
                     onClick={() => handleCopyCode(`Local lPermiteEstoqueNegativo := GetMV("MV_ESTNEG", .F., .F.)\nLocal nLimiteCreditoPadrao    := GetMV("MV_LIMCRED", .F., 10000.00)\n\nIf !lPermiteEstoqueNegativo .And. nSaldo < nQtdVenda\n    ApMsgAlert("Parâmetro MV_ESTNEG não autoriza estoque negativo!", "Regra SX6")\nEndIf`, 'sx6')}
                     className="text-[10px] text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    {copiedSnippet === 'sx6' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {copiedSnippet === 'sx6' ? <Check size={14} weight="bold" className="text-emerald-400" /> : <Copy size={14} weight="bold" />}
                     <span>{copiedSnippet === 'sx6' ? 'Copiado!' : 'Copiar Código'}</span>
                   </button>
                 </div>
@@ -494,7 +492,7 @@ EndIf`}
                 isDark ? 'bg-cyan-950/15 border-gray-800/60 text-cyan-100' : 'bg-cyan-50/60 border-slate-200 text-cyan-950'
               }`}>
                 <div className="flex items-center gap-2 text-xs font-bold text-cyan-400">
-                  <ShieldAlert className="w-4 h-4" />
+                  <ShieldWarning size={18} weight="duotone" />
                   <span>Respeitar Obrigatoriamente a Chave de Filial (xFilial)</span>
                 </div>
                 <p className={`text-xs leading-relaxed mt-1.5 ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
@@ -529,7 +527,7 @@ EndIf`}
               {/* Painel Esquerdo: Busca e Lista de Tabelas */}
               <div className="lg:col-span-4 space-y-3">
                 <div className="relative">
-                  <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <MagnifyingGlass size={15} weight="bold" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   <input
                     type="text"
                     value={searchTerm}
@@ -573,7 +571,7 @@ EndIf`}
                           </div>
                           <div className="truncate text-[11px] text-gray-400 mt-0.5 font-normal">{tbl.name}</div>
                         </div>
-                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />}
+                        {isSelected && <CheckCircle size={15} weight="fill" className="text-cyan-400 shrink-0" />}
                       </button>
                     );
                   })}
@@ -598,7 +596,7 @@ EndIf`}
                     className="px-3.5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs cursor-pointer shadow-xs transition-all flex items-center gap-1.5"
                   >
                     <span>Usar em Query</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight size={14} weight="bold" />
                   </button>
                 </div>
 

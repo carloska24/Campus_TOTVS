@@ -5,19 +5,47 @@ import { soundFx } from '../../utils/audio';
 import { 
   GraduationCap, 
   ArrowRight, 
-  Clock, 
-  Code, 
-  CheckCircle2, 
-  FileCode, 
-  Layers, 
-  Sparkles, 
-  ChevronRight,
+  Clock,
+  Sparkle, 
+  CaretRight,
   BookOpen,
   Copy,
   Check,
-  Award,
-  Terminal
-} from 'lucide-react';
+  TerminalWindow,
+  Database,
+  TreeStructure,
+  Lightning,
+  ShieldCheck,
+  Cpu,
+  type IconWeight
+} from '@phosphor-icons/react';
+
+const getTrackIcon = (id: string, size = 18, weight: IconWeight = 'duotone') => {
+  switch (id) {
+    case 'fundamentos': return <BookOpen size={size} weight={weight} className="text-cyan-400 shrink-0" />;
+    case 'banco-de-dados': return <Database size={size} weight={weight} className="text-blue-400 shrink-0" />;
+    case 'arquitetura': return <TreeStructure size={size} weight={weight} className="text-purple-400 shrink-0" />;
+    case 'arsenal': return <Lightning size={size} weight={weight} className="text-amber-400 shrink-0" />;
+    default: return <GraduationCap size={size} weight={weight} className="text-cyan-400 shrink-0" />;
+  }
+};
+
+const getLevelBadgeColor = (level: string, isDark: boolean) => {
+  switch (level?.toLowerCase()) {
+    case 'iniciante':
+      return isDark ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/40' : 'bg-emerald-50 text-emerald-700 border-emerald-200';
+    case 'intermediário':
+    case 'intermediario':
+      return isDark ? 'bg-blue-950/60 text-blue-400 border-blue-800/40' : 'bg-blue-50 text-blue-700 border-blue-200';
+    case 'avançado':
+    case 'avancado':
+      return isDark ? 'bg-purple-950/60 text-purple-400 border-purple-800/40' : 'bg-purple-50 text-purple-700 border-purple-200';
+    case 'especialista':
+      return isDark ? 'bg-amber-950/60 text-amber-400 border-amber-800/40' : 'bg-amber-50 text-amber-700 border-amber-200';
+    default:
+      return isDark ? 'bg-gray-800 text-gray-300 border-gray-700' : 'bg-slate-100 text-slate-700 border-slate-200';
+  }
+};
 
 export const MasterclassView: React.FC = () => {
   const [activeTrackId, setActiveTrackId] = useState('fundamentos');
@@ -29,6 +57,7 @@ export const MasterclassView: React.FC = () => {
 
   const currentTrack = MASTERCLASS_TRACKS.find((t) => t.id === activeTrackId) || MASTERCLASS_TRACKS[0];
   const chapters = currentTrack?.chapters || [];
+  const totalMinutes = chapters.reduce((acc, curr) => acc + (parseInt(curr.duration || '0') || 0), 0);
   const currentChapter = chapters.find((c) => c.id === selectedChapterId) || chapters[0] || {
     id: 'cap01',
     title: 'Capítulo 01',
@@ -67,7 +96,7 @@ export const MasterclassView: React.FC = () => {
         {/* CABEÇALHO EDITORIAL INTEGRADO */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-            <GraduationCap className="w-4 h-4" />
+            <GraduationCap size={18} weight="duotone" />
             <span>Formação Oficial de Engenharia TOTVS</span>
           </div>
 
@@ -76,7 +105,7 @@ export const MasterclassView: React.FC = () => {
           </h1>
 
           <p className={`text-xs md:text-sm leading-relaxed max-w-3xl ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-            Formação completa e estruturada da Engenharia de Software TOTVS Protheus. Navegue pelos módulos organizados por nível de maturidade e consulte o arsenal prático de código.
+            Formação completa e estruturada da Engenharia de Software TOTVS Protheus. Navegue pelas trilhas organizadas por nível de maturidade e consulte o arsenal prático de código.
           </p>
 
           {/* FAIXA INTEGRADA DE MÉTRICAS DA MASTERCLASS */}
@@ -89,7 +118,7 @@ export const MasterclassView: React.FC = () => {
           >
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 border border-cyan-500/20">
-                <BookOpen className="w-4 h-4" />
+                <BookOpen size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -102,8 +131,8 @@ export const MasterclassView: React.FC = () => {
             </div>
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20">
-                <Layers className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/20">
+                <TreeStructure size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -116,8 +145,8 @@ export const MasterclassView: React.FC = () => {
             </div>
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/20">
-                <Terminal className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20">
+                <Cpu size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -131,7 +160,7 @@ export const MasterclassView: React.FC = () => {
 
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
-                <Award className="w-4 h-4" />
+                <ShieldCheck size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -163,7 +192,7 @@ export const MasterclassView: React.FC = () => {
                     setSelectedChapterId(track.chapters[0].id);
                   }
                 }}
-                className={`py-2 px-3.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`py-2 px-3.5 rounded-lg text-xs font-semibold flex items-center gap-2.5 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   isActive
                     ? isDark
                       ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 shadow-xs font-bold'
@@ -173,8 +202,15 @@ export const MasterclassView: React.FC = () => {
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
                 }`}
               >
-                <span>{track.icon}</span>
+                {getTrackIcon(track.id, 16)}
                 <span>{track.name}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                  isActive 
+                    ? isDark ? 'bg-cyan-900/40 text-cyan-200' : 'bg-cyan-50 text-cyan-800'
+                    : isDark ? 'bg-gray-800 text-gray-400' : 'bg-slate-200 text-slate-600'
+                }`}>
+                  {track.chapters?.length || 0}
+                </span>
               </button>
             );
           })}
@@ -183,13 +219,40 @@ export const MasterclassView: React.FC = () => {
         {/* ESTRUTURA MASTER-DETAIL: SUMÁRIO DE CAPÍTULOS + ÁREA DE ESTUDO */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          {/* Coluna Esquerda: Sumário de Capítulos */}
-          <div className="lg:col-span-4 space-y-2">
-            <div className={`text-[10px] font-bold uppercase tracking-wider px-2 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-              Sumário de Capítulos
+          {/* Coluna Esquerda: Painel Unificado do Sumário de Capítulos (Superfície Nível 1) */}
+          <div 
+            className={`lg:col-span-4 rounded-2xl border overflow-hidden shadow-xs transition-colors flex flex-col ${
+              isDark ? 'bg-[#161b22]/40 border-[#30363d]' : 'bg-white border-slate-200'
+            }`}
+          >
+            {/* Cabeçalho do Painel do Sumário */}
+            <div className={`p-4 border-b flex items-center justify-between transition-colors ${
+              isDark ? 'border-[#30363d]/60 bg-black/15' : 'border-slate-100 bg-slate-50/60'
+            }`}>
+              <div className="flex items-center gap-2.5">
+                <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                  isDark ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30' : 'bg-cyan-50 text-cyan-700 border border-cyan-200'
+                }`}>
+                  <BookOpen size={15} weight="duotone" />
+                </div>
+                <div>
+                  <h3 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    Sumário de Aulas
+                  </h3>
+                  <span className={`text-[10px] block ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+                    {currentTrack?.name.split(':')[1]?.trim() || currentTrack?.name || 'Trilha Ativa'}
+                  </span>
+                </div>
+              </div>
+              <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+                isDark ? 'bg-cyan-950 text-cyan-400 border-cyan-800/50' : 'bg-cyan-50 text-cyan-700 border-cyan-200'
+              }`}>
+                {chapters.length} {chapters.length === 1 ? 'aula' : 'aulas'}
+              </span>
             </div>
 
-            <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1">
+            {/* Lista Rolável de Capítulos */}
+            <div className="p-2 space-y-1 overflow-y-auto max-h-[520px] custom-scrollbar">
               {chapters.map((ch, idx) => {
                 const isSelected = ch.id === selectedChapterId;
                 return (
@@ -199,36 +262,91 @@ export const MasterclassView: React.FC = () => {
                       soundFx.playTick();
                       setSelectedChapterId(ch.id);
                     }}
-                    className={`w-full text-left p-3 rounded-xl transition-all flex items-center justify-between gap-3 text-xs cursor-pointer border ${
+                    className={`w-full text-left p-3 rounded-xl transition-all flex items-center gap-3 text-xs cursor-pointer border group relative ${
                       isSelected
                         ? isDark 
-                          ? 'bg-cyan-500/10 border-cyan-500/40 text-white font-bold shadow-xs' 
-                          : 'bg-white border-cyan-300 text-slate-900 font-bold shadow-xs'
+                          ? 'bg-cyan-500/12 border-cyan-500/40 text-white shadow-xs font-bold' 
+                          : 'bg-cyan-50/80 border-cyan-300 text-cyan-950 shadow-xs font-bold'
                         : isDark 
-                          ? 'border-transparent text-gray-400 hover:text-gray-200 hover:bg-white/5' 
-                          : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                          ? 'border-transparent text-gray-400 hover:text-gray-200 hover:bg-white/[0.04]' 
+                          : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                     }`}
                   >
+                    {/* Badge Numérico / Ícone de Estado */}
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-all ${
+                      isSelected
+                        ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/40 scale-105'
+                        : isDark
+                          ? 'bg-[#1c2128] text-gray-400 border border-gray-700/50 group-hover:border-gray-600 group-hover:text-gray-300'
+                          : 'bg-slate-100 text-slate-600 border border-slate-200 group-hover:border-slate-300 group-hover:text-slate-800'
+                    }`}>
+                      {String(idx + 1).padStart(2, '0')}
+                    </div>
+
+                    {/* Metadados e Título */}
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-cyan-400' : 'text-gray-500'}`}>
-                          Cap. {String(idx + 1).padStart(2, '0')}
-                        </span>
-                        <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-                          isDark ? 'bg-gray-800 text-gray-300' : 'bg-slate-200 text-slate-600'
+                      <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                        <span className={`text-[10px] font-mono flex items-center gap-1 ${
+                          isSelected ? (isDark ? 'text-cyan-300 font-semibold' : 'text-cyan-700 font-semibold') : 'text-gray-400'
                         }`}>
-                          {ch.duration}
+                          <Clock size={11} weight="bold" />
+                          <span>{ch.duration}</span>
                         </span>
+
+                        {ch.level && (
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-semibold border ${getLevelBadgeColor(ch.level, isDark)}`}>
+                            {ch.level}
+                          </span>
+                        )}
+
+                        {ch.badge && (
+                          <span className={`text-[9px] font-mono px-1 rounded opacity-70 hidden sm:inline-block ${
+                            isDark ? 'text-gray-400' : 'text-slate-500'
+                          }`}>
+                            {ch.badge}
+                          </span>
+                        )}
                       </div>
-                      <div className="truncate text-xs font-semibold">
+
+                      <div className={`text-xs truncate transition-colors ${
+                        isSelected 
+                          ? isDark ? 'text-white' : 'text-slate-900' 
+                          : isDark ? 'text-gray-300 group-hover:text-white' : 'text-slate-700 group-hover:text-slate-900'
+                      }`}>
                         {ch.title.split(':')[1]?.trim() || ch.title}
                       </div>
                     </div>
 
-                    <ChevronRight className={`w-4 h-4 shrink-0 transition-transform ${isSelected ? 'text-cyan-400 translate-x-0.5' : 'text-gray-600'}`} />
+                    {/* Indicador de Seleção à Direita */}
+                    <div className="shrink-0 flex items-center">
+                      <CaretRight 
+                        size={15} 
+                        weight="bold" 
+                        className={`transition-transform duration-200 ${
+                          isSelected 
+                            ? 'text-cyan-400 translate-x-0.5' 
+                            : 'text-gray-600 group-hover:text-gray-400 group-hover:translate-x-0.5'
+                        }`} 
+                      />
+                    </div>
                   </button>
                 );
               })}
+            </div>
+
+            {/* Rodapé Informativo da Trilha */}
+            <div className={`p-3.5 border-t mt-auto flex items-center justify-between text-[11px] transition-colors ${
+              isDark ? 'border-[#30363d]/60 bg-black/10' : 'border-slate-100 bg-slate-50/50'
+            }`}>
+              <div className="flex items-center gap-2">
+                <Sparkle size={14} weight="duotone" className="text-cyan-400 shrink-0" />
+                <span className={`text-[10px] font-mono ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+                  {totalMinutes} min de imersão prática
+                </span>
+              </div>
+              <span className={`text-[10px] font-mono font-bold ${isDark ? 'text-cyan-400' : 'text-cyan-700'}`}>
+                ADVPL / TLPP
+              </span>
             </div>
           </div>
 
@@ -240,17 +358,22 @@ export const MasterclassView: React.FC = () => {
           >
             {/* Cabeçalho do Capítulo */}
             <div className="flex flex-wrap items-start justify-between gap-4 border-b pb-5 border-gray-800/30">
-              <div className="space-y-1.5 max-w-xl">
-                <div className="flex items-center gap-2">
-                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                    isDark ? 'bg-cyan-950 text-cyan-400 border border-cyan-800/40' : 'bg-cyan-50 text-cyan-700 border border-cyan-200'
+              <div className="space-y-2 max-w-xl">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                    isDark ? 'bg-cyan-950 text-cyan-400 border-cyan-800/40' : 'bg-cyan-50 text-cyan-700 border-cyan-200'
                   }`}>
                     {currentChapter.badge}
                   </span>
-                  <span className={`text-xs flex items-center gap-1 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>{currentChapter.duration} de estudo imersivo</span>
+                  <span className={`text-xs flex items-center gap-1 font-mono ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+                    <Clock size={13} weight="bold" />
+                    <span>{currentChapter.duration} de imersão</span>
                   </span>
+                  {currentChapter.level && (
+                    <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold border ${getLevelBadgeColor(currentChapter.level, isDark)}`}>
+                      {currentChapter.level}
+                    </span>
+                  )}
                 </div>
 
                 <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
@@ -261,28 +384,33 @@ export const MasterclassView: React.FC = () => {
               {currentChapter.snippetCode && (
                 <button
                   onClick={() => handleLoadSnippet(currentChapter.snippetCode)}
-                  className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
                 >
                   <span>Abrir Fonte no Editor</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight size={14} weight="bold" />
                 </button>
               )}
             </div>
 
             {/* Descrição em Prosa de Consultoria */}
-            <p className={`text-xs md:text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
-              {currentChapter.description}
-            </p>
+            <div className="space-y-1">
+              <h3 className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+                Visão Geral & Fundamentação
+              </h3>
+              <p className={`text-xs md:text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-slate-600'}`}>
+                {currentChapter.description}
+              </p>
+            </div>
 
             {/* Pontos-Chave e Diretrizes do TDN */}
             {currentChapter.keyPoints && currentChapter.keyPoints.length > 0 && (
               <div className="space-y-3 pt-1">
-                <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Diretrizes e Boas Práticas Oficiais (TDN)</span>
+                <div className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-2">
+                  <Sparkle size={16} weight="fill" />
+                  <span>Diretrizes e Boas Práticas Oficiais (TDN & CodeAnalysis)</span>
                 </div>
 
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {currentChapter.keyPoints.map((point, i) => (
                     <div 
                       key={i} 
@@ -306,15 +434,18 @@ export const MasterclassView: React.FC = () => {
             {currentChapter.snippetCode && (
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className={`font-semibold ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-                    Implementação Oficial de Referência:
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <TerminalWindow size={15} weight="bold" className="text-cyan-400" />
+                    <span className={`font-semibold ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+                      Implementação Oficial de Referência:
+                    </span>
+                  </div>
                   
                   <button
                     onClick={() => handleCopyCode(currentChapter.snippetCode)}
-                    className="text-[10px] text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-[10px] text-cyan-400 hover:underline flex items-center gap-1.5 cursor-pointer font-medium"
                   >
-                    {isCopied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {isCopied ? <Check size={14} weight="bold" className="text-emerald-400" /> : <Copy size={14} weight="bold" />}
                     <span>{isCopied ? 'Copiado!' : 'Copiar Código'}</span>
                   </button>
                 </div>

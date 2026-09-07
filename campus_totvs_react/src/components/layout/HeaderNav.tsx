@@ -2,18 +2,18 @@ import React from 'react';
 import { useCampusStore, type CampusTab } from '../../store/useCampusStore';
 import { soundFx } from '../../utils/audio';
 import { 
-  FlaskConical, 
-  Layers, 
+  Flask, 
+  Stack, 
   BookOpen, 
   GraduationCap, 
   Trophy, 
-  RotateCcw, 
+  ArrowCounterClockwise, 
   Play, 
-  CheckCircle2, 
+  ShieldCheck, 
   Sun, 
   Moon,
-  Sparkles
-} from 'lucide-react';
+  Lightning
+} from '@phosphor-icons/react';
 
 interface HeaderNavProps {
   onRunCode: () => void;
@@ -32,12 +32,12 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
 
   const isDark = theme === 'dark';
 
-  const navItems: { id: CampusTab; label: string; icon: React.ReactNode }[] = [
-    { id: 'lab', label: 'Laboratório', icon: <FlaskConical className="w-4 h-4" /> },
-    { id: 'modulos', label: 'Módulos ERP (SIGA)', icon: <Layers className="w-4 h-4" /> },
-    { id: 'dicionario', label: 'Dicionário SX', icon: <BookOpen className="w-4 h-4" /> },
-    { id: 'masterclass', label: 'Masterclass (01 a 08)', icon: <GraduationCap className="w-4 h-4" /> },
-    { id: 'carreira', label: 'Trilha de Carreira', icon: <Trophy className="w-4 h-4" /> }
+  const navItems: { id: CampusTab; label: string; IconComponent: React.ElementType }[] = [
+    { id: 'lab', label: 'Laboratório', IconComponent: Flask },
+    { id: 'modulos', label: 'Módulos ERP (SIGA)', IconComponent: Stack },
+    { id: 'dicionario', label: 'Dicionário SX', IconComponent: BookOpen },
+    { id: 'masterclass', label: 'Masterclass (01 a 08)', IconComponent: GraduationCap },
+    { id: 'carreira', label: 'Trilha de Carreira', IconComponent: Trophy }
   ];
 
   const handleReset = () => {
@@ -55,11 +55,15 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
     >
       {/* Brand & Logo */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0284c7] to-[#06b6d4] flex items-center justify-center font-bold text-white shadow-md shadow-cyan-900/30">
-          T
+        <div className="flex items-center shrink-0">
+          <img 
+            src="/totvs_logo.png" 
+            alt="TOTVS" 
+            className="h-8 w-auto object-contain drop-shadow-sm transition-transform hover:scale-105"
+          />
         </div>
-        <div>
-          <div className={`text-sm font-bold tracking-tight flex items-center gap-1.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+        <div className={`border-l pl-3 transition-colors ${isDark ? 'border-gray-700/50' : 'border-slate-300'}`}>
+          <div className={`text-sm font-extrabold tracking-tight flex items-center gap-1.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
             Campus TOTVS
             <span 
               className={`text-[10px] uppercase font-semibold px-1.5 py-0.2 rounded border ${
@@ -71,8 +75,8 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
               Protheus 2026
             </span>
           </div>
-          <div className={`text-[10px] -mt-0.5 tracking-wide font-medium ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
-            PLATAFORMA OFICIAL DE CAPACITAÇÃO
+          <div className={`text-[9px] -mt-0.5 tracking-wider font-semibold uppercase ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+            Plataforma Oficial de Capacitação
           </div>
         </div>
       </div>
@@ -87,6 +91,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
       >
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
+          const Icon = item.IconComponent;
           return (
             <button
               key={item.id}
@@ -104,7 +109,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
               }`}
             >
-              {item.icon}
+              <Icon weight={isActive ? 'fill' : 'regular'} className="w-4 h-4" />
               <span>{item.label}</span>
             </button>
           );
@@ -121,7 +126,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
               : 'bg-amber-50 border-amber-300 text-amber-700'
           }`}
         >
-          <span>⚡</span>
+          <Lightning weight="fill" className="w-3.5 h-3.5 text-amber-400" />
           <span>{userXp} XP</span>
         </div>
 
@@ -138,7 +143,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
               : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100 border-slate-200'
           }`}
         >
-          {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {isDark ? <Sun weight="bold" className="w-4 h-4" /> : <Moon weight="bold" className="w-4 h-4" />}
         </button>
 
         {/* Reset Lesson Code Button */}
@@ -152,7 +157,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
                 : 'bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border-slate-300'
             }`}
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <ArrowCounterClockwise weight="bold" className="w-3.5 h-3.5" />
             <span>Resetar Aula</span>
           </button>
         )}
@@ -166,7 +171,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
           title="Executar código no simulador Protheus (F5)"
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-md shadow-cyan-900/30 transition-all cursor-pointer"
         >
-          <Play className="w-3.5 h-3.5 fill-white" />
+          <Play weight="fill" className="w-3.5 h-3.5" />
           <span>Executar</span>
         </button>
 
@@ -179,7 +184,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ onRunCode, onGradeCode }) 
           title="Auditar código e validar objetivos da missão (F9)"
           className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white text-xs font-bold shadow-md shadow-emerald-900/30 transition-all cursor-pointer"
         >
-          <CheckCircle2 className="w-3.5 h-3.5" />
+          <ShieldCheck weight="bold" className="w-4 h-4" />
           <span>Validar Desafio</span>
         </button>
       </div>

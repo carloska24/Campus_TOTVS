@@ -2,19 +2,23 @@ import React, { useState } from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
 import { soundFx } from '../../utils/audio';
 import { 
-  Layers, 
+  Stack, 
   ArrowRight, 
-  Workflow, 
+  FlowArrow, 
   Table, 
-  Code, 
   ShieldCheck, 
-  CheckCircle2,
-  ChevronRight,
-  BarChart3,
-  FileCheck2,
-  Briefcase,
-  GraduationCap
-} from 'lucide-react';
+  CaretRight,
+  ChartBar,
+  FileText,
+  GraduationCap,
+  Receipt,
+  ShoppingCart,
+  Warehouse,
+  Wallet,
+  Calculator,
+  Scales,
+  type IconWeight
+} from '@phosphor-icons/react';
 
 interface IFlowStep {
   step: string;
@@ -229,6 +233,18 @@ EndIf`
   }
 ];
 
+const getModuloIcon = (id: string, size = 18, weight: IconWeight = 'duotone') => {
+  switch (id) {
+    case 'sigafat': return <Receipt size={size} weight={weight} className="text-cyan-400 shrink-0" />;
+    case 'sigacom': return <ShoppingCart size={size} weight={weight} className="text-blue-400 shrink-0" />;
+    case 'sigaest': return <Warehouse size={size} weight={weight} className="text-purple-400 shrink-0" />;
+    case 'sigafin': return <Wallet size={size} weight={weight} className="text-emerald-400 shrink-0" />;
+    case 'sigactb': return <Calculator size={size} weight={weight} className="text-amber-400 shrink-0" />;
+    case 'sigafis': return <Scales size={size} weight={weight} className="text-rose-400 shrink-0" />;
+    default: return <Stack size={size} weight={weight} className="text-cyan-400 shrink-0" />;
+  }
+};
+
 export const ModulosView: React.FC = () => {
   const [selectedId, setSelectedId] = useState('sigafat');
   const { setUserCode, setActiveTab, activeLessonId, theme } = useCampusStore();
@@ -253,7 +269,7 @@ export const ModulosView: React.FC = () => {
         {/* CABEÇALHO EDITORIAL COM IDENTIDADE DA ENGENHARIA */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
-            <ShieldCheck className="w-4 h-4" />
+            <ShieldCheck size={18} weight="duotone" />
             <span>Arquitetura de Negócio & Engenharia TOTVS</span>
           </div>
 
@@ -276,7 +292,7 @@ export const ModulosView: React.FC = () => {
             {/* Métrica 1 */}
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0 border border-cyan-500/20">
-                <BarChart3 className="w-4 h-4" />
+                <ChartBar size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -291,7 +307,7 @@ export const ModulosView: React.FC = () => {
             {/* Métrica 2 */}
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20">
-                <FileCheck2 className="w-4 h-4" />
+                <FileText size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -306,7 +322,7 @@ export const ModulosView: React.FC = () => {
             {/* Métrica 3 */}
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/20">
-                <Layers className="w-4 h-4" />
+                <Stack size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -321,7 +337,7 @@ export const ModulosView: React.FC = () => {
             {/* Métrica 4 */}
             <div className="flex-1 p-3.5 flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
-                <GraduationCap className="w-4 h-4" />
+                <GraduationCap size={18} weight="duotone" />
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
@@ -360,7 +376,7 @@ export const ModulosView: React.FC = () => {
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
                 }`}
               >
-                <span className="text-sm">{mod.icon}</span>
+                {getModuloIcon(mod.id, 16)}
                 <span>{mod.name.split(':')[0]}</span>
                 <span className={`text-[10px] px-1 rounded font-mono ${
                   isSelected 
@@ -394,8 +410,8 @@ export const ModulosView: React.FC = () => {
                 </span>
               </div>
 
-              <h2 className="text-xl font-bold flex items-center gap-2">
-                <span>{selectedModulo.icon}</span>
+              <h2 className="text-xl font-bold flex items-center gap-2.5">
+                {getModuloIcon(selectedModulo.id, 24)}
                 <span>{selectedModulo.name}</span>
               </h2>
 
@@ -409,14 +425,14 @@ export const ModulosView: React.FC = () => {
               className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer shrink-0"
             >
               <span>Abrir Fonte no Editor</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight size={14} weight="bold" />
             </button>
           </div>
 
           {/* FLUXO OPERACIONAL: STEPPER HORIZONTAL ENTERPRISE */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-400">
-              <Workflow className="w-4 h-4" />
+              <FlowArrow size={18} weight="duotone" />
               <span>{selectedModulo.flowTitle}</span>
             </div>
 
@@ -460,7 +476,7 @@ export const ModulosView: React.FC = () => {
                   {/* Seta Conectora de Fluxo (Desktop) */}
                   {idx < selectedModulo.flowSteps.length - 1 && (
                     <div className="hidden md:flex items-center justify-center text-cyan-400/50 px-0.5">
-                      <ChevronRight className="w-4 h-4" />
+                      <CaretRight size={16} weight="bold" />
                     </div>
                   )}
                 </React.Fragment>
@@ -471,7 +487,7 @@ export const ModulosView: React.FC = () => {
           {/* TABELAS MESTRE DO MÓDULO (APRESENTAÇÃO TABULAR CORPORATIVA) */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400">
-              <Table className="w-4 h-4 text-cyan-400" />
+              <Table size={18} weight="duotone" className="text-cyan-400" />
               <span>Tabelas Mestre do Dicionário ({selectedModulo.name.split(':')[0]})</span>
             </div>
 

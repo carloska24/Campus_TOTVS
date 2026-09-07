@@ -2450,7 +2450,12 @@
               <span class="btn-label" id="btnCompleteLabel">Concluir Missão (+50 XP)</span>
             </button>
             <div id="challengeResetArea" style="display: none; text-align: center; margin-top: 6px;">
-              <button type="button" class="btn-reset-challenge" id="btnResetChallenge">↺ Refazer Missão</button>
+              <button type="button" class="btn-reset-challenge" id="btnResetChallenge">↺ Refazer Esta Missão</button>
+            </div>
+            <div style="text-align: center; margin-top: 8px;">
+              <button type="button" class="btn-reset-challenge" id="btnResetAllChallenges" style="font-size: 11px; padding: 4px 10px; opacity: 0.85; border-color: rgba(255,255,255,0.15);" onclick="if(confirm('Deseja redefinir todos os desafios como NÃO FEITOS para praticar do zero?')) resetAllChallengesProgress();" title="Redefine todos os desafios para praticar novamente do início">
+                🔄 Resetar Todos os Desafios (Praticar do Zero)
+              </button>
             </div>
           </div>
 
@@ -4255,11 +4260,16 @@
         <pre id="graderSolutionText" style="margin: 0; font-family: 'Consolas', monospace; font-size: 11.5px; color: #a5f3fc; background: rgba(0, 210, 211, 0.05); padding: 10px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap; max-height: 110px; border: 1px solid rgba(0, 210, 211, 0.15);"></pre>
       </div>
 
-      <div class="grader-footer">
-        <button class="btn btn-secondary" id="graderBtnClose">Fechar</button>
-        <button class="btn btn-primary" id="graderBtnCompleteMission" style="background: linear-gradient(135deg, #10b981, #059669);">
-          🏆 Concluir Missão (+50 XP)
+      <div class="grader-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+        <button type="button" class="btn btn-secondary" id="graderBtnResetAll" onclick="if(confirm('Deseja resetar todos os desafios como NÃO FEITOS para praticar do zero?')) resetAllChallengesProgress();" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.4); font-size: 11.5px; padding: 7px 12px;" title="Redefine todos os desafios para praticar novamente do início">
+          🔄 Resetar Desafios (Praticar do Zero)
         </button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" id="graderBtnClose">Fechar</button>
+          <button class="btn btn-primary" id="graderBtnCompleteMission" style="background: linear-gradient(135deg, #10b981, #059669);">
+            🏆 Concluir Missão (+50 XP)
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -7775,281 +7785,353 @@
         }
 
         case "aula02": {
-          const hasElseIf = /ElseIf\s+.*nMedia\s*(?:>=|>)/i.test(cleanCode) || (/If\s+.*nMedia/i.test(cleanCode) && /Else/i.test(cleanCode));
+          // Desafio: Matriz de Regras aRegras com limites e faixas de pontuacao
+          const hasMatrizRegras = /\baRegras\s*:=|\baFaixas\s*:=/i.test(cleanCode) && /\{/i.test(cleanCode) && /(?:Excelente|Top Performance|Bom|Regular|9\.0|7\.0)/i.test(cleanCode);
           criteria.push({
             id: 0,
-            title: "Implementar condição condicional para média intermediária",
-            pass: hasElseIf,
-            tip: hasElseIf ? "Correto! Estrutura ElseIf/If condicional detectada." : "Adicione uma cláusula ElseIf nMedia >= 7.0 para classificar notas intermediárias."
+            title: "Criar matriz aRegras com faixas e rótulos de desempenho",
+            pass: hasMatrizRegras,
+            tip: hasMatrizRegras 
+              ? "Excelente! Matriz aRegras com faixas de pontuação declarada com sucesso." 
+              : "Substitua os Ifs fixos declarando: Local aRegras := { {9.0, 'Excelente', 0.20}, {7.0, 'Bom', 0.10}, ... }."
           });
 
-          const hasAaddPrata = /aAdd\s*\(\s*aResultado\s*,.*(?:Prata|Pleno)/i.test(cleanCode);
+          const hasLoopRegras = /For\s+\w+\s*:=\s*1\s+To\s+Len\s*\(\s*(?:aRegras|aFaixas)\s*\)/i.test(cleanCode);
           criteria.push({
             id: 1,
-            title: "Inserir 'Nivel Prata (Pleno)' com aAdd()",
-            pass: hasAaddPrata,
-            tip: hasAaddPrata ? "Ótimo! aAdd utilizado para popular o vetor aResultado." : "Use aAdd(aResultado, 'Classificacao: Nivel Prata (Pleno)') na condição atendida."
+            title: "Percorrer matriz de regras dinamicamente com For...Next",
+            pass: hasLoopRegras,
+            tip: hasLoopRegras 
+              ? "Muito bem! Laço For...Next percorrendo dinamicamente o tamanho da matriz." 
+              : "Utilize o loop For nI := 1 To Len(aRegras) para iterar pelas faixas da matriz."
           });
 
-          const hasEndIf = /End\s*If/i.test(cleanCode);
+          const hasDynamicEval = /(?:aRegras|aFaixas)\s*\[\s*\w+\s*\]\s*\[\s*1\s*\]/i.test(cleanCode) && /nNota\s*(?:>=|>)/i.test(cleanCode);
           criteria.push({
             id: 2,
-            title: "Estrutura condicional finalizada com EndIf",
-            pass: hasEndIf,
-            tip: hasEndIf ? "EndIf posicionado corretamente." : "Lembre-se de fechar os blocos condicionais com EndIf."
+            title: "Avaliação dinâmica da nota pelo limite da matriz",
+            pass: hasDynamicEval,
+            tip: hasDynamicEval 
+              ? "Perfeito! Condição avaliando o elemento aRegras[nI][1] dinamicamente." 
+              : "Verifique If nNota >= aRegras[nI][1] e atribua o status correspondente."
           });
 
-          const hasOutA2 = isRunSuccess && /(?:Prata|Pleno|Aprovado)/i.test(outMsg);
+          const hasOutA2 = isRunSuccess && /(?:Classificacao|Resultado Final|PAINEL DE DESEMPENHO)/i.test(outMsg) && /\baRegras\b/i.test(cleanCode);
           criteria.push({
             id: 3,
-            title: "Executar no Protheus Virtual e validar a classificação",
+            title: "Executar no Protheus Virtual e validar o cálculo dinâmico",
             pass: hasOutA2,
-            tip: hasOutA2 ? "Classificação exibida com sucesso no modal do Protheus!" : "Execute no Protheus Virtual e certifique-se de que a classificação apareça na mensagem."
+            tip: hasOutA2 
+              ? "Painel executado com sucesso e lógica dinâmica validada!" 
+              : "Execute o código com a matriz aRegras implementada no Protheus Virtual para validar."
           });
           break;
         }
 
         case "aula02b": {
-          const hasLoop = /For\s+\w+\s*:=|While\s+/i.test(cleanCode);
+          // Desafio: Static Function Fatorial(nNum) com trava > 12
+          const hasStaticFatorial = /Static\s+Function\s+Fatorial\s*\(\s*\w+\s*\)/i.test(cleanCode);
           criteria.push({
             id: 0,
-            title: "Estruturar repetição com laço For ou While",
-            pass: hasLoop,
-            tip: hasLoop ? "Laço de repetição detectado." : "Utilize For ou While para iterar pelos dados."
+            title: "Criar a Static Function Fatorial(nNum)",
+            pass: hasStaticFatorial,
+            tip: hasStaticFatorial 
+              ? "Ótimo! Static Function Fatorial declarada e isolada no fonte." 
+              : "Crie ao final do arquivo: Static Function Fatorial(nNum) para modularizar o cálculo."
           });
 
-          const hasAccum = /\w+\s*\+=\s*\w+/i.test(cleanCode);
+          const hasTrava12 = /If\s+\w+\s*>\s*12/i.test(cleanCode) && /(?:ApMsgStop|Return\s+0|Alerta|bloque)/i.test(cleanCode);
           criteria.push({
             id: 1,
-            title: "Calcular total acumulado com operador +=",
-            pass: hasAccum,
-            tip: hasAccum ? "Operador de atribuição cumulativa += implementado." : "Utilize nTotal += nValor para somar os valores das iterações."
+            title: "Implementar trava de segurança para números > 12",
+            pass: hasTrava12,
+            tip: hasTrava12 
+              ? "Segurança garantida! Trava implementada para evitar estouro numérico no AppServer." 
+              : "Adicione If nNum > 12 com aviso ApMsgStop ou retorno 0 para impedir números superiores a 12."
           });
 
-          const hasLoopClose = /Next|EndDo/i.test(cleanCode);
+          const hasWhileFat = /While\s+\w+\s*>\s*1/i.test(cleanCode) && /\*=/i.test(cleanCode) && /--/i.test(cleanCode) && /Static\s+Function\s+Fatorial/i.test(cleanCode);
           criteria.push({
             id: 2,
-            title: "Encerramento correto do loop com Next / EndDo",
-            pass: hasLoopClose,
-            tip: hasLoopClose ? "Loop fechado corretamente." : "Feche o laço For com Next ou While com EndDo."
+            title: "Laço While com multiplicação acumulada (*=) e decremento (--)",
+            pass: hasWhileFat,
+            tip: hasWhileFat 
+              ? "Algoritmo de fatorial com While, *= e decremento funcionando perfeitamente." 
+              : "Dentro da Static Function, use While nNum > 1 multiplicando nResultado *= nNum e decrementando nNum--."
           });
 
-          const hasOutA2b = isRunSuccess && /(?:Total|Soma|Média|Saldo)/i.test(outMsg);
+          const hasOutA2b = isRunSuccess && /Static\s+Function\s+Fatorial/i.test(cleanCode) && /(?:Fatorial\s*\(|!\s*=\s*\d+)/i.test(cleanCode);
           criteria.push({
             id: 3,
-            title: "Exibição do total consolidado no Protheus Virtual",
+            title: "Executar e validar a função Fatorial no Protheus Virtual",
             pass: hasOutA2b,
-            tip: hasOutA2b ? "Total consolidado exibido com sucesso!" : "Certifique-se de exibir o valor total acumulado no ApMsgInfo."
+            tip: hasOutA2b 
+              ? "Fatorial validado com excelência no Protheus Virtual!" 
+              : "Chame a função Fatorial() na User Function principal e teste a execução no Protheus."
           });
           break;
         }
 
         case "aula03": {
-          const hasPRD5 = /PRD005/i.test(cleanCode) || /aItens/i.test(cleanCode);
+          // Desafio: Inserir o 5º produto 'PRD005' na matriz aItens, tratar e recalcular total
+          const hasPRD5 = /PRD005/i.test(cleanCode) && /aAdd\s*\(\s*aItens/i.test(cleanCode);
           criteria.push({
             id: 0,
-            title: "Inserir o 5º produto na matriz aItens",
+            title: "Inserir o 5º produto ('PRD005') na matriz aItens",
             pass: hasPRD5,
-            tip: hasPRD5 ? "Item adicional inserido na matriz de produtos." : "Adicione a linha do produto 'PRD005' na matriz aItens."
+            tip: hasPRD5 
+              ? "Excelente! Produto 'PRD005' adicionado na matriz aItens com aAdd()." 
+              : "Adicione a linha: aAdd(aItens, {'PRD005', 'webcam full hd 1080p', 1, 280.00}) na matriz de produtos."
           });
 
-          const hasPadR = /PadR\s*\(/i.test(cleanCode);
+          const hasMin5 = (cleanCode.match(/aAdd\s*\(\s*aItens/gi) || []).length >= 5 && /PRD005/i.test(cleanCode);
           criteria.push({
             id: 1,
-            title: "Padronizar alinhamento da descrição com PadR()",
-            pass: hasPadR,
-            tip: hasPadR ? "PadR utilizado para alinhamento profissional de colunas." : "Formate a descrição do item com PadR(cDesc, 26)."
+            title: "Garantir a matriz com no mínimo 5 produtos",
+            pass: hasMin5,
+            tip: hasMin5 
+              ? "Perfeito! A matriz agora possui os 5 itens configurados corretamente." 
+              : "A matriz de itens original possui 4 produtos. Inclua o 5º item via aAdd() para totalizar 5."
           });
 
-          const hasTotalMatriz = /nTotal/i.test(cleanCode);
+          const hasTotalMatriz = /PRD005/i.test(cleanCode) && /nTotalGeral\s*\+?=\s*nSubTotal/i.test(cleanCode) && /Transform\s*\(\s*nTotalGeral/i.test(cleanCode);
           criteria.push({
             id: 2,
-            title: "Recalcular o total geral do pedido",
+            title: "Recalcular o total geral do pedido acumulando o novo produto",
             pass: hasTotalMatriz,
-            tip: hasTotalMatriz ? "Total geral do pedido acumulado." : "Garanta que o loop soma o novo produto ao total geral."
+            tip: hasTotalMatriz 
+              ? "Total geral recalculado e formatado com a nova linha inclusa!" 
+              : "Certifique-se de que o For...Next itera até Len(aItens) e acumula o subtotal do PRD005."
           });
 
-          const hasOutA3 = isRunSuccess && /PRD005/i.test(outMsg);
+          const hasOutA3 = isRunSuccess && /PRD005/i.test(outMsg) && /PRD005/i.test(cleanCode);
           criteria.push({
             id: 3,
             title: "Validação da listagem de itens no Protheus Virtual",
             pass: hasOutA3,
-            tip: hasOutA3 ? "Tabela de itens renderizada perfeitamente!" : "Execute e confira se o PRD005 aparece na listagem do modal."
+            tip: hasOutA3 
+              ? "Tabela de itens renderizada perfeitamente com o PRD005 no modal!" 
+              : "Execute no Protheus Virtual e confirme se o produto PRD005 aparece na listagem do relatório."
           });
           break;
         }
 
         case "aula04": {
-          const hasCodeblock = /\{\s*\|[^|]*\|\s*.*(?:>|<)/i.test(cleanCode);
+          // Desafio: Busca Dinamica por Categoria com Codeblock (bBuscaCat)
+          const hasCodeblockCat = /\{\s*\|[^|]+\|\s*[^}]*(?:\[\s*3\s*\]\s*==\s*["']Perifericos["']|["']Perifericos["']\s*\$)/i.test(cleanCode);
           criteria.push({
             id: 0,
-            title: "Definir Codeblock com critério de comparação",
-            pass: hasCodeblock,
-            tip: hasCodeblock ? "Codeblock de comparação lambda criado com sucesso." : "Defina bBloco := { |x, y| x[4] > y[4] } para ordenação decrescente por valor."
+            title: "Definir Codeblock com critério de Categoria ('Perifericos')",
+            pass: hasCodeblockCat,
+            tip: hasCodeblockCat 
+              ? "Codeblock lambda por categoria criado com sucesso." 
+              : "Crie o Codeblock: bBuscaCat := {|x| x[3] == 'Perifericos'} para buscar por categoria."
           });
 
-          const hasASort = /aSort\s*\(/i.test(cleanCode);
+          const hasAScanCat = /aScan\s*\(\s*aProdutos\s*,\s*(?:bBuscaCat|bFiltro|\{[^}]*Perifericos)/i.test(cleanCode) && /Perifericos/i.test(cleanCode);
           criteria.push({
             id: 1,
-            title: "Ordenar matriz com a função aSort()",
-            pass: hasASort,
-            tip: hasASort ? "aSort executado com o bloco de código." : "Invoque aSort(aProdutos, , , bBloco) para ordenar os registros."
+            title: "Localizar produto por categoria na matriz usando aScan()",
+            pass: hasAScanCat,
+            tip: hasAScanCat 
+              ? "aScan executado com o bloco de categoria com precisão." 
+              : "Execute a busca: nPos := aScan(aProdutos, bBuscaCat) para encontrar o primeiro periférico."
           });
 
-          const hasAScan = /aScan\s*\(/i.test(cleanCode);
+          const hasPosCheck = /nPos\w*\s*>\s*0/i.test(cleanCode) && /Perifericos/i.test(cleanCode);
           criteria.push({
             id: 2,
-            title: "Buscar elemento na matriz com aScan()",
-            pass: hasAScan,
-            tip: hasAScan ? "aScan aplicado para localização dinâmica." : "Utilize aScan(aProdutos, { |x| x[1] == 'PRD001' }) para localizar o índice."
+            title: "Validar se o produto da categoria foi localizado (nPos > 0)",
+            pass: hasPosCheck,
+            tip: hasPosCheck 
+              ? "Validação defensiva de índice encontrado implementada." 
+              : "Adicione If nPos > 0 para garantir que o produto foi encontrado antes de ler seus dados."
           });
 
-          const hasOutA4 = isRunSuccess && /(?:aSort|aScan|Ordenad|Encontrado)/i.test(outMsg);
+          const hasOutA4 = isRunSuccess && /Perifericos/i.test(cleanCode) && /(?:Teclado Mecanico|Mouse Sem Fio|Perifericos)/i.test(outMsg);
           criteria.push({
             id: 3,
-            title: "Validar algoritmo de ordenação e busca no Protheus",
+            title: "Executar no Protheus Virtual e validar a busca por categoria",
             pass: hasOutA4,
-            tip: hasOutA4 ? "Algoritmo validado com excelência no Protheus Virtual!" : "Execute no Protheus Virtual para validar o resultado da busca."
+            tip: hasOutA4 
+              ? "Algoritmo validado com excelência no Protheus Virtual!" 
+              : "Execute no Protheus Virtual e certifique-se de que o periférico localizado apareça no resultado."
           });
           break;
         }
 
         case "aula05": {
-          const hasDialog = /DEFINE\s+MSDIALOG/i.test(cleanCode);
+          // Desafio: Calculadora Financeira com IOF (nTaxaIOF e MSGET)
+          const hasIOFVar = /Local\s+.*(?:nTaxaIOF|nIOF)\b/i.test(cleanCode) && /0\.38/i.test(cleanCode);
           criteria.push({
             id: 0,
-            title: "Criar janela nativa com DEFINE MSDIALOG",
-            pass: hasDialog,
-            tip: hasDialog ? "Janela nativa MSDIALOG configurada." : "Utilize o comando DEFINE MSDIALOG para a janela modal."
+            title: "Declarar a variável Local nTaxaIOF com alíquota padrão 0.38%",
+            pass: hasIOFVar,
+            tip: hasIOFVar 
+              ? "Variável Local nTaxaIOF declarada no topo com escopo e tipo correto." 
+              : "Declare no início da User Function: Local nTaxaIOF := 0.38 para a alíquota de IOF."
           });
 
-          const hasMsGet = /@.*MSGET/i.test(cleanCode);
+          const hasIOFGet = /MSGET\s+.*(?:nTaxaIOF|nIOF|oGetIOF)/i.test(cleanCode);
           criteria.push({
             id: 1,
-            title: "Campos de digitação interativa com @ MSGET",
-            pass: hasMsGet,
-            tip: hasMsGet ? "Campos de entrada MSGET vinculados a variáveis." : "Adicione os campos interativos de valor e desconto com @ MSGET."
+            title: "Adicionar campo de entrada interativo MSGET para o IOF",
+            pass: hasIOFGet,
+            tip: hasIOFGet 
+              ? "Campo interativo MSGET posicionado na MSDialog com sucesso." 
+              : "Adicione na janela: @ 070, 065 MSGET oGetIOF VAR nTaxaIOF PICTURE '@E 99.99' PIXEL OF oDlg."
           });
 
-          const hasCalcAction = /ACTION|SetText/i.test(cleanCode);
+          const hasIOFCalc = /(?:CalcComIOF|nTaxaIOF|nIOF)/i.test(cleanCode) && /(?:IOF\s*\/|\*\s*\(?\s*1\s*\+\s*\(?\s*n(?:Taxa)?IOF)/i.test(cleanCode);
           criteria.push({
             id: 2,
-            title: "Lógica de cálculo vinculada ao botão da tela",
-            pass: hasCalcAction,
-            tip: hasCalcAction ? "Ação de cálculo e atualização dinâmica de tela OK." : "Vincule a ação de recálculo ao botão de calcular."
+            title: "Implementar cálculo financeiro aplicando a cascata do IOF",
+            pass: hasIOFCalc,
+            tip: hasIOFCalc 
+              ? "Cálculo com cascata tributária de desconto e IOF implementado!" 
+              : "Calcule o total aplicando primeiro o desconto comercial e em seguida o IOF sobre o valor final."
           });
 
-          const hasOutA5 = isRunSuccess && /(?:MSDIALOG|Desconto|Líquido|Total)/i.test(outMsg);
+          const hasOutA5 = isRunSuccess && /IOF/i.test(cleanCode) && /(?:IOF|Tributo|1355|1\.355)/i.test(outMsg);
           criteria.push({
             id: 3,
-            title: "Validação da interface no Protheus Virtual",
+            title: "Executar e validar a interface com IOF no Protheus Virtual",
             pass: hasOutA5,
-            tip: hasOutA5 ? "Interface gráfica simulada com sucesso!" : "Execute no Protheus Virtual para testar a janela de diálogo."
+            tip: hasOutA5 
+              ? "Interface gráfica com cálculo de IOF simulada com sucesso!" 
+              : "Execute no Protheus Virtual e clique em Calcular para validar o total com IOF."
           });
           break;
         }
 
         case "aula06": {
-          const hasRetSql = /RetSqlName\s*\(\s*["'](?:SA1|SC5|SB1)["']\s*\)/i.test(cleanCode);
+          // Desafio: Filtro SQL Regional (A1_EST == 'SP') e Ordenacao por A1_LC DESC
+          const hasFilterSP = /A1_EST\s*=\s*['"]SP['"]/i.test(cleanCode);
           criteria.push({
             id: 0,
-            title: "Resolução dinâmica de tabela com RetSqlName()",
-            pass: hasRetSql,
-            tip: hasRetSql ? "Boa prática oficial TOTVS: RetSqlName utilizado em vez de tabela fixa." : "Nunca faça SQL fixo! Use RetSqlName('SA1') para buscar o nome da empresa ativa."
+            title: "Filtrar clientes do estado 'SP' (AND SA1.A1_EST = 'SP')",
+            pass: hasFilterSP,
+            tip: hasFilterSP 
+              ? "Filtro regional por UF 'SP' adicionado na cláusula WHERE." 
+              : "Adicione na string da query: cQuery += \" AND SA1.A1_EST = 'SP' \"."
           });
 
-          const hasDelet = /D_E_L_E_T_\s*=\s*['"]\s+['"]/i.test(cleanCode);
+          const hasOrderByLC = /ORDER\s+BY\s+.*A1_LC\s+DESC/i.test(cleanCode);
           criteria.push({
             id: 1,
-            title: "Cláusula obrigatória de deleção lógica (D_E_L_E_T_ = ' ')",
-            pass: hasDelet,
-            tip: hasDelet ? "Filtro de deleção lógica incluído, protegendo integridade de dados." : "Adicione WHERE D_E_L_E_T_ = ' ' para filtrar registros excluídos no Protheus."
+            title: "Ordenar decrescente por limite de crédito (ORDER BY A1_LC DESC)",
+            pass: hasOrderByLC,
+            tip: hasOrderByLC 
+              ? "Cláusula ORDER BY A1_LC DESC aplicada para listar maiores limites primeiro." 
+              : "Substitua a ordenação por: cQuery += \" ORDER BY SA1.A1_LC DESC \"."
           });
 
-          const hasTCQuery = /TCQuery\s+/i.test(cleanCode);
+          const hasDeletAndClose = /D_E_L_E_T_\s*=\s*['"]\s+['"]/i.test(cleanCode) && /DbCloseArea\s*\(\s*\)/i.test(cleanCode) && /A1_EST/i.test(cleanCode);
           criteria.push({
             id: 2,
-            title: "Abertura de área TopConnect com TCQuery / ChangeQuery",
-            pass: hasTCQuery,
-            tip: hasTCQuery ? "Área de consulta aberta via TCQuery." : "Envie a query com TCQuery ChangeQuery(cQuery) New Alias 'QRY_TMP'."
+            title: "Preservar deleção lógica obrigatória e fechamento com DbCloseArea()",
+            pass: hasDeletAndClose,
+            tip: hasDeletAndClose 
+              ? "Boas práticas de engenharia TOTVS respeitadas com excelência." 
+              : "Mantenha o filtro D_E_L_E_T_ = ' ' e certifique-se de liberar a área com DbCloseArea()."
           });
 
-          const hasCloseArea = /DbCloseArea\s*\(\s*\)/i.test(cleanCode);
+          const hasOutA6 = isRunSuccess && /A1_EST/i.test(cleanCode) && /A1_LC/i.test(cleanCode) && /(?:SP|Sao Paulo|CLIENTES)/i.test(outMsg);
           criteria.push({
             id: 3,
-            title: "Fechamento obrigatório de área com DbCloseArea()",
-            pass: hasCloseArea,
-            tip: hasCloseArea ? "Memória liberada com DbCloseArea(), evitando memory leak." : "Regra inegociável: Sempre feche a área após o laço com (cAlias)->(DbCloseArea())."
+            title: "Executar e validar listagem filtrada de SP no Protheus Virtual",
+            pass: hasOutA6,
+            tip: hasOutA6 
+              ? "Consulta TopConnect executada e validada com filtros corporativos!" 
+              : "Execute no Protheus Virtual para testar a consulta SQL filtrada por clientes de SP."
           });
           break;
         }
 
         case "aula07": {
-          const hasGetArea = /GetArea\s*\(\s*\)/i.test(cleanCode);
+          // Desafio: Validacao de Prazo de Entrega (C5_ENTREG e C5_EMISSAO + 5) no PE MT410OK
+          const hasCamposData = /C5_ENTREG/i.test(cleanCode) && /(?:C5_EMISSAO|dDataBase|Date\(\))/i.test(cleanCode);
           criteria.push({
             id: 0,
-            title: "Salvar contexto geral do ambiente com GetArea()",
-            pass: hasGetArea,
-            tip: hasGetArea ? "Contexto geral salvo no início da rotina." : "Use Local aArea := GetArea() para salvar o ponteiro inicial."
+            title: "Recuperar campos de data C5_ENTREG e C5_EMISSAO",
+            pass: hasCamposData,
+            tip: hasCamposData 
+              ? "Campos de data de entrega e emissão recuperados da área SC5." 
+              : "No MT410OK, leia as datas do pedido: dEntrega := SC5->C5_ENTREG e dEmissao := SC5->C5_EMISSAO."
           });
 
-          const hasTableArea = /->\s*\(\s*GetArea\s*\(\s*\)\s*\)/i.test(cleanCode) || /GetArea/i.test(cleanCode);
+          const hasPrazoValidation = /(?:C5_ENTREG|dEntrega)\s*<\s*(?:C5_EMISSAO|dEmissao|\+?\s*5)/i.test(cleanCode) || (/\+\s*5\b/i.test(cleanCode) && /C5_ENTREG/i.test(cleanCode));
           criteria.push({
             id: 1,
-            title: "Salvar posicionamento da tabela mestre",
-            pass: hasTableArea,
-            tip: hasTableArea ? "Posicionamento do registro salvo com sucesso." : "Salve a área da tabela com Local aAreaTab := (cAlias)->(GetArea())."
+            title: "Validar prazo de entrega inferior a 5 dias úteis",
+            pass: hasPrazoValidation,
+            tip: hasPrazoValidation 
+              ? "Regra de negócio de prazo mínimo de entrega implementada." 
+              : "Valide a condição: If dEntrega < (dEmissao + 5) para rejeitar pedidos com entrega rápida não permitida."
           });
 
-          const hasLogicPE = /If|Else/i.test(cleanCode);
+          const hasBloqueioHelp = /lRetorno\s*:=\s*\.F\./i.test(cleanCode) && /Help\s*\(/i.test(cleanCode) && /C5_ENTREG/i.test(cleanCode);
           criteria.push({
             id: 2,
-            title: "Lógica de validação customizada no Ponto de Entrada",
-            pass: hasLogicPE,
-            tip: hasLogicPE ? "Regra de negócio customizada implementada no ponto de entrada." : "Adicione a validação de bloqueio ou liberação comercial."
+            title: "Bloquear gravação com lRetorno := .F. e acionar Help()",
+            pass: hasBloqueioHelp,
+            tip: hasBloqueioHelp 
+              ? "Bloqueio oficial via Help() e lRetorno := .F. configurado." 
+              : "Ao constatar prazo inválido, defina lRetorno := .F. e exiba mensagem usando a função Help()."
           });
 
-          const hasRestArea = /RestArea\s*\(/i.test(cleanCode);
+          const hasContextoPE = /GetArea\s*\(\s*\)/i.test(cleanCode) && /RestArea\s*\(/i.test(cleanCode) && /C5_ENTREG/i.test(cleanCode);
           criteria.push({
             id: 3,
-            title: "Restauração segura de contexto com RestArea()",
-            pass: hasRestArea,
-            tip: hasRestArea ? "Áreas restauradas com sucesso na saída da rotina." : "Restaure obrigatoriamente as áreas com RestArea(aAreaTab) e RestArea(aArea)."
+            title: "Preservar integridade de contexto com GetArea() e RestArea()",
+            pass: hasContextoPE,
+            tip: hasContextoPE 
+              ? "Contexto protegido com GetArea() e RestArea(), blindando o ERP." 
+              : "Mantenha o salvamento de ponteiros no início e a restauração RestArea() no final do P.E."
           });
           break;
         }
 
         case "aula08": {
-          const hasGetMV = /GetMV\s*\(\s*["']MV_/i.test(cleanCode);
+          // Desafio: Eliminacao de Hard-Code com comparacao de pedido via GetMV('MV_LIMPED')
+          const hasDynamicParamCheck = /If\s+.*(?:nVlrTotal|nTotal|nValor)\s*>\s*GetMV\s*\(\s*["']MV_LIMPED["']/i.test(cleanCode) || /If\s+.*GetMV\s*\(\s*["']MV_LIMPED["'].*<\s*(?:nVlrTotal|nTotal|nValor)/i.test(cleanCode);
           criteria.push({
             id: 0,
-            title: "Leitura dinâmica de parâmetro SX6 com GetMV()",
-            pass: hasGetMV,
-            tip: hasGetMV ? "GetMV() utilizado para parametrizar regras de negócio." : "Substitua valores fixos chamando GetMV('MV_LIMPED', .F., 50000)."
+            title: "Comparação condicional do valor do pedido com GetMV('MV_LIMPED')",
+            pass: hasDynamicParamCheck,
+            tip: hasDynamicParamCheck 
+              ? "Hard-code eliminado com sucesso! Regra de decisão conectada à SX6." 
+              : "Substitua a trava fixa por: If nVlrTotal > GetMV('MV_LIMPED', .F., 50000)."
           });
 
-          const hasCompare = /GetMV/i.test(cleanCode) && /(?:nVal|nTotal|nLimite|>|<|>=|<=)/i.test(cleanCode);
+          const hasFallbackParam = /GetMV\s*\(\s*["']MV_LIMPED["']\s*,\s*\.F\.\s*,\s*\d+\s*\)/i.test(cleanCode) || /GetMV\s*\(\s*["']MV_LIMPED["']\s*,/i.test(cleanCode);
           criteria.push({
             id: 1,
-            title: "Aplicação do parâmetro na regra de negócio",
-            pass: hasCompare,
-            tip: hasCompare ? "Parâmetro integrado à tomada de decisão." : "Compare o valor do pedido com o limite lido do GetMV."
+            title: "Uso de parâmetros opcionais de segurança no GetMV (fallback)",
+            pass: hasFallbackParam,
+            tip: hasFallbackParam 
+              ? "Parâmetros de fallback (.F., 50000) garantem execução segura sem falhas." 
+              : "Passe o valor padrão defensivo: GetMV('MV_LIMPED', .F., 50000) caso o parâmetro não exista."
           });
 
-          const hasTransform = /Transform\s*\(/i.test(cleanCode);
+          const hasBlockAction = /(?:lRetorno\s*:=\s*\.F\.|ApMsgStop|Help\s*\()/i.test(cleanCode) && /MV_LIMPED/i.test(cleanCode) && /If\s+/i.test(cleanCode);
           criteria.push({
             id: 2,
-            title: "Formatação visual com Transform(@E)",
-            pass: hasTransform,
-            tip: hasTransform ? "Valores formatados para o usuário." : "Formate os valores lidos com Transform(nValor, '@E 999,999.92')."
+            title: "Bloqueio da rotina ou alerta quando o limite for ultrapassado",
+            pass: hasBlockAction,
+            tip: hasBlockAction 
+              ? "Tratamento de bloqueio por alçada implementado com sucesso." 
+              : "Dentro da condição, defina lRetorno := .F. ou acione Help()/ApMsgStop alertando o operador."
           });
 
-          const hasOutA8 = isRunSuccess && /(?:GetMV|Parâmetro|LIMPED|PERDESC)/i.test(outMsg);
+          const hasOutA8 = isRunSuccess && /(?:ultrapassado|bloqueado|limite|LIMEXCED)/i.test(outMsg) && /MV_LIMPED/i.test(cleanCode);
           criteria.push({
             id: 3,
-            title: "Relatório de parametrização no Protheus Virtual",
+            title: "Executar e validar regra de bloqueio dinâmico no Protheus Virtual",
             pass: hasOutA8,
-            tip: hasOutA8 ? "Relatório de parâmetros gerado com sucesso!" : "Execute no Protheus Virtual para validar a exibição dos parâmetros."
+            tip: hasOutA8 
+              ? "Parametrização dinâmica validada com louvor no Protheus Virtual!" 
+              : "Execute no Protheus Virtual e valide o comportamento da rotina parametrizada dinamicamente."
           });
           break;
         }
@@ -8140,6 +8222,14 @@
         graderScoreDesc.innerText = 'Veja abaixo os itens que ainda precisam de ajuste no seu código para liberar a aprovação total.';
         graderBtnCompleteMission.style.display = 'none';
         playAudioFx('tick');
+
+        // Se o desafio ainda não atende a todos os critérios, garante que fique como NÃO CONCLUÍDO
+        if (completedChallenges[currentLesson.id]) {
+          delete completedChallenges[currentLesson.id];
+          localStorage.setItem('totvs_campus_completed_challenges', JSON.stringify(completedChallenges));
+          renderChallenge(currentLesson);
+          renderLessonsList();
+        }
       }
 
       // Injeta lista detalhada de critérios no modal
@@ -8199,8 +8289,13 @@
     function resetCurrentLesson() {
       if (!currentLesson) return;
       localStorage.removeItem('totvs_user_code_' + currentLesson.id);
+      delete completedChallenges[currentLesson.id];
+      localStorage.setItem('totvs_campus_completed_challenges', JSON.stringify(completedChallenges));
+      localStorage.removeItem('totvs_quest_tasks_' + currentLesson.id);
+
       if (monacoEditorInstance) {
         monacoEditorInstance.setValue(currentLesson.code);
+        monacoEditorInstance.setPosition({ lineNumber: 1, column: 1 });
       }
       renderLessonsList();
       renderChallenge(currentLesson);
@@ -8219,9 +8314,56 @@
       }
 
       if (typeof showToastNotification === 'function') {
-        showToastNotification(`Código de "${currentLesson.badge}" restaurado para o estado inicial sem edições!`, '🔄');
+        showToastNotification(`Código de "${currentLesson.badge}" restaurado para o estado inicial sem edições! Desafio redefinido para praticar.`, '🔄');
       }
     }
+
+    // Reseta o progresso de TODOS os desafios para o estado inicial "Não Feito"
+    function resetAllChallengesProgress(showToast = true) {
+      completedChallenges = {};
+      localStorage.setItem('totvs_campus_completed_challenges', JSON.stringify(completedChallenges));
+      LESSONS_DATABASE.forEach(lesson => {
+        localStorage.removeItem('totvs_quest_tasks_' + lesson.id);
+      });
+      renderLessonsList();
+      if (currentLesson) {
+        renderChallenge(currentLesson);
+      }
+      playAudioFx('tick');
+
+      // Se o modal de auditoria estiver aberto, fecha ou re-audita
+      if (graderModal && graderModal.classList.contains('active')) {
+        runCodeGrader();
+      }
+
+      if (showToast && typeof showToastNotification === 'function') {
+        showToastNotification('Todos os desafios foram resetados para NÃO FEITOS! Você pode praticar cada um do zero.', '🎯');
+      }
+    }
+    window.resetAllChallengesProgress = resetAllChallengesProgress;
+
+    // Sanitização de integridade ao carregar a página: remove aprovação indevida se o código atual não passar no teste real
+    function sanitizeChallengesProgress() {
+      let changed = false;
+      LESSONS_DATABASE.forEach(lesson => {
+        if (completedChallenges[lesson.id]) {
+          const savedCode = localStorage.getItem('totvs_user_code_' + lesson.id);
+          const currentCode = (savedCode !== null && savedCode !== undefined) ? savedCode : lesson.code;
+          const grade = gradeLessonChallenge(lesson, currentCode);
+          if (!grade.passed) {
+            delete completedChallenges[lesson.id];
+            localStorage.removeItem('totvs_quest_tasks_' + lesson.id);
+            changed = true;
+          }
+        }
+      });
+      if (changed) {
+        localStorage.setItem('totvs_campus_completed_challenges', JSON.stringify(completedChallenges));
+        renderLessonsList();
+        if (currentLesson) renderChallenge(currentLesson);
+      }
+    }
+    window.sanitizeChallengesProgress = sanitizeChallengesProgress;
 
     function applyChallengeSolution() {
       if (!currentLesson || !currentLesson.challenge || !currentLesson.challenge.solution) return;
@@ -8500,6 +8642,7 @@
 
     // Inicialização das Features Avançadas (Configurador Virtual & Calculadora de Carreira)
     setTimeout(() => {
+      if (typeof sanitizeChallengesProgress === 'function') sanitizeChallengesProgress();
       if (typeof initDictionaryExplorer === 'function') initDictionaryExplorer();
       if (typeof initCareerCalculator === 'function') initCareerCalculator();
     }, 100);

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
+import { sanitizeForSpeech, getBestPortugueseVoice } from '../../utils/speechTutor';
 import { SpeakerHigh, SpeakerSlash, Sparkle, BookOpen } from '@phosphor-icons/react';
 
 interface CodeInspectorProps {
@@ -34,16 +35,24 @@ export const CodeInspector: React.FC<CodeInspectorProps> = ({ currentLine }) => 
       return;
     }
 
-    const textToSpeak = `${exp.title}. ${exp.desc}. ${exp.audioHint || ''}`;
-    const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    utterance.lang = 'pt-BR';
-    utterance.rate = 1.05;
+    const rawText = `${exp.title}. ${exp.desc}. ${exp.audioHint || ''}`;
+    const cleanText = sanitizeForSpeech(rawText);
 
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'pt-BR';
+    utterance.rate = 0.98;
+    utterance.pitch = 1.0;
+
+    const bestVoice = getBestPortugueseVoice();
+    if (bestVoice) {
+      utterance.voice = bestVoice;
+    }
+
+    utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
 
     window.speechSynthesis.speak(utterance);
-    setIsSpeaking(true);
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCampusStore } from '../../store/useCampusStore';
 import { soundFx } from '../../utils/audio';
+import { sanitizeForSpeech, getBestPortugueseVoice } from '../../utils/speechTutor';
 import { 
   Sparkle, 
   SpeakerHigh, 
@@ -64,7 +65,7 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
   const codeLines = (getCurrentCode() || '').split('\n');
   const activeLineSnippet = codeLines[currentLine - 1] || (exp ? `#Include "Totvs.ch"` : '// Código ADVPL');
 
-  // Controle de Áudio com Web SpeechSynthesis (Português do Brasil)
+  // Controle de Áudio com Web SpeechSynthesis (Português do Brasil - Alta Fidelidade com IA)
   const handleToggleSpeech = () => {
     if (typeof window === 'undefined' || !window.speechSynthesis) return;
 
@@ -77,15 +78,20 @@ export const RightPanel: React.FC<RightPanelProps> = ({ currentLine, onGradeCode
     if (!exp) return;
 
     window.speechSynthesis.cancel();
-    const textToSpeak = `${exp.title}. ${exp.desc}. ${exp.audioHint ? 'Dica prática: ' + exp.audioHint : ''}`;
-    const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    utterance.lang = 'pt-BR';
-    utterance.rate = 1.02;
+    
+    // Tratamento fonético e limpeza de caracteres de código para leitura humana e natural
+    const rawText = `${exp.title}. ${exp.desc}. ${exp.audioHint ? 'Dica prática: ' + exp.audioHint : ''}`;
+    const cleanText = sanitizeForSpeech(rawText);
 
-    const voices = window.speechSynthesis.getVoices();
-    const ptVoice = voices.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt_BR') || v.lang.includes('pt'));
-    if (ptVoice) {
-      utterance.voice = ptVoice;
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'pt-BR';
+    utterance.rate = 0.98; // Cadência profissional e pausada
+    utterance.pitch = 1.0;
+
+    // Seleciona a melhor voz neural/natural em PT-BR
+    const bestVoice = getBestPortugueseVoice();
+    if (bestVoice) {
+      utterance.voice = bestVoice;
     }
 
     utterance.onstart = () => setIsSpeaking(true);

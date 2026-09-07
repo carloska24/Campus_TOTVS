@@ -3,8 +3,7 @@ import { useCampusStore } from './store/useCampusStore';
 import { HeaderNav } from './components/layout/HeaderNav';
 import { Sidebar } from './components/layout/Sidebar';
 import { MonacoEditorPanel } from './components/editor/MonacoEditorPanel';
-import { CodeInspector } from './components/editor/CodeInspector';
-import { ChallengeCard } from './components/challenge/ChallengeCard';
+import { RightPanel } from './components/layout/RightPanel';
 import { GraderModal } from './components/challenge/GraderModal';
 import { VirtualProtheusModal } from './components/protheus/VirtualProtheusModal';
 import { ModulosView } from './components/views/ModulosView';
@@ -92,7 +91,10 @@ export const App: React.FC = () => {
   }, [handleRunCode, handleGradeCode]);
 
   return (
-    <div className="w-screen h-screen flex flex-col bg-[#0d1117] text-white font-sans overflow-hidden select-none">
+    <div 
+      className="w-screen h-screen flex flex-col font-sans overflow-hidden select-none transition-colors duration-200"
+      style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-main)' }}
+    >
       {/* Barra de Navegação Superior */}
       <HeaderNav onRunCode={handleRunCode} onGradeCode={handleGradeCode} />
 
@@ -103,14 +105,17 @@ export const App: React.FC = () => {
             {/* Barra Lateral de Aulas */}
             <Sidebar />
 
-            {/* Painel Central do Editor + Inspetor */}
+            {/* Painel Central do Monaco Editor */}
             <div className="flex-1 flex flex-col h-full min-w-0">
               <MonacoEditorPanel onSelectLine={(line) => setCurrentLine(line)} />
-              <CodeInspector currentLine={currentLine} />
             </div>
 
-            {/* Painel Lateral Direito da Missão Prática */}
-            <ChallengeCard onGradeCode={handleGradeCode} />
+            {/* Painel Lateral Direito: Inspetor & Tutor IA (Áudio + Equalizador) + Missão Prática */}
+            <RightPanel 
+              currentLine={currentLine} 
+              onGradeCode={handleGradeCode} 
+              onRunCode={handleRunCode} 
+            />
           </>
         )}
 

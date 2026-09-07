@@ -26,8 +26,11 @@ export const GraderModal: React.FC<GraderModalProps> = ({ gradeResult, onApplySo
     isCurrentCodeModified, 
     resetCurrentLesson, 
     resetAllChallenges,
-    setChallengeCompleted 
+    setChallengeCompleted,
+    theme 
   } = useCampusStore();
+
+  const isDark = theme === 'dark';
 
   if (!isGraderModalOpen || !gradeResult) return null;
 
@@ -64,18 +67,34 @@ export const GraderModal: React.FC<GraderModalProps> = ({ gradeResult, onApplySo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in">
-      <div className="bg-[#161b22] border border-[#30363d] rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div 
+        className={`border rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden transition-colors ${
+          isDark 
+            ? 'bg-[#161b22] border-[#30363d]' 
+            : 'bg-white border-[#cbd5e1]'
+        }`}
+      >
         {/* Header */}
-        <div className="p-4 border-b border-[#30363d] flex items-center justify-between bg-[#1c2128]">
+        <div 
+          className={`p-4 border-b flex items-center justify-between ${
+            isDark ? 'border-[#30363d] bg-[#1c2128]' : 'border-[#e2e8f0] bg-slate-50'
+          }`}
+        >
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-800/40 text-cyan-400 flex items-center justify-center font-mono font-bold text-xs">
+            <div 
+              className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-xs border ${
+                isDark 
+                  ? 'bg-cyan-950 border-cyan-800/40 text-cyan-400' 
+                  : 'bg-cyan-50 border-cyan-200 text-cyan-700'
+              }`}
+            >
               {score}/{total}
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white flex items-center gap-2">
+              <h2 className={`text-sm font-bold flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                 Auditoria de Código: {lesson?.badge}
               </h2>
-              <p className="text-xs text-gray-400">
+              <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
                 Critérios técnicos e diretrizes oficiais TOTVS CodeAnalysis
               </p>
             </div>
@@ -83,7 +102,9 @@ export const GraderModal: React.FC<GraderModalProps> = ({ gradeResult, onApplySo
 
           <button
             onClick={() => openGraderModal(false)}
-            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-[#30363d] transition-colors"
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+              isDark ? 'text-gray-400 hover:text-white hover:bg-[#30363d]' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-200'
+            }`}
           >
             <X className="w-5 h-5" />
           </button>
@@ -93,157 +114,141 @@ export const GraderModal: React.FC<GraderModalProps> = ({ gradeResult, onApplySo
         <div className="p-4 space-y-4 overflow-y-auto flex-1 text-xs">
           {/* Score Banner */}
           {passed ? (
-            <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/40 to-green-950/30 border border-emerald-500/40 flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 shrink-0">
+            <div 
+              className={`p-4 rounded-xl border flex items-start gap-3 ${
+                isDark 
+                  ? 'bg-gradient-to-r from-emerald-950/40 to-green-950/30 border-emerald-500/40 text-gray-200' 
+                  : 'bg-emerald-50 border-emerald-300 text-emerald-900'
+              }`}
+            >
+              <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-500 shrink-0">
                 <Trophy className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-emerald-400">
-                  Missão 100% Cumprida com Excelência! 🏆
+                <h3 className={`text-sm font-bold ${isDark ? 'text-emerald-300' : 'text-emerald-800'}`}>
+                  Parabéns! Código 100% Aprovado!
                 </h3>
-                <p className="text-gray-300 mt-0.5">
-                  Parabéns! Seu código atendeu a todos os {total} critérios técnicos oficiais do Protheus.
+                <p className="mt-1 leading-relaxed text-[11px]">
+                  Sua solução cumpre todos os requisitos de compilação, integridade transacional e conformidade de sintaxe do Protheus.
                 </p>
               </div>
             </div>
           ) : (
-            <div className="p-3.5 rounded-xl bg-gradient-to-r from-amber-950/40 to-yellow-950/30 border border-amber-500/40 flex items-start gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/20 text-amber-400 shrink-0">
+            <div 
+              className={`p-4 rounded-xl border flex items-start gap-3 ${
+                isDark 
+                  ? 'bg-gradient-to-r from-amber-950/40 to-orange-950/30 border-amber-500/40 text-gray-200' 
+                  : 'bg-amber-50 border-amber-300 text-amber-900'
+              }`}
+            >
+              <div className="p-2 rounded-lg bg-amber-500/20 text-amber-500 shrink-0">
                 <AlertCircle className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-amber-400">
-                  Atenção: {score} de {total} critérios atendidos
+                <h3 className={`text-sm font-bold ${isDark ? 'text-amber-300' : 'text-amber-800'}`}>
+                  Desafio Incompleto ({score} de {total} critérios atendidos)
                 </h3>
-                <p className="text-gray-300 mt-0.5">
-                  Veja abaixo os itens que ainda precisam de ajuste no seu código para liberar a aprovação total.
+                <p className="mt-1 leading-relaxed text-[11px]">
+                  Revise a lista de critérios abaixo. O Grader automático analisa variáveis, chamadas de funções e lógica no código.
                 </p>
               </div>
             </div>
           )}
 
-          {/* Criteria Cards */}
+          {/* Checklist de Critérios do Grader */}
           <div className="space-y-2">
-            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-              Checklist Detalhado de Validação
+            <h4 className={`font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+              <ClipboardCheck className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Critérios de Avaliação Automática</span>
             </h4>
 
-            {criteria.map((crit, idx) => (
-              <div
-                key={idx}
-                className={`p-3 rounded-lg border flex flex-col gap-1 transition-all ${
-                  crit.pass 
-                    ? 'bg-emerald-950/15 border-emerald-500/30 text-gray-200' 
-                    : 'bg-[#0d1117] border-[#30363d] text-gray-400'
-                }`}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 font-semibold">
-                    <span>{crit.pass ? '✅' : '🟡'}</span>
-                    <span className={crit.pass ? 'text-white' : 'text-amber-300'}>
-                      Passo {idx + 1}: {crit.title}
-                    </span>
-                  </div>
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                      crit.pass 
-                        ? 'bg-emerald-500/20 text-emerald-400' 
-                        : 'bg-amber-500/20 text-amber-400'
-                    }`}
-                  >
-                    {crit.pass ? 'Aprovado' : 'Pendente'}
-                  </span>
-                </div>
-                <div className="text-[11px] text-gray-400 pl-6 leading-relaxed">
-                  {crit.tip}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Comparativo: Código Base Original vs Submetido */}
-          <div className="p-3 rounded-lg bg-[#0d1117] border border-[#30363d] space-y-2">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-gray-300 uppercase text-[11px]">
-                  Código Inicial da Aula (Sem Edições):
-                </span>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${
-                  isModified 
-                    ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' 
-                    : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                }`}>
-                  {isModified ? '✏️ Código Editado' : '✨ Código Limpo'}
-                </span>
-              </div>
-
-              <button
-                onClick={handleResetCurrent}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#21262d] hover:bg-[#30363d] text-gray-300 hover:text-white text-xs border border-[#30363d] transition-all"
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span>Restaurar Código Inicial</span>
-              </button>
-            </div>
-
-            <pre className="text-[11px] font-mono text-gray-400 bg-[#161b22] p-2.5 rounded max-h-24 overflow-y-auto whitespace-pre-wrap border border-[#30363d]">
-              {lesson?.code}
-            </pre>
-          </div>
-
-          {/* Gabarito Oficial */}
-          {lesson?.challenge?.solution && (
-            <div className="p-3 rounded-lg bg-[#0d1117] border border-cyan-900/30 space-y-2">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <span className="font-bold text-cyan-400 uppercase text-[11px] flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Gabarito / Solução Oficial Esperada:
-                </span>
-
-                <button
-                  onClick={() => {
-                    onApplySolution();
-                    openGraderModal(false);
-                  }}
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-cyan-950 hover:bg-cyan-900 text-cyan-300 hover:text-white text-xs border border-cyan-700/50 transition-all font-medium"
+            <div className="space-y-1.5">
+              {criteria.map((c, i) => (
+                <div
+                  key={i}
+                  className={`p-3 rounded-xl border flex items-start gap-3 transition-colors ${
+                    c.passed
+                      ? isDark 
+                        ? 'bg-emerald-950/15 border-emerald-500/30 text-gray-200' 
+                        : 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
+                      : isDark 
+                        ? 'bg-[#1c2128] border-red-500/30 text-gray-300' 
+                        : 'bg-rose-50/60 border-rose-200 text-rose-950'
+                  }`}
                 >
-                  <ClipboardCheck className="w-3.5 h-3.5" />
-                  <span>Aplicar Solução no Editor</span>
-                </button>
-              </div>
-
-              <pre className="text-[11px] font-mono text-cyan-200 bg-[#161b22] p-2.5 rounded max-h-28 overflow-y-auto whitespace-pre-wrap border border-cyan-900/40">
-                {lesson.challenge.solution}
-              </pre>
+                  <div className="mt-0.5">
+                    {c.passed ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-xs">{c.name}</div>
+                    <div className={`text-[11px] mt-0.5 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>{c.desc}</div>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
         </div>
 
-        {/* Footer */}
-        <div className="p-3 border-t border-[#30363d] bg-[#1c2128] flex items-center justify-between gap-2">
-          <button
-            onClick={handleResetAll}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-amber-300 text-xs font-medium border border-amber-500/30 transition-all"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Resetar Todos os Desafios</span>
-          </button>
-
+        {/* Footer Actions */}
+        <div 
+          className={`p-3.5 border-t flex flex-wrap items-center justify-between gap-2.5 ${
+            isDark ? 'bg-[#1c2128] border-[#30363d]' : 'bg-slate-50 border-[#e2e8f0]'
+          }`}
+        >
           <div className="flex items-center gap-2">
             <button
-              onClick={() => openGraderModal(false)}
-              className="px-3.5 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-gray-300 text-xs font-medium border border-[#30363d] transition-all"
+              onClick={handleResetCurrent}
+              title="Restaura o código original desta aula para tentar novamente"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                isDark 
+                  ? 'bg-[#21262d] hover:bg-[#30363d] text-gray-300 hover:text-white border-[#30363d]' 
+                  : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300'
+              }`}
             >
-              Fechar
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Resetar Aula</span>
             </button>
 
-            {passed && (
+            <button
+              onClick={handleResetAll}
+              title="Reseta todos os desafios concluídos para praticar tudo do zero"
+              className="px-3 py-1.5 rounded-lg text-[11px] font-medium text-rose-500 hover:bg-rose-500/10 border border-rose-500/30 transition-colors cursor-pointer"
+            >
+              Resetar Tudo para Não Feito
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {!passed && (
+              <button
+                onClick={() => {
+                  onApplySolution();
+                  openGraderModal(false);
+                }}
+                className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs transition-colors cursor-pointer"
+              >
+                Aplicar Solução
+              </button>
+            )}
+
+            {passed ? (
               <button
                 onClick={handleComplete}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white text-xs font-bold shadow-md shadow-emerald-950/50 transition-all"
+                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs shadow-md shadow-emerald-900/30 transition-all cursor-pointer"
               >
-                <CheckCircle2 className="w-4 h-4" />
-                <span>Concluir Missão (+{lesson?.challenge?.xp} XP)</span>
+                <Sparkles className="w-4 h-4" />
+                <span>Salvar Conquista (+XP)</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => openGraderModal(false)}
+                className="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition-colors cursor-pointer"
+              >
+                Continuar Praticando
               </button>
             )}
           </div>

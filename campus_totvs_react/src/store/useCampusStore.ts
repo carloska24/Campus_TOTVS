@@ -58,6 +58,21 @@ const getSavedXp = (): number => {
   }
 };
 
+const getSavedTheme = (): 'dark' | 'light' => {
+  try {
+    const saved = localStorage.getItem(STORAGE_THEME);
+    const theme = saved === 'light' ? 'light' : 'dark';
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.classList.toggle('light', theme === 'light');
+    }
+    return theme;
+  } catch {
+    return 'dark';
+  }
+};
+
 export const useCampusStore = create<CampusState>((set, get) => ({
   activeTab: 'lab',
   activeLessonId: 'aula01',
@@ -65,7 +80,7 @@ export const useCampusStore = create<CampusState>((set, get) => ({
   completedChallenges: getSavedCompleted(),
   questTasks: {},
   userXp: getSavedXp(),
-  theme: (localStorage.getItem(STORAGE_THEME) as 'dark' | 'light') || 'dark',
+  theme: getSavedTheme(),
   
   isGraderModalOpen: false,
   isProtheusModalOpen: false,
@@ -186,7 +201,11 @@ export const useCampusStore = create<CampusState>((set, get) => ({
     set((state) => {
       const next = state.theme === 'dark' ? 'light' : 'dark';
       localStorage.setItem(STORAGE_THEME, next);
-      document.documentElement.setAttribute('data-theme', next);
+      if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('data-theme', next);
+        document.documentElement.classList.toggle('dark', next === 'dark');
+        document.documentElement.classList.toggle('light', next === 'light');
+      }
       return { theme: next };
     });
   }

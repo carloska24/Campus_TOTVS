@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Editor, { type OnMount } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 import { useCampusStore } from '../../store/useCampusStore';
 import { setupMonacoAdvpl } from '../../utils/monacoConfig';
 import { soundFx } from '../../utils/audio';
+import { EditorStatusBar } from './EditorStatusBar';
 import { RotateCcw, FileCode, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface MonacoEditorPanelProps {
@@ -20,10 +21,12 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
     theme 
   } = useCampusStore();
 
+  const [activeLine, setActiveLine] = useState(1);
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const lesson = getCurrentLesson();
   const currentCode = getCurrentCode();
   const isModified = isCurrentCodeModified();
+  const isDark = theme === 'dark';
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -31,8 +34,10 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
 
     // Evento de alteração de posição do cursor para atualizar o tutor/inspetor
     editor.onDidChangeCursorPosition((e) => {
+      const line = e.position.lineNumber;
+      setActiveLine(line);
       if (onSelectLine) {
-        onSelectLine(e.position.lineNumber);
+        onSelectLine(line);
       }
     });
   };
@@ -43,26 +48,42 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
     if (editorRef.current && lesson) {
       editorRef.current.setValue(lesson.code);
       editorRef.current.setPosition({ lineNumber: 1, column: 1 });
+      setActiveLine(1);
+      if (onSelectLine) onSelectLine(1);
     }
   };
 
   return (
-    <div className="flex-1 flex flex-col h-[calc(100vh-3.5rem)] bg-[#0d1117] overflow-hidden border-r border-[#30363d]">
+    <div 
+      className={`flex-1 flex flex-col h-[calc(100vh-3.5rem)] overflow-hidden border-r transition-colors duration-200 ${
+        isDark ? 'bg-[#0d1117] border-[#30363d]' : 'bg-[#ffffff] border-[#e2e8f0]'
+      }`}
+    >
       {/* Tab bar / Toolbar */}
-      <div className="h-10 bg-[#161b22] border-b border-[#30363d] px-3 flex items-center justify-between select-none">
+      <div 
+        className={`h-10 border-b px-3 flex items-center justify-between select-none shrink-0 ${
+          isDark ? 'bg-[#161b22] border-[#30363d]' : 'bg-[#f8fafc] border-[#e2e8f0]'
+        }`}
+      >
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#21262d] text-cyan-300 text-xs font-mono border border-cyan-800/40">
+          <div 
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono border font-semibold ${
+              isDark 
+                ? 'bg-[#21262d] text-cyan-300 border-cyan-800/40' 
+                : 'bg-white text-cyan-700 border-slate-200 shadow-sm'
+            }`}
+          >
             <FileCode className="w-3.5 h-3.5" />
             <span>{lesson ? lesson.badge : 'Editor'}</span>
           </div>
 
           {isModified ? (
-            <span className="flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">
+            <span className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 border border-amber-500/30">
               <AlertCircle className="w-3 h-3" />
               <span>Modificado</span>
             </span>
           ) : (
-            <span className="flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            <span className="flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/30">
               <CheckCircle2 className="w-3 h-3" />
               <span>Original Limpo</span>
             </span>
@@ -70,16 +91,20 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="text-[11px] text-gray-400 hidden sm:flex items-center gap-1">
+          <div className={`text-[11px] hidden sm:flex items-center gap-1 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
             <span>💡</span>
-            <span>Atalhos: <kbd className="px-1 py-0.5 rounded bg-[#21262d] text-gray-300 font-mono">F5</kbd> Executar | <kbd className="px-1 py-0.5 rounded bg-[#21262d] text-gray-300 font-mono">F9</kbd> Validar</span>
+            <span>Clique em qualquer linha para inspecionar & ouvir a IA</span>
           </div>
 
           {isModified && (
             <button
               onClick={handleReset}
               title="Restaurar o código original limpo desta aula e zerar o checklist"
-              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#21262d] hover:bg-[#30363d] text-amber-300 hover:text-white text-xs font-medium border border-amber-500/30 transition-all cursor-pointer"
+              className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium border transition-all cursor-pointer ${
+                isDark 
+                  ? 'bg-[#21262d] hover:bg-[#30363d] text-amber-300 hover:text-white border-amber-500/30' 
+                  : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200'
+              }`}
             >
               <RotateCcw className="w-3 h-3" />
               <span>Restaurar Código</span>
@@ -94,7 +119,7 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
           height="100%"
           language="advpl"
           value={currentCode}
-          theme={theme === 'light' ? 'totvs-light-plus' : 'totvs-dark-plus'}
+          theme={isDark ? 'totvs-dark-plus' : 'totvs-light-plus'}
           onMount={handleEditorDidMount}
           onChange={(value) => {
             if (lesson && value !== undefined) {
@@ -115,6 +140,9 @@ export const MonacoEditorPanel: React.FC<MonacoEditorPanelProps> = ({ onSelectLi
           }}
         />
       </div>
+
+      {/* Status Bar Inferior */}
+      <EditorStatusBar currentLine={activeLine} />
     </div>
   );
 };
